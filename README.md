@@ -1,4 +1,4 @@
-# My-Wallet
+# My Wallet
 
 Este es un proyecto que busca realizar una aplicación móvil en la que se puedan manejar las finanzas personales. Esto será realizado mediante la interfaz principal en la que se espera añadir ingresos y gastos
 

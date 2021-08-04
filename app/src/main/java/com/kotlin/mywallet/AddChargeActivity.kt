@@ -16,8 +16,6 @@ class AddChargeActivity : AppCompatActivity() {
     private lateinit var categorySpinner: Spinner
     private lateinit var addChargeButton: Button
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_charge)

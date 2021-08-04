@@ -13,4 +13,8 @@
     <string name="action_text">Añadir Ingreso</string>
     <string name="placeholder_username">Nombre</string>
     <string name="description">App Image</string>
+    <string name="hint_username">Username</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_user_or_email">Username or email</string>
 </resources>

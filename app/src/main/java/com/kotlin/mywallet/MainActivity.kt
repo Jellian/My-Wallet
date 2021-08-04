@@ -1,81 +1,53 @@
 package com.kotlin.mywallet
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.button.MaterialButton
 
 const val USER_NAME = "com.kotlin.mywallet"
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : Activity() {  // Extends Activity y no AppCompatActivity, para ocultar barra de titulo
 
-    private lateinit var signInBtn: Button
-    private lateinit var emailTxt: EditText
-    private lateinit var passwordTxt: EditText
-    private lateinit var userNameTxt: EditText
+    private lateinit var regButton: MaterialButton
+    private lateinit var ingButton: MaterialButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_main)
 
-        signInBtn = findViewById(R.id.loginButton)
-        userNameTxt = findViewById(R.id.editUserName)
-        emailTxt = findViewById(R.id.editTextEmailAddress)
-        passwordTxt = findViewById(R.id.editTextPassword)
+        regButton= findViewById(R.id.reg_button)
+        ingButton= findViewById(R.id.ing_button)
 
-        // Aqui se hacia logIn con el teclado de android.
-//        passwordTxt.setOnKeyListener(object : View.OnKeyListener {
-//            override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
-//                if (event.action == KeyEvent.ACTION_DOWN) {     // Cada que se presiona una tecla
-//                    return when (keyCode) {
-//                        KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> {   // Enter o flecha :v
-//                            logIn()
-//                            true
-//                        }
-//                        else -> {
-//                            false
-//                        }
-//                    }
-//                }
-//                return false
-//            }
-//        })
+        regButton.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java).apply {
+            }
+            startActivityForResult(intent, 1)
+        }
 
-        signInBtn.setOnClickListener( View.OnClickListener { logIn() })
+        ingButton.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java).apply {
+            }
+            startActivity(intent)
+        }
+
     }
 
-    private fun logIn(){
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-        if(userNameTxt.text.isNullOrEmpty()){
-            Toast.makeText(
-                this,
-                "Nombre de usuario vacío",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-        else{
-            if (emailTxt.text.toString() == "prueba@email.com" && passwordTxt.text.toString() == "password") {
+        if(resultCode == Activity.RESULT_OK){
 
-                val bundle = Bundle()
-                bundle.putString(USER_NAME, userNameTxt.text.toString())
-
-                val intent = Intent(this, HomeActivity::class.java).apply {
-                    putExtras(bundle)
-                }
-                startActivity(intent)
-            }
-            else
-            {
-                Toast.makeText(
-                    this,
-                    "Wrong email or password",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
         }
     }
+
 }

@@ -23,6 +23,24 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="Wallet.Button.Rounded" parent="Wallet.Button">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MyApp.Button.Circle</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">100dp</item>
+        <item name="android:height">100dp</item>
+        <item name="android:textSize">50sp</item>
+        <item name="cornerRadius">100dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.MyApp.Button.Circle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerRadius">100dp</item>
+    </style>
+
     <style name="Wallet.Button.Welcome" parent="Wallet.Button">
         <item name="android:textColor">@color/secondaryTextColor</item>
         <item name="backgroundTint">?attr/colorAccent</item>

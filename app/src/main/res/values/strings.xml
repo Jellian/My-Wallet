@@ -17,4 +17,20 @@
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="hint_user_or_email">Username or email</string>
+    <string name="open_drawer">Abrir</string>
+    <string name="close_drawer">Cerrar</string>
+    <string name="user">Usuario</string>
+    <string name="email">Correo electrónico</string>
+
+    <string name="drawer.home">Home</string>
+
+    <string name="drawer.account">Cuenta</string>
+    <string name="drawer.accounts">Mis cuentas</string>
+    <string name="drawer.add_account">Agregar cuenta</string>
+
+    <string name="drawer.extra">Adicional</string>
+    <string name="drawer.about">Acerca de</string>
+    <string name="drawer.privacy">Privacidad</string>
+
+
 </resources>

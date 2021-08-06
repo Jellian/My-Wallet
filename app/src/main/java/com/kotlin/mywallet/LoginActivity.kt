@@ -29,13 +29,8 @@ class LoginActivity : AppCompatActivity() {
         signInBtn.setOnClickListener {
             Log.d("Hola", "ClickListener")
             if (dataUser != null) {
-                Log.d("Hola", "No es null")
                 logIn(dataUser)
             }
-            else{
-                Log.d("Hola", "Es null, crack")
-            }
-
         }
     }
 

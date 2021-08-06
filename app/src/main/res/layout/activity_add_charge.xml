@@ -6,98 +6,128 @@
     android:layout_height="match_parent"
     tools:context=".AddChargeActivity">
 
-    <EditText
-        android:id="@+id/editTextNote"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
-        android:ems="10"
-        android:gravity="top|start"
-        android:inputType="textMultiLine"
-        android:lines="8"
-        android:maxLines="10"
-        android:minLines="6"
-        android:scrollbars="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/amountEditText" />
-
     <Spinner
-        android:id="@+id/categorySpinner"
-        android:layout_width="158dp"
+        android:id="@+id/accountsSpinner"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNote" />
-
-    <EditText
-        android:id="@+id/amountEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
-        android:ems="10"
-        android:inputType="numberDecimal"
-        android:text="0.0"
-        android:textAlignment="textEnd"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerActionText" />
-
-    <Button
-        android:id="@+id/addChargeButton"
-        android:layout_width="248dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:text="@string/text_button_charge"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/categorySpinner" />
+        app:layout_constraintEnd_toStartOf="@+id/layout_amountEditText"
+        app:layout_constraintStart_toStartOf="@id/layout_noteEditText"
+        app:layout_constraintTop_toTopOf="@id/layout_amountEditText"
+        app:layout_constraintBottom_toBottomOf="@id/layout_amountEditText"
+/>
 
     <TextView
-        android:id="@+id/labelAmountText"
-        android:layout_width="58dp"
-        android:layout_height="wrap_content"
-        android:text="@string/label_amount"
-        app:layout_constraintBottom_toTopOf="@+id/amountEditText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.283"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/labelNotesText"
-        android:layout_width="58dp"
-        android:layout_height="wrap_content"
-        android:text="@string/label_note"
-        app:layout_constraintBottom_toTopOf="@+id/editTextNote"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.283"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/labelCategoryText"
-        android:layout_width="105dp"
+        android:id="@+id/labelCategoryText2"
+        android:layout_width="0dp"
         android:layout_height="22dp"
-        android:text="@string/label_category"
-        app:layout_constraintBottom_toTopOf="@+id/categorySpinner"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.411"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:text="Cuenta"
+        app:layout_constraintBottom_toTopOf="@+id/accountsSpinner"
+        app:layout_constraintEnd_toEndOf="@id/accountsSpinner"
+        app:layout_constraintStart_toStartOf="@id/accountsSpinner" />
 
     <TextView
         android:id="@+id/headerActionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="48dp"
+        android:fontFamily="casual"
         android:text="@string/action_text"
         android:textSize="24sp"
+        android:textColor="@color/primaryTextColor"
+        android:textAlignment="center"
+        android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layout_amountEditText"
+        style="@style/Wallet.TextInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:hint="Cantidad"
+        app:layout_constraintEnd_toEndOf="@id/layout_noteEditText"
+        app:layout_constraintStart_toEndOf="@id/guideline1"
+        app:layout_constraintTop_toBottomOf="@+id/headerActionText"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/amountEditText"
+            android:text="0.00"
+            android:inputType="numberDecimal"
+            android:textAlignment="textEnd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            app:layout_constraintStart_toStartOf="@+id/layout_text_user" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layout_noteEditText"
+        style="@style/Wallet.TextInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="48dp"
+        android:layout_marginTop="48dp"
+        android:hint="Nota"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_amountEditText"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/noteEditText"
+            android:inputType="textMultiLine"
+            android:gravity="top|start"
+            android:lines="8"
+            android:maxLines="10"
+            android:minLines="6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/layout_text_user" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <Spinner
+        android:id="@+id/categorySpinner"
+        android:layout_width="152dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="64dp"
+        android:layout_marginTop="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_noteEditText"
+        />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/addChargeButton"
+        style="@style/Wallet.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:text="@string/text_button_charge"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/categorySpinner" />
+
+    <TextView
+        android:id="@+id/labelCategoryText"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        android:text="@string/label_category"
+        app:layout_constraintBottom_toTopOf="@+id/categorySpinner"
+        app:layout_constraintEnd_toEndOf="@id/categorySpinner"
+        app:layout_constraintStart_toStartOf="@id/categorySpinner" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.30" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

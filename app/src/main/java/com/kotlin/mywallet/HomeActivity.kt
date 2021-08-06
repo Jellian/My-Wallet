@@ -1,8 +1,10 @@
 package com.kotlin.mywallet
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -11,6 +13,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.kotlin.mywallet.finance.Cargo
+import com.kotlin.mywallet.finance.Cuenta
+import com.kotlin.mywallet.finance.Egreso
+import com.kotlin.mywallet.finance.Ingreso
 import com.kotlin.mywallet.personal.Usuario
 
 //const val TRANS_TYPE = "com.kotlin.mywallet"
@@ -63,12 +69,25 @@ class HomeActivity : AppCompatActivity() {
         addExpenseButton.setOnClickListener(prepareCharge())
 
         addAccountButton.setOnClickListener(addAccount())
+        showAccountsButton.setOnClickListener (showAccounts())
 
     }
 
     private fun addAccount() = View.OnClickListener {
         val intent = Intent(this, AddAccountActivity::class.java)
         startActivityForResult(intent, TWO)
+    }
+
+    private fun showAccounts() = View.OnClickListener {
+        val intent = Intent(this, ListActivity::class.java)
+
+        user.getAccounts().forEach {
+            intent.putExtra( it.getName(), it)
+            Log.d(it.getName(),"PASSED")
+        }
+        intent.putExtra("accountsList" ,user.getAccountNames())
+
+        startActivity(intent)
     }
 
     private fun prepareCharge() = View.OnClickListener { view ->
@@ -96,10 +115,21 @@ class HomeActivity : AppCompatActivity() {
             // Viene de hacer el cargo
             if(requestCode == ONE) {
 
-                //val cargo = intent.getParcelableExtra<Cargo>("cargo")
-                val cuentaNombre = intent.getStringExtra("cuenta")
+                val type = data?.getIntExtra("type",0)
+                val cuentaNombre = data?.getStringExtra("cuenta")
 
-                //addCharge(cuentaNombre, cargo)
+                if (type != null) {
+                    Log.d("NO NULO", "ASI ES")
+                    if(type > 0) {
+                        val cargo = data.getParcelableExtra<Ingreso>("cargo")
+                        user.addIncome(cuentaNombre, cargo)
+                        showDialog("Ingreso creado.", "${cargo?.getAmount()} MXN a cuenta $cuentaNombre en categoría ${cargo?.getCategory()}.")
+                    } else {
+                        val cargo = data.getParcelableExtra<Egreso>("cargo")
+                        user.addExpense(cuentaNombre, cargo)
+                        showDialog("Egreso creado.", "-${cargo?.getAmount()} MXN a cuenta $cuentaNombre en categoría ${cargo?.getCategory()}.")
+                   }
+                }
             }
             // Viene de agregar cuenta
             else if(requestCode == TWO){
@@ -115,7 +145,9 @@ class HomeActivity : AppCompatActivity() {
         val drawerToggle = ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open_drawer,R.string.close_drawer)
     }
 
-
-
+    private fun showDialog(title:String,message:String){
+        AlertDialog.Builder(this).setTitle(title).setMessage(message)
+            .setPositiveButton("OK"){ _, _ -> }.create().show()
+    }
 
 }

@@ -1,6 +1,9 @@
 package com.kotlin.mywallet.personal
 
+import android.widget.Toast
 import com.kotlin.mywallet.finance.Cuenta
+import com.kotlin.mywallet.finance.Egreso
+import com.kotlin.mywallet.finance.Ingreso
 
 class Usuario(private var nombre: String = "") {
 
@@ -21,5 +24,26 @@ class Usuario(private var nombre: String = "") {
         return namesList
     }
 
+    fun addExpense(cuenta:String?="", cargo: Egreso?){
+        cuentas.forEach {
+            if(it.getName()== cuenta){
+                it.addExpense(cargo)
 
+                return
+            }
+        }
+    }
+
+    fun addIncome(cuenta:String?="", cargo: Ingreso?){
+        cuentas.forEach {
+            if(it.getName() == cuenta){
+                it.addIncome(cargo)
+                return
+            }
+        }
+    }
+
+    fun getAccounts(): MutableList<Cuenta>{
+        return this.cuentas
+    }
 }

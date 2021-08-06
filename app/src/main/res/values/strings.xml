@@ -31,6 +31,7 @@
     <string name="drawer.extra">Adicional</string>
     <string name="drawer.about">Acerca de</string>
     <string name="drawer.privacy">Privacidad</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

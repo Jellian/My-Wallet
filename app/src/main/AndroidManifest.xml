@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyWallet">
-        <activity android:name=".ShowAccounts"></activity>
+        <activity android:name=".DetailActivity"></activity>
+        <activity android:name=".ListActivity" />
         <activity android:name=".AddAccountActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />

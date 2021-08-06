@@ -47,19 +47,14 @@ class AddChargeActivity : AppCompatActivity() {
 
         categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                showDialog("No seleccionaste categoria","Vuelve a desplegar la lista y asegúrate de elegir correctamente alguna")
-                Toast.makeText(applicationContext, "No hay categoria" , Toast.LENGTH_LONG).show()
             }
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 category = categories[position]
-                Toast.makeText(applicationContext , categories[position] , Toast.LENGTH_LONG).show()
             }
         }
 
         accountSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                showDialog("No seleccionaste cuenta","Vuelve a desplegar la lista y asegúrate de elegir correctamente alguna")
-                Toast.makeText(applicationContext, "No hay cuenta" , Toast.LENGTH_LONG).show()
             }
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 cuenta = accounts?.get(position) as String
@@ -77,15 +72,6 @@ class AddChargeActivity : AppCompatActivity() {
         }
     }
 
-    private fun showDialog(title:String,message:String){
-        AlertDialog.Builder(this)
-            .setTitle(title)
-            .setMessage(message)
-            .setPositiveButton("OK"){dialogInterface, which -> }
-            .create()
-            .show()
-    }
-
     private fun createCharge() = View.OnClickListener {
 
         val intent = Intent(this, AddChargeActivity::class.java)
@@ -97,11 +83,16 @@ class AddChargeActivity : AppCompatActivity() {
 
         if (chargeType == "ingreso") {
             val cargo = Ingreso(amount, category, note)
+            intent.putExtra("type", 1 )
             intent.putExtra("cargo", cargo )
+            //Toast.makeText(this, "Ingreso creado. ${amount}MXN a cuenta $cuenta en categoría $category.", Toast.LENGTH_LONG).show()
         }
         else{
             val cargo = Egreso(-amount, category, note)
+            intent.putExtra("type", -1 )
             intent.putExtra("cargo", cargo )
+            //Toast.makeText(this, "Egreso creado. -${amount}MXN a $cuenta en categoría $category", Toast.LENGTH_LONG).show()
+            //showDialog("Egreso creado.", "-${amount}MXN a cuenta $cuenta en categoría $category.")
         }
 
         setResult(Activity.RESULT_OK, intent)

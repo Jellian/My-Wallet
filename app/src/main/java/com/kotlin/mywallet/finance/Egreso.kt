@@ -6,9 +6,7 @@ import android.os.Parcelable
 import androidx.annotation.RequiresApi
 import com.kotlin.mywallet.utils.Date
 
-class Egreso(private var amount: Float = 0.0f, private var category: String = "", private var note: String = ""): Cargo(),
-    Parcelable {
-
+class Egreso(private var amount: Float = 0.0f, private var category: String = "", private var note: String = ""): Parcelable{
     @RequiresApi(Build.VERSION_CODES.O)
     private val date: String = Date().now()
 
@@ -17,6 +15,14 @@ class Egreso(private var amount: Float = 0.0f, private var category: String = ""
         parcel.readString()!!,
         parcel.readString()!!
     ) {
+    }
+
+    fun getAmount(): Float{
+        return this.amount
+    }
+
+    fun getCategory(): String{
+        return this.category
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -38,4 +44,5 @@ class Egreso(private var amount: Float = 0.0f, private var category: String = ""
             return arrayOfNulls(size)
         }
     }
+
 }

@@ -1,31 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background = "@color/primaryColor"
-    >
+    android:background="@color/primaryColor">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView_main_appName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
+        android:paddingHorizontal="16dp"
         android:fontFamily="casual"
-        android:text="@string/app_name"
         android:textAlignment="center"
-        android:textAllCaps="false"
         android:textColor="@color/secondaryTextColor"
-        android:textSize="48dp"
         android:textStyle="bold|italic"
+        android:text="@string/app_name"
+        android:textSize="48sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageIcon"
+        android:id="@+id/imageView_register_appIcon"
         android:layout_width="176dp"
         android:layout_height="176dp"
         android:layout_marginTop="24dp"
@@ -34,29 +31,29 @@
         android:src="@drawable/walleticon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_main_appName" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/reg_button"
+        android:id="@+id/button_main_signUp"
         style="@style/Wallet.Button.Welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="152dp"
-        android:text="Registrarse"
+        android:text="@string/registrarse"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageIcon" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView_register_appIcon" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/ing_button"
+        android:id="@+id/button_main_signIn"
         style="@style/Wallet.Button.Welcome"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Ingresar"
-        app:layout_constraintEnd_toEndOf="@id/reg_button"
-        app:layout_constraintStart_toStartOf="@id/reg_button"
-        app:layout_constraintTop_toBottomOf="@+id/reg_button" />
+        android:text="@string/ingresar"
+        app:layout_constraintEnd_toEndOf="@id/button_main_signUp"
+        app:layout_constraintStart_toStartOf="@id/button_main_signUp"
+        app:layout_constraintTop_toBottomOf="@+id/button_main_signUp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,13 +5,13 @@ class Categories() {
     companion object categoryList {
 
         val incomeOptions = listOf(
-            "Deposit", "Salary", "Investment","Bonus",
-            "Holiday Pay", "Rent", "Sales", "loans"
+            "Depósito", "Salario", "Inversión","Bono",
+            "Ahorro", "Renta", "Venta",
         )
 
         val expendOptions = listOf(
-            "Transport",  "Food", "Entertainment", "Home",
-            "Clothes",  "Health",  "Auto", "Restaurant"
+            "Transporte",  "Comida", "Entretenimiento", "Casa",
+            "Ropa",  "Salud",  "Auto", "Restaurante"
         )
 
     }

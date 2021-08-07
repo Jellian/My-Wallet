@@ -23,7 +23,7 @@
 
         <androidx.appcompat.widget.Toolbar
             app:navigationIcon="@drawable/menu"
-            android:id="@+id/app_bar"
+            android:id="@+id/toolbar_home_appBar"
             style="@style/Widget.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -31,27 +31,27 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/addIncomeButton"
+        android:id="@+id/button_home_addIncome"
         style="@style/Wallet.Button.Rounded"
         android:layout_marginStart="64dp"
-        android:text="+"
+        android:text="@string/plus"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.811" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/addExpenseButton"
+        android:id="@+id/button_home_addExpense"
         style="@style/Wallet.Button.Rounded"
         android:layout_marginEnd="64dp"
-        android:text="-"
+        android:text="@string/minus"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.811" />
 
     <TextView
-        android:id="@+id/welcomeHomeText"
+        android:id="@+id/textView_home_welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -68,7 +68,7 @@
         app:layout_constraintVertical_bias="0.125" />
 
     <TextView
-        android:id="@+id/totalAmountText"
+        android:id="@+id/textView_home_totalAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -77,15 +77,15 @@
         android:text="@string/text_account_status"
         android:textAlignment="center"
         android:textColor="@color/primaryTextColor"
-        android:textSize="48sp"
+        android:textSize="72sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/welcomeHomeText"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_home_welcome"
+        app:layout_constraintVertical_bias="0.1" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView_home_pesos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -93,27 +93,27 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="casual"
-        android:text="$"
+        android:text="@string/pesos"
         android:textAlignment="center"
         android:textColor="@color/primaryTextColor"
-        android:textSize="48sp"
+        android:textSize="72sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/totalAmountText"
+        app:layout_constraintEnd_toStartOf="@+id/textView_home_totalAmount"
         app:layout_constraintHorizontal_bias="0.961"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/welcomeHomeText"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_home_welcome"
+        app:layout_constraintVertical_bias="0.1" />
 
     <Button
         android:id="@+id/addAcountButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="AGREGAR"
-        app:layout_constraintBottom_toTopOf="@+id/addIncomeButton"
+        app:layout_constraintBottom_toTopOf="@+id/button_home_addIncome"
         app:layout_constraintEnd_toStartOf="@+id/showAccountsButton"
         app:layout_constraintHorizontal_bias="0.451"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/totalAmountText"
+        app:layout_constraintTop_toBottomOf="@+id/textView_home_totalAmount"
         app:layout_constraintVertical_bias="0.528" />
 
     <Button
@@ -122,9 +122,9 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="68dp"
         android:text="MOSTRAR"
-        app:layout_constraintBottom_toTopOf="@+id/addExpenseButton"
+        app:layout_constraintBottom_toTopOf="@+id/button_home_addExpense"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/totalAmountText"
+        app:layout_constraintTop_toBottomOf="@+id/textView_home_totalAmount"
         app:layout_constraintVertical_bias="0.528" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 

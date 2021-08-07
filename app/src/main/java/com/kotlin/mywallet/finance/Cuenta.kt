@@ -30,15 +30,17 @@ class Cuenta(private var id: Int, private var name: String, private val initialA
         return totalAmount
     }
 
-    fun addExpense(cargo: Egreso?){
-        if (cargo != null) {
-            expenses.add(cargo)
+    fun addExpense(charge: Egreso?){
+        if (charge != null) {
+            expenses.add(charge)
+            this.totalAmount += charge.getAmount()
         }
     }
 
-    fun addIncome(cargo: Ingreso?){
-        if (cargo != null) {
-            incomes.add(cargo)
+    fun addIncome(charge: Ingreso?){
+        if (charge != null) {
+            incomes.add(charge)
+            this.totalAmount += charge.getAmount()
         }
     }
 

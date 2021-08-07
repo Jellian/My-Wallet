@@ -60,6 +60,7 @@
 
     <style name="Wallet.HintText" parent="TextAppearance.MaterialComponents.Subtitle2">
         <item name="fontFamily">casual</item>
+        <item name="android:fontFamily">casual</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
 

@@ -1,7 +1,6 @@
 package com.kotlin.mywallet
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,36 +11,41 @@ import com.kotlin.mywallet.finance.Ingreso
 
 class AddChargeActivity : AppCompatActivity() {
 
-    private lateinit var headerActionText: TextView
+    private lateinit var headerActionTextView: TextView
     private lateinit var amountEditText: EditText
-    private lateinit var editTextNote: EditText
+    private lateinit var noteEditText: EditText
     private lateinit var categorySpinner: Spinner
     private lateinit var addChargeButton: Button
     private lateinit var accountSpinner: Spinner
 
-    private var chargeType: String? = "ingreso"
+    private var chargeType: Int? = 0
     private var category: String = ""
-    private var cuenta: String = ""
+    private var account: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_charge)
 
-        amountEditText = findViewById(R.id.amountEditText)
-        editTextNote = findViewById(R.id.noteEditText)
-        headerActionText = findViewById(R.id.headerActionText)
-        categorySpinner = findViewById(R.id.categorySpinner)
-        accountSpinner = findViewById(R.id.accountsSpinner)
-        addChargeButton= findViewById(R.id.addChargeButton)
+        amountEditText = findViewById(R.id.editText_addCharge_amount)
+        noteEditText = findViewById(R.id.editText_addCharge_note)
+        headerActionTextView = findViewById(R.id.textView_addCharge_headerAction)
+        categorySpinner = findViewById(R.id.spinner_addCharge_categories)
+        accountSpinner = findViewById(R.id.spinner_addCharge_accounts)
+        addChargeButton= findViewById(R.id.button_addCharge_add)
 
-        //val bundle = intent.extras
-        chargeType = intent.getStringExtra("type")//bundle?.getString(TRANS_TYPE)
-        val accounts = intent.getSerializableExtra("accountsList") as? ArrayList<*>
+        chargeType = intent.getIntExtra(HomeActivity.TYPE, 0)
+        val accounts = intent.getSerializableExtra(HomeActivity.ACCOUNT_LIST) as? ArrayList<*>
 
-        headerActionText.text = "Añadir $chargeType"
+        val categories : List<String>
 
-        val categories = if (chargeType != "ingreso") Categories.expendOptions
-        else Categories.incomeOptions
+        if (chargeType != +1) {
+            categories = Categories.expendOptions
+            headerActionTextView.text = getString(R.string.anadir_egreso)
+        }
+        else {
+            categories = Categories.incomeOptions
+            headerActionTextView.text = getString(R.string.anadir_ingreso)
+        }
 
         addChargeButton.setOnClickListener( createCharge())
 
@@ -57,7 +61,7 @@ class AddChargeActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                cuenta = accounts?.get(position) as String
+                account = accounts?.get(position) as String
             }
         }
 
@@ -77,22 +81,19 @@ class AddChargeActivity : AppCompatActivity() {
         val intent = Intent(this, AddChargeActivity::class.java)
 
         val amount = amountEditText.text.toString().toFloat()
-        val note = editTextNote.text.toString()
+        val note = noteEditText.text.toString()
 
-        intent.putExtra("cuenta", cuenta)
+        intent.putExtra(HomeActivity.ACCOUNT, account)
 
-        if (chargeType == "ingreso") {
-            val cargo = Ingreso(amount, category, note)
-            intent.putExtra("type", 1 )
-            intent.putExtra("cargo", cargo )
-            //Toast.makeText(this, "Ingreso creado. ${amount}MXN a cuenta $cuenta en categoría $category.", Toast.LENGTH_LONG).show()
+        if (chargeType == 1) {
+            val charge = Ingreso(amount, category, note)
+            intent.putExtra(HomeActivity.TYPE, 1 )
+            intent.putExtra(HomeActivity.CHARGE, charge )
         }
         else{
-            val cargo = Egreso(-amount, category, note)
-            intent.putExtra("type", -1 )
-            intent.putExtra("cargo", cargo )
-            //Toast.makeText(this, "Egreso creado. -${amount}MXN a $cuenta en categoría $category", Toast.LENGTH_LONG).show()
-            //showDialog("Egreso creado.", "-${amount}MXN a cuenta $cuenta en categoría $category.")
+            val charge = Egreso(-amount, category, note)
+            intent.putExtra(HomeActivity.TYPE, -1 )
+            intent.putExtra(HomeActivity.CHARGE, charge )
         }
 
         setResult(Activity.RESULT_OK, intent)

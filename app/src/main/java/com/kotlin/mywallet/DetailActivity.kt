@@ -7,19 +7,19 @@ import com.kotlin.mywallet.finance.Cuenta
 
 class DetailActivity : AppCompatActivity() {
 
-    private lateinit var name: TextView
-    private lateinit var total: TextView
+    private lateinit var accountNameTextView: TextView
+    private lateinit var totalTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        val product = intent.getParcelableExtra<Cuenta>("Cuenta")
+        val account = intent.getParcelableExtra<Cuenta>(ListActivity.ACCOUNT)
 
-        name = findViewById(R.id.tvAccountDetailName)
-        total = findViewById(R.id.tvTotalAmount)
+        accountNameTextView = findViewById(R.id.textView_detail_accountName)
+        totalTextView = findViewById(R.id.textView_detail_totalAmount)
 
-        name.text = product?.getName() ?: ""
-        total.text = product?.getTotalAmount().toString()
+        accountNameTextView.text = account?.getName() ?: ""
+        totalTextView.text = account?.getTotalAmount().toString()
     }
 }

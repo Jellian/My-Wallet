@@ -9,6 +9,11 @@ import com.kotlin.mywallet.finance.Cuenta
 
 class ListActivity : AppCompatActivity() {
 
+    companion object {
+        const val ACCOUNT = "ACCOUNT"
+        const val ACCOUNT_LIST = "ACCOUNT_LIST"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
@@ -17,24 +22,24 @@ class ListActivity : AppCompatActivity() {
 
         listFragment.setListener{
             val intent = Intent(this, DetailActivity::class.java)
-            intent.putExtra("Cuenta",it)
+            intent.putExtra(ACCOUNT,it)
             startActivity(intent)
         }
 
     }
 
     fun getAccounts(): MutableList<Cuenta>{
-            // obtenemos las cuentas existentes
-            val accountList =
-                intent.getSerializableExtra("accountsList") as? ArrayList<*> //Lista de nombres de las cuentas
+            // Obtenemos las cuentas existentes
+            val accountList = intent.getSerializableExtra(ACCOUNT_LIST) as? ArrayList<*> //Lista de nombres de las cuentas
 
             val accountsToShow = mutableListOf<Cuenta>()
+            var account: Cuenta?
 
             if (accountList?.none { it.toString().isEmpty() } == true) {
                 accountList.forEach {
-                    val c = intent.getParcelableExtra<Cuenta>(it.toString())
-                    if (c != null) {
-                        accountsToShow.add(c)
+                    account = intent.getParcelableExtra<Cuenta>(it.toString())
+                    if (account != null) {
+                        accountsToShow.add(account!!)
                     }
                 }
             }

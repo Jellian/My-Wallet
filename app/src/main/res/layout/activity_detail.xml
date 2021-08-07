@@ -7,12 +7,12 @@
     android:paddingVertical="16dp">
 
     <TextView
-        android:id="@+id/headerDetailText"
+        android:id="@+id/textView_detail_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:fontFamily="casual"
-        android:text="Detalles"
+        android:text="@string/detalles"
         android:textSize="24sp"
         android:textColor="@color/primaryTextColor"
         android:textAlignment="center"
@@ -22,69 +22,70 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imgCuenta"
+        android:id="@+id/imageView_detail_accountIcon"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:src="@drawable/money"
-        app:layout_constraintTop_toBottomOf="@id/headerDetailText"
-        app:layout_constraintStart_toStartOf="@id/guideline5"
-        app:layout_constraintEnd_toEndOf="@id/guideline6"/>
+        app:layout_constraintTop_toBottomOf="@id/textView_detail_header"
+        app:layout_constraintStart_toStartOf="@id/detail_guideline3"
+        app:layout_constraintEnd_toEndOf="@id/detail_guideline4"
+        android:contentDescription="@string/icono_de_cuenta" />
 
     <TextView
-        android:id="@+id/tvAccountDetailName"
+        android:id="@+id/textView_detail_accountName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="casual"
-        android:text="Cuenta"
+        android:text="@string/cuenta"
         android:textAlignment="center"
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_margin="8dp"
-        app:layout_constraintStart_toStartOf="@+id/guideline4"
-        app:layout_constraintTop_toBottomOf="@+id/headerDetailText" />
+        app:layout_constraintStart_toStartOf="@+id/detail_guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/textView_detail_header" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Total en cuenta"
+        android:text="@string/total_en_cuenta"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@id/tvTotalAmount"
-        app:layout_constraintStart_toStartOf="@+id/guideline4" />
+        app:layout_constraintBottom_toTopOf="@id/textView_detail_totalAmount"
+        app:layout_constraintStart_toStartOf="@+id/detail_guideline2" />
 
     <TextView
-        android:id="@+id/tvTotalAmount"
+        android:id="@+id/textView_detail_totalAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textColor="#000"
         android:textSize="24sp"
-        android:text="$1,000"
+        android:text="@string/_1000"
         android:fontFamily="casual"
-        app:layout_constraintBottom_toTopOf="@id/guideline7"
-        app:layout_constraintStart_toStartOf="@id/guideline4"/>
+        app:layout_constraintBottom_toTopOf="@id/detail_guideline1"
+        app:layout_constraintStart_toStartOf="@id/detail_guideline2"/>
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline4"
+        android:id="@+id/detail_guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent=".05" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline5"
+        android:id="@+id/detail_guideline3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.30" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline6"
+        android:id="@+id/detail_guideline4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.70" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline7"
+        android:id="@+id/detail_guideline1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

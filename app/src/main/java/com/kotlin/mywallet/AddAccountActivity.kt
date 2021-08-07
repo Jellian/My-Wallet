@@ -8,21 +8,20 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import com.google.android.material.button.MaterialButton
-import java.time.temporal.TemporalAmount
 
 class AddAccountActivity : AppCompatActivity() {
 
-    private lateinit var textName: EditText
-    private lateinit var textInitialAmount: EditText
+    private lateinit var accountNameEditText: EditText
+    private lateinit var initialAmountEditText: EditText
     private lateinit var acceptButton: MaterialButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_account)
 
-        acceptButton= findViewById(R.id.acceptButton)
-        textName = findViewById(R.id.text_name)
-        textInitialAmount = findViewById(R.id.text_initial_amount)
+        acceptButton= findViewById(R.id.button_addAccount_accept)
+        accountNameEditText = findViewById(R.id.textView_addAccount_accountName)
+        initialAmountEditText = findViewById(R.id.textView_addAccount_initialAmount)
 
         acceptButton.setOnClickListener(returnNewAccountData())
 
@@ -30,16 +29,16 @@ class AddAccountActivity : AppCompatActivity() {
 
     private fun returnNewAccountData() = View.OnClickListener {
 
-        if(textName.text.isNullOrEmpty() || textInitialAmount.text.isNullOrEmpty()){
+        if(accountNameEditText.text.isNullOrEmpty() || initialAmountEditText.text.isNullOrEmpty()){
             Toast.makeText(this, "Por favor llena todos los campos", Toast.LENGTH_SHORT).show()
         }
         else {
             val intent = Intent(this, AddAccountActivity::class.java)
-            val amount = textInitialAmount.text.toString()
-            val name = textName.text.toString()
+            val amount = initialAmountEditText.text.toString()
+            val name = accountNameEditText.text.toString()
 
-            intent.putExtra("name", name)
-            intent.putExtra("amount", amount)
+            intent.putExtra(HomeActivity.NEW_ACCOUNT_NAME, name)
+            intent.putExtra(HomeActivity.NEW_ACCOUNT_AMOUNT, amount)
             setResult(Activity.RESULT_OK, intent)
             Toast.makeText(this, "Cuenta $name agregada.", Toast.LENGTH_SHORT).show()
             finish()

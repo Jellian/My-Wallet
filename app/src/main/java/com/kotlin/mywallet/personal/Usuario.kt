@@ -5,16 +5,17 @@ import com.kotlin.mywallet.finance.Cuenta
 import com.kotlin.mywallet.finance.Egreso
 import com.kotlin.mywallet.finance.Ingreso
 
-class Usuario(private var nombre: String = "") {
+class Usuario(private var nombre: String? = "") {
 
     private var cuentas = mutableListOf<Cuenta>()
+    private var grandTotal = 0.0f
     //private var allInfo = AllInfo()
 
-    fun addAccount(name:String, initAmt: Float){
+    fun addAccount(accountName:String, initialAmount: Float){
         val newId = cuentas.size
-        val newAccount = Cuenta(newId, name, initAmt)
-
+        val newAccount = Cuenta(newId, accountName, initialAmount)
         cuentas.add(newAccount)
+        grandTotal += newAccount.getTotalAmount()
     }
 
     fun getAccountNames(): ArrayList<String> {
@@ -24,20 +25,21 @@ class Usuario(private var nombre: String = "") {
         return namesList
     }
 
-    fun addExpense(cuenta:String?="", cargo: Egreso?){
+    fun addExpense(accountName: String?="", charge: Egreso?){
         cuentas.forEach {
-            if(it.getName()== cuenta){
-                it.addExpense(cargo)
-
+            if(it.getName()== accountName){
+                it.addExpense(charge)
+                grandTotal += charge?.getAmount() ?: 0.0f
                 return
             }
         }
     }
 
-    fun addIncome(cuenta:String?="", cargo: Ingreso?){
+    fun addIncome(accountName: String?="", charge: Ingreso?){
         cuentas.forEach {
-            if(it.getName() == cuenta){
-                it.addIncome(cargo)
+            if(it.getName() == accountName){
+                it.addIncome(charge)
+                grandTotal += charge?.getAmount() ?: 0.0f
                 return
             }
         }
@@ -45,5 +47,9 @@ class Usuario(private var nombre: String = "") {
 
     fun getAccounts(): MutableList<Cuenta>{
         return this.cuentas
+    }
+
+    fun getGrandTotal(): Float{
+        return grandTotal
     }
 }

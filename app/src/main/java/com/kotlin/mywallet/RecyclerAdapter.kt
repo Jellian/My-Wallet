@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.mywallet.finance.Cuenta
@@ -14,8 +13,8 @@ class RecyclerAdapter( private val context: Context, private val accounts: Mutab
 
     class ViewHolder(val view : View) : RecyclerView.ViewHolder(view){
         //obteniendo las referencias a las Views
-        private val name = view.findViewById<TextView>(R.id.tvAccount)
-        private val amount = view.findViewById<TextView>(R.id.tvAmount)
+        private val name = view.findViewById<TextView>(R.id.textView_itemAccount_accountName)
+        private val amount = view.findViewById<TextView>(R.id.textView_itemAccount_amount)
 
         //"atando" los datos a las Views
         fun bind(account: Cuenta, context: Context){

@@ -7,26 +7,26 @@
     tools:context=".AddChargeActivity">
 
     <Spinner
-        android:id="@+id/accountsSpinner"
+        android:id="@+id/spinner_addCharge_accounts"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@+id/layout_amountEditText"
-        app:layout_constraintStart_toStartOf="@id/layout_noteEditText"
-        app:layout_constraintTop_toTopOf="@id/layout_amountEditText"
-        app:layout_constraintBottom_toBottomOf="@id/layout_amountEditText"
+        app:layout_constraintEnd_toStartOf="@+id/layout_addCharge_amount"
+        app:layout_constraintStart_toStartOf="@id/layout_addCharge_note"
+        app:layout_constraintTop_toTopOf="@id/layout_addCharge_amount"
+        app:layout_constraintBottom_toBottomOf="@id/layout_addCharge_amount"
 />
 
     <TextView
-        android:id="@+id/labelCategoryText2"
+        android:id="@+id/textView_addCharge_account"
         android:layout_width="0dp"
         android:layout_height="22dp"
-        android:text="Cuenta"
-        app:layout_constraintBottom_toTopOf="@+id/accountsSpinner"
-        app:layout_constraintEnd_toEndOf="@id/accountsSpinner"
-        app:layout_constraintStart_toStartOf="@id/accountsSpinner" />
+        android:text="@string/cuenta"
+        app:layout_constraintBottom_toTopOf="@+id/spinner_addCharge_accounts"
+        app:layout_constraintEnd_toEndOf="@id/spinner_addCharge_accounts"
+        app:layout_constraintStart_toStartOf="@id/spinner_addCharge_accounts" />
 
     <TextView
-        android:id="@+id/headerActionText"
+        android:id="@+id/textView_addCharge_headerAction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
@@ -41,68 +41,68 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layout_amountEditText"
+        android:id="@+id/layout_addCharge_amount"
         style="@style/Wallet.TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:hint="Cantidad"
-        app:layout_constraintEnd_toEndOf="@id/layout_noteEditText"
-        app:layout_constraintStart_toEndOf="@id/guideline1"
-        app:layout_constraintTop_toBottomOf="@+id/headerActionText"
+        android:hint="@string/cantidad"
+        app:layout_constraintEnd_toEndOf="@id/layout_addCharge_note"
+        app:layout_constraintStart_toEndOf="@id/addCharge_guideline1"
+        app:layout_constraintTop_toBottomOf="@+id/textView_addCharge_headerAction"
         app:layout_constraintVertical_chainStyle="packed">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/amountEditText"
-            android:text="0.00"
+            android:id="@+id/editText_addCharge_amount"
+            android:text="@string/_0_00"
             android:inputType="numberDecimal"
             android:textAlignment="textEnd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            app:layout_constraintStart_toStartOf="@+id/layout_text_user" />
+            app:layout_constraintStart_toStartOf="@+id/layout_register_userName" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layout_noteEditText"
+        android:id="@+id/layout_addCharge_note"
         style="@style/Wallet.TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="48dp"
         android:layout_marginTop="48dp"
-        android:hint="Nota"
+        android:hint="@string/nota"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_amountEditText"
+        app:layout_constraintTop_toBottomOf="@+id/layout_addCharge_amount"
         app:layout_constraintVertical_chainStyle="packed">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/noteEditText"
+            android:id="@+id/editText_addCharge_note"
             android:inputType="textMultiLine"
             android:gravity="top|start"
             android:lines="8"
-            android:maxLines="10"
-            android:minLines="6"
+            android:maxLines="5"
+            android:minLines="4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@+id/layout_text_user" />
+            app:layout_constraintStart_toStartOf="@+id/layout_register_userName" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
     <Spinner
-        android:id="@+id/categorySpinner"
+        android:id="@+id/spinner_addCharge_categories"
         android:layout_width="152dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="64dp"
         android:layout_marginTop="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_noteEditText"
+        app:layout_constraintTop_toBottomOf="@+id/layout_addCharge_note"
         />
 
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/addChargeButton"
+        android:id="@+id/button_addCharge_add"
         style="@style/Wallet.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -110,23 +110,23 @@
         android:text="@string/text_button_charge"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/categorySpinner" />
+        app:layout_constraintTop_toBottomOf="@id/spinner_addCharge_categories" />
 
     <TextView
-        android:id="@+id/labelCategoryText"
+        android:id="@+id/textView_addCharge_category"
         android:layout_width="0dp"
         android:layout_height="22dp"
         android:text="@string/label_category"
-        app:layout_constraintBottom_toTopOf="@+id/categorySpinner"
-        app:layout_constraintEnd_toEndOf="@id/categorySpinner"
-        app:layout_constraintStart_toStartOf="@id/categorySpinner" />
+        app:layout_constraintBottom_toTopOf="@+id/spinner_addCharge_categories"
+        app:layout_constraintEnd_toEndOf="@id/spinner_addCharge_categories"
+        app:layout_constraintStart_toStartOf="@id/spinner_addCharge_categories" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline1"
+        android:id="@+id/addCharge_guideline1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.30" />
+        app:layout_constraintGuide_percent="0.45" />
 
 
 

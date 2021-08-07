@@ -32,6 +32,26 @@
     <string name="drawer.about">Acerca de</string>
     <string name="drawer.privacy">Privacidad</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="registrarse">Registrarse</string>
+    <string name="ingresar">Ingresar</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
+    <string name="pesos">$</string>
+    <string name="cantidad">Cantidad</string>
+    <string name="_0_00">0.00</string>
+    <string name="nota">Nota</string>
+    <string name="nueva_cuenta">Nueva cuenta</string>
+    <string name="nombre_de_la_cuenta">Nombre de la cuenta</string>
+    <string name="monto_inicial">Monto inicial</string>
+    <string name="anadir_ingreso">Añadir ingreso</string>
+    <string name="anadir_egreso">Añadir egreso</string>
+    <string name="cuenta">Cuenta</string>
+    <string name="icono_de_la_cuenta">Icono de la cuenta</string>
+    <string name="detalles">Detalles</string>
+    <string name="total_en_cuenta">Total en cuenta</string>
+    <string name="imagen_de_usuario">Imagen de usuario</string>
+    <string name="_1000">$1000</string>
+    <string name="icono_de_cuenta">Icono de cuenta</string>
 
 </resources>

@@ -13,20 +13,26 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
-import com.kotlin.mywallet.finance.Cargo
-import com.kotlin.mywallet.finance.Cuenta
 import com.kotlin.mywallet.finance.Egreso
 import com.kotlin.mywallet.finance.Ingreso
 import com.kotlin.mywallet.personal.Usuario
 
-//const val TRANS_TYPE = "com.kotlin.mywallet"
-private const val ONE = 1   // Para agregar cargo
-private const val TWO = 2   // Para agregar cuenta
+private const val ONE = 1   // PARA AGREGAR CARGO
+private const val TWO = 2   // PARA AGREGAR CUENTA
 
 class HomeActivity : AppCompatActivity() {
 
-    private lateinit var welcomeHomeTxt: TextView
-    private lateinit var totalAmountTxt: TextView
+    companion object {
+        const val ACCOUNT_LIST = "ACCOUNT_LIST"
+        const val TYPE = "TYPE"
+        const val CHARGE = "CHARGE"
+        const val ACCOUNT = "ACCOUNT"
+        const val NEW_ACCOUNT_NAME = "NEW_ACCOUNT_NAME"
+        const val NEW_ACCOUNT_AMOUNT = "NEW_ACCOUNT_AMOUNT"
+    }
+
+    private lateinit var welcomeTextView: TextView
+    private lateinit var totalAmountTextView: TextView
     private lateinit var addIncomeButton: Button
     private lateinit var addExpenseButton: Button
 
@@ -39,37 +45,39 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val appBar = findViewById<Toolbar>(R.id.app_bar)
+        val appBar = findViewById<Toolbar>(R.id.toolbar_home_appBar)
         this.setSupportActionBar(appBar)
 
         setupDrawer(appBar)
 
-        val bundle = intent.extras
-        val name = bundle?.getString(USER_NAME)
+        val userName = intent.getStringExtra(MainActivity.USER_NAME)
+        val email = intent.getStringExtra(MainActivity.USER_EMAIL)
 
-        user = Usuario(name!!)
+        user = Usuario(userName)
 
         val navView = findViewById<NavigationView>(R.id.nav_view)
         val headerView = navView.getHeaderView(0)
-        val navUserName = headerView.findViewById<TextView>(R.id.userNameText)
+        val userNameNav = headerView.findViewById<TextView>(R.id.textView_drawerMenu_userName)
+        val emailNav = headerView.findViewById<TextView>(R.id.textView_drawerMenu_email)
 
-        navUserName.text = name
+        userNameNav.text = userName
+        emailNav.text = email
 
-        welcomeHomeTxt = findViewById(R.id.welcomeHomeText)
-        addIncomeButton = findViewById(R.id.addIncomeButton)
-        addExpenseButton = findViewById(R.id.addExpenseButton)
-        totalAmountTxt = findViewById(R.id.totalAmountText)
+        welcomeTextView = findViewById(R.id.textView_home_welcome)
+        addIncomeButton = findViewById(R.id.button_home_addIncome)
+        addExpenseButton = findViewById(R.id.button_home_addExpense)
+        totalAmountTextView = findViewById(R.id.textView_home_totalAmount)
 
         addAccountButton = findViewById(R.id.addAcountButton)
         showAccountsButton = findViewById(R.id.showAccountsButton)
 
-        welcomeHomeTxt.text = "Bienvenido $name"
+        "Bienvenido \n $userName".also { welcomeTextView.text = it }
 
         addIncomeButton.setOnClickListener(prepareCharge())
         addExpenseButton.setOnClickListener(prepareCharge())
 
         addAccountButton.setOnClickListener(addAccount())
-        showAccountsButton.setOnClickListener (showAccounts())
+        showAccountsButton.setOnClickListener(showAccounts())
 
     }
 
@@ -81,29 +89,25 @@ class HomeActivity : AppCompatActivity() {
     private fun showAccounts() = View.OnClickListener {
         val intent = Intent(this, ListActivity::class.java)
 
+        // Se agrega cada cuenta con su nombre al intent
         user.getAccounts().forEach {
             intent.putExtra( it.getName(), it)
-            Log.d(it.getName(),"PASSED")
         }
-        intent.putExtra("accountsList" ,user.getAccountNames())
+        // Se envía lista de strings que corresponden a los nombres de todas las cuentas del usuario
+        intent.putExtra(ACCOUNT_LIST ,user.getAccountNames())
 
         startActivity(intent)
     }
 
     private fun prepareCharge() = View.OnClickListener { view ->
 
-        //val bundle = Bundle()
         val intent = Intent(this, AddChargeActivity::class.java)
-
+        // Qué botón llamó a la función?
         when(view.id){
-            R.id.addIncomeButton -> intent.putExtra("type", "ingreso")//bundle.putString(TRANS_TYPE, "ingreso")
-            else -> intent.putExtra("type", "egreso")//bundle.putString(TRANS_TYPE, "egreso")
+            R.id.button_home_addIncome -> intent.putExtra(TYPE, +1)
+            else -> intent.putExtra(TYPE, -1)
         }
-
-        intent.putExtra("accountsList" ,user.getAccountNames())
-
-        //intent.putExtras(bundle)
-        //startActivity(intent)
+        intent.putExtra(ACCOUNT_LIST ,user.getAccountNames())
 
         startActivityForResult(intent, ONE )
     }
@@ -111,32 +115,18 @@ class HomeActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(resultCode == Activity.RESULT_OK){
+        if(resultCode == Activity.RESULT_OK && data != null){
             // Viene de hacer el cargo
             if(requestCode == ONE) {
-
-                val type = data?.getIntExtra("type",0)
-                val cuentaNombre = data?.getStringExtra("cuenta")
-
-                if (type != null) {
-                    Log.d("NO NULO", "ASI ES")
-                    if(type > 0) {
-                        val cargo = data.getParcelableExtra<Ingreso>("cargo")
-                        user.addIncome(cuentaNombre, cargo)
-                        showDialog("Ingreso creado.", "${cargo?.getAmount()} MXN a cuenta $cuentaNombre en categoría ${cargo?.getCategory()}.")
-                    } else {
-                        val cargo = data.getParcelableExtra<Egreso>("cargo")
-                        user.addExpense(cuentaNombre, cargo)
-                        showDialog("Egreso creado.", "-${cargo?.getAmount()} MXN a cuenta $cuentaNombre en categoría ${cargo?.getCategory()}.")
-                   }
-                }
+                doCharge(data)
             }
             // Viene de agregar cuenta
             else if(requestCode == TWO){
-                val n = data?.getStringExtra("name") ?: ""
-                val a = data?.getStringExtra("amount")?.toFloat() ?: 0.0f
-                user.addAccount(n, a)
+                val newAccountName = data.getStringExtra(NEW_ACCOUNT_NAME)?: ""
+                val newAccountAmount = data.getStringExtra(NEW_ACCOUNT_AMOUNT)?.toFloat() ?: 0.0f
+                user.addAccount(newAccountName, newAccountAmount)
             }
+            refreshTotal()
         }
     }
 
@@ -148,6 +138,29 @@ class HomeActivity : AppCompatActivity() {
     private fun showDialog(title:String,message:String){
         AlertDialog.Builder(this).setTitle(title).setMessage(message)
             .setPositiveButton("OK"){ _, _ -> }.create().show()
+    }
+
+    private fun doCharge(intent: Intent?){
+        if(intent != null) {
+            val type = intent.getIntExtra(TYPE, 0)
+            val accountName = intent.getStringExtra(ACCOUNT)
+            // INGRESO
+            if (type > 0) {
+                val charge = intent.getParcelableExtra<Ingreso>(CHARGE)
+                user.addIncome(accountName, charge)
+                showDialog("Ingreso creado.", "${charge?.getAmount()} MXN a cuenta $accountName en categoría ${charge?.getCategory()}.")
+            }
+            // EGRESO
+            else {
+                val charge = intent.getParcelableExtra<Egreso>(CHARGE)
+                user.addExpense(accountName, charge)
+                showDialog("Egreso creado.", "-${charge?.getAmount()} MXN a cuenta $accountName en categoría ${charge?.getCategory()}.")
+            }
+        }
+    }
+
+    private fun refreshTotal(){
+        totalAmountTextView.text = user.getGrandTotal().toString()
     }
 
 }

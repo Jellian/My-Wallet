@@ -3,44 +3,42 @@ package com.kotlin.mywallet
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.KeyEvent
-import android.view.View
 import android.view.Window
-import android.view.WindowManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
-import java.io.Serializable
-
-const val USER_NAME = "com.kotlin.mywallet"
 
 class MainActivity : Activity() {  // Extends Activity y no AppCompatActivity, para ocultar barra de titulo
 
-    private lateinit var regButton: MaterialButton
-    private lateinit var ingButton: MaterialButton
+    companion object {
+        const val USER_NAME = "USER_NAME"
+        const val USER_EMAIL = "USER_EMAIL"
+        const val USER_PASSWORD = "USER_PASSWORD"
+    }
 
-    private var dataUser= ArrayList<String>()
+    private lateinit var signUpButton: MaterialButton
+    private lateinit var signInButton: MaterialButton
+
+    private var userName: String = ""
+    private var userEmail: String = ""
+    private var userPassword: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_main)
 
-        regButton= findViewById(R.id.reg_button)
-        ingButton= findViewById(R.id.ing_button)
+        signUpButton= findViewById(R.id.button_main_signUp)
+        signInButton= findViewById(R.id.button_main_signIn)
 
-        regButton.setOnClickListener {
+        signUpButton.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivityForResult(intent, 1)
         }
 
-        ingButton.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java).apply {
-                putExtra("dataList", dataUser)
-            }
+        signInButton.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.putExtra(USER_NAME, userName)
+            intent.putExtra(USER_EMAIL, userEmail)
+            intent.putExtra(USER_PASSWORD, userPassword)
             startActivity(intent)
         }
 
@@ -49,7 +47,9 @@ class MainActivity : Activity() {  // Extends Activity y no AppCompatActivity, p
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(resultCode == Activity.RESULT_OK && data!= null)
-            dataUser = data.getSerializableExtra("dataList") as ArrayList<String>
+        if(resultCode == RESULT_OK && data!= null)
+            userName = data.getStringExtra(USER_NAME).toString()
+            userEmail = data?.getStringExtra(USER_EMAIL).toString()
+            userPassword = data?.getStringExtra(USER_PASSWORD).toString()
     }
 }

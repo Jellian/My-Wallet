@@ -7,7 +7,7 @@
     tools:context=".RegisterActivity">
 
     <TextView
-        android:id="@+id/appName"
+        android:id="@+id/textView_register_appName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageIcon"
+        android:id="@+id/imageView_register_appIcon"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_marginTop="24dp"
@@ -31,10 +31,10 @@
         android:src="@drawable/walleticon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appName" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_register_appName" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layout_text_user"
+        android:id="@+id/layout_register_userName"
         style="@style/Wallet.TextInputLayout.Login"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -43,20 +43,20 @@
         android:hint="@string/hint_username"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageIcon"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_register_appIcon"
         app:layout_constraintVertical_chainStyle="packed">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/text_user"
+            android:id="@+id/editText_register_userName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
             android:maxLines="1"
-            app:layout_constraintStart_toStartOf="@+id/layout_text_user" />
+            app:layout_constraintStart_toStartOf="@+id/layout_register_userName" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layout_text_email"
+        android:id="@+id/layout_register_email"
         style="@style/Wallet.TextInputLayout.Login"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -65,21 +65,21 @@
         android:hint="@string/hint_email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_text_user"
+        app:layout_constraintTop_toBottomOf="@+id/layout_register_userName"
         app:layout_constraintVertical_chainStyle="packed">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/text_email"
+            android:id="@+id/editText_register_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
             android:maxLines="1"
-            app:layout_constraintStart_toStartOf="@+id/layout_text_user" />
+            app:layout_constraintStart_toStartOf="@+id/layout_register_userName" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layout_text_password"
+        android:id="@+id/layout_register_password"
         style="@style/Wallet.TextInputLayout.Login"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -89,10 +89,10 @@
         app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_text_email">
+        app:layout_constraintTop_toBottomOf="@+id/layout_register_email">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/text_pass"
+            android:id="@+id/editText_register_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword" />
@@ -100,16 +100,16 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/acceptButton"
+        android:id="@+id/button_register_accept"
         style="@style/Wallet.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="72dp"
-        android:text="Aceptar"
+        android:text="@string/aceptar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_text_password" />
+        app:layout_constraintTop_toBottomOf="@+id/layout_register_password" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

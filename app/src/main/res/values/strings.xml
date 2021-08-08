@@ -53,5 +53,8 @@
     <string name="imagen_de_usuario">Imagen de usuario</string>
     <string name="_1000">$1000</string>
     <string name="icono_de_cuenta">Icono de cuenta</string>
+    <string name="charge">Cargo</string>
+    <string name="category">category</string>
+    <string name="note">Note</string>
 
 </resources>

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.Window
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -13,8 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
-import com.kotlin.mywallet.finance.Egreso
-import com.kotlin.mywallet.finance.Ingreso
+import com.kotlin.mywallet.finance.Cargo
 import com.kotlin.mywallet.personal.Usuario
 
 private const val ONE = 1   // PARA AGREGAR CARGO
@@ -43,6 +43,7 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_home)
 
         val appBar = findViewById<Toolbar>(R.id.toolbar_home_appBar)
@@ -95,7 +96,6 @@ class HomeActivity : AppCompatActivity() {
         }
         // Se envía lista de strings que corresponden a los nombres de todas las cuentas del usuario
         intent.putExtra(ACCOUNT_LIST ,user.getAccountNames())
-
         startActivity(intent)
     }
 
@@ -146,13 +146,13 @@ class HomeActivity : AppCompatActivity() {
             val accountName = intent.getStringExtra(ACCOUNT)
             // INGRESO
             if (type > 0) {
-                val charge = intent.getParcelableExtra<Ingreso>(CHARGE)
+                val charge = intent.getParcelableExtra<Cargo>(CHARGE)
                 user.addIncome(accountName, charge)
                 showDialog("Ingreso creado.", "${charge?.getAmount()} MXN a cuenta $accountName en categoría ${charge?.getCategory()}.")
             }
             // EGRESO
             else {
-                val charge = intent.getParcelableExtra<Egreso>(CHARGE)
+                val charge = intent.getParcelableExtra<Cargo>(CHARGE)
                 user.addExpense(accountName, charge)
                 showDialog("Egreso creado.", "-${charge?.getAmount()} MXN a cuenta $accountName en categoría ${charge?.getCategory()}.")
             }

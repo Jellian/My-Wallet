@@ -3,9 +3,9 @@ package com.kotlin.mywallet
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import android.util.Log
 import com.kotlin.mywallet.finance.Cuenta
+import java.lang.Exception
 
 class ListActivity : AppCompatActivity() {
 
@@ -21,9 +21,9 @@ class ListActivity : AppCompatActivity() {
         val listFragment = supportFragmentManager.findFragmentById(R.id.fragmentList) as ListFragment
 
         listFragment.setListener{
-            val intent = Intent(this, DetailActivity::class.java)
-            intent.putExtra(ACCOUNT,it)
-            startActivity(intent)
+                val intent = Intent(this, DetailActivity::class.java)
+                intent.putExtra(ACCOUNT, it)
+                startActivity(intent)
         }
 
     }

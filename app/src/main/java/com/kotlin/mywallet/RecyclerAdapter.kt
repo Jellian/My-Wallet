@@ -41,4 +41,3 @@ class RecyclerAdapter( private val context: Context, private val accounts: Mutab
 
 
 }
-

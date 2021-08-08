@@ -1,14 +1,19 @@
 package com.kotlin.mywallet.finance
 
+import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
+import android.util.Log
+import androidx.annotation.RequiresApi
+
 
 class Cuenta(private var id: Int, private var name: String, private val initialAmount:Float = 0.0f) : Parcelable{
     private var currency = "MXN"
     private var totalAmount = 0f
-    private var expenses = mutableListOf<Egreso>()
-    private var incomes = mutableListOf<Ingreso>()
+    private var expenses = mutableListOf<Cargo>()
+    private var incomes = mutableListOf<Cargo>()
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readString()!!,
@@ -16,6 +21,8 @@ class Cuenta(private var id: Int, private var name: String, private val initialA
     ) {
         currency = parcel.readString()!!
         totalAmount = parcel.readFloat()
+        parcel.readTypedList(expenses, Cargo.CREATOR)
+        parcel.readTypedList(incomes, Cargo.CREATOR)
     }
 
     init{
@@ -30,16 +37,29 @@ class Cuenta(private var id: Int, private var name: String, private val initialA
         return totalAmount
     }
 
-    fun addExpense(charge: Egreso?){
+    fun getCharges(): MutableList<Cargo>{
+        val allCharges: MutableList<Cargo> = ArrayList()
+
+        this.incomes.forEach {
+            Log.d(it.getType(),"${it.getAmount()}MXN en ${it.getCategory()} con nota ${it.getNote()}")
+        }
+
+        allCharges.addAll(this.incomes)
+        allCharges.addAll(this.expenses)
+
+        return allCharges
+    }
+
+    fun addExpense(charge: Cargo?){
         if (charge != null) {
-            expenses.add(charge)
+            this.expenses.add(charge)
             this.totalAmount += charge.getAmount()
         }
     }
 
-    fun addIncome(charge: Ingreso?){
+    fun addIncome(charge: Cargo?){
         if (charge != null) {
-            incomes.add(charge)
+            this.incomes.add(charge)
             this.totalAmount += charge.getAmount()
         }
     }
@@ -50,6 +70,8 @@ class Cuenta(private var id: Int, private var name: String, private val initialA
         parcel.writeFloat(initialAmount)
         parcel.writeString(currency)
         parcel.writeFloat(totalAmount)
+        parcel.writeTypedList(expenses)
+        parcel.writeTypedList(incomes)
     }
 
     override fun describeContents(): Int {
@@ -57,6 +79,7 @@ class Cuenta(private var id: Int, private var name: String, private val initialA
     }
 
     companion object CREATOR : Parcelable.Creator<Cuenta> {
+        @RequiresApi(Build.VERSION_CODES.Q)
         override fun createFromParcel(parcel: Parcel): Cuenta {
             return Cuenta(parcel)
         }

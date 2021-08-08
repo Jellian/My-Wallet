@@ -6,8 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
-import com.kotlin.mywallet.finance.Egreso
-import com.kotlin.mywallet.finance.Ingreso
+import com.kotlin.mywallet.finance.Cargo
 
 class AddChargeActivity : AppCompatActivity() {
 
@@ -20,7 +19,7 @@ class AddChargeActivity : AppCompatActivity() {
 
     private var chargeType: Int? = 0
     private var category: String = ""
-    private var account: String = ""
+    private var accountName: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +30,7 @@ class AddChargeActivity : AppCompatActivity() {
         headerActionTextView = findViewById(R.id.textView_addCharge_headerAction)
         categorySpinner = findViewById(R.id.spinner_addCharge_categories)
         accountSpinner = findViewById(R.id.spinner_addCharge_accounts)
-        addChargeButton= findViewById(R.id.button_addCharge_add)
+        addChargeButton = findViewById(R.id.button_addCharge_add)
 
         chargeType = intent.getIntExtra(HomeActivity.TYPE, 0)
         val accounts = intent.getSerializableExtra(HomeActivity.ACCOUNT_LIST) as? ArrayList<*>
@@ -61,7 +60,7 @@ class AddChargeActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                account = accounts?.get(position) as String
+                accountName = accounts?.get(position) as String
             }
         }
 
@@ -83,15 +82,15 @@ class AddChargeActivity : AppCompatActivity() {
         val amount = amountEditText.text.toString().toFloat()
         val note = noteEditText.text.toString()
 
-        intent.putExtra(HomeActivity.ACCOUNT, account)
+        intent.putExtra(HomeActivity.ACCOUNT, accountName)
 
         if (chargeType == 1) {
-            val charge = Ingreso(amount, category, note)
+            val charge = Cargo(amount, category, note)
             intent.putExtra(HomeActivity.TYPE, 1 )
             intent.putExtra(HomeActivity.CHARGE, charge )
         }
         else{
-            val charge = Egreso(-amount, category, note)
+            val charge = Cargo(-amount, category, note)
             intent.putExtra(HomeActivity.TYPE, -1 )
             intent.putExtra(HomeActivity.CHARGE, charge )
         }

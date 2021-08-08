@@ -6,6 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".AddChargeActivity">
 
+    <com.google.android.material.appbar.AppBarLayout
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/layout_addCharge_appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            app:navigationIcon="@drawable/menu"
+            android:id="@+id/toolbar_addCharge_appBar"
+            style="@style/Widget.Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title="Nuevo movimiento" />
+    </com.google.android.material.appbar.AppBarLayout>
+
     <Spinner
         android:id="@+id/spinner_addCharge_accounts"
         android:layout_width="0dp"
@@ -38,7 +53,7 @@
         android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/layout_addCharge_appBar" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layout_addCharge_amount"

@@ -60,11 +60,11 @@
         style="@style/Wallet.TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="16dp"
         android:hint="@string/cantidad"
         app:layout_constraintEnd_toEndOf="@id/layout_addCharge_note"
         app:layout_constraintStart_toEndOf="@id/addCharge_guideline1"
-        app:layout_constraintTop_toBottomOf="@+id/textView_addCharge_headerAction"
+        app:layout_constraintTop_toBottomOf="@+id/textView_addCharge_date"
         app:layout_constraintVertical_chainStyle="packed">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -101,6 +101,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="@+id/layout_register_userName" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -143,6 +144,20 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.45" />
 
+    <TextView
+        android:id="@+id/textView_addCharge_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="casual"
+        android:text="@string/_00_00_00"
+        android:textAlignment="center"
+        android:textColor="@color/secondaryDarkColor"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_addCharge_headerAction" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

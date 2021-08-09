@@ -18,12 +18,14 @@ class RecyclerAdapter2(private val context: Context, private val charges : List<
         private val category = view.findViewById<TextView>(R.id.textView_itemCharge_category)
         private val note = view.findViewById<TextView>(R.id.textView_itemCharge_note)
         private val arrow = view.findViewById<ImageView>(R.id.imageView_itemCharge_arrowIcon)
+        private val date = view.findViewById<TextView>(R.id.textView_itemCharge_date)
 
         fun bind(charge: Cargo, context: Context){
             type.text = charge.getType()
             amount.text = charge.getAmount().toString()
             category.text = charge.getCategory()
             note.text = charge.getNote()
+            date.text = charge.getDate()
 
             if (charge.getType() != "Ingreso"){
                 arrow.setImageResource(R.drawable.ic_arrow_red)

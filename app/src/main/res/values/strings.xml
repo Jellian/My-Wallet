@@ -49,12 +49,13 @@
     <string name="cuenta">Cuenta</string>
     <string name="icono_de_la_cuenta">Icono de la cuenta</string>
     <string name="detalles">Detalles</string>
-    <string name="total_en_cuenta">Total en cuenta</string>
+    <string name="total_en_cuenta">Total en \ncuenta</string>
     <string name="imagen_de_usuario">Imagen de usuario</string>
     <string name="_1000">$1000</string>
     <string name="icono_de_cuenta">Icono de cuenta</string>
     <string name="charge">Cargo</string>
     <string name="category">category</string>
     <string name="note">Note</string>
+    <string name="_00_00_00">00/00/00</string>
 
 </resources>

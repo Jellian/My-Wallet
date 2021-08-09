@@ -59,6 +59,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="casual"
         android:text="@string/_1000"
+        android:layout_marginTop="8sp"
         android:textColor="#000"
         android:textSize="24sp"
         android:textStyle="bold"

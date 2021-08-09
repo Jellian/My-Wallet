@@ -13,7 +13,6 @@ class Cuenta(private var id: Int, private var name: String, private val initialA
     private var expenses = mutableListOf<Cargo>()
     private var incomes = mutableListOf<Cargo>()
 
-    @RequiresApi(Build.VERSION_CODES.Q)
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readString()!!,
@@ -39,13 +38,13 @@ class Cuenta(private var id: Int, private var name: String, private val initialA
 
     fun getCharges(): MutableList<Cargo>{
         val allCharges: MutableList<Cargo> = ArrayList()
-
-        this.incomes.forEach {
-            Log.d(it.getType(),"${it.getAmount()}MXN en ${it.getCategory()} con nota ${it.getNote()}")
-        }
-
+//        this.incomes.forEach {
+//            Log.d(it.getType(),"${it.getAmount()}MXN en ${it.getCategory()} con nota ${it.getNote()}")
+//        }
         allCharges.addAll(this.incomes)
         allCharges.addAll(this.expenses)
+
+        allCharges.sortByDescending { it.getDate() }
 
         return allCharges
     }
@@ -79,7 +78,6 @@ class Cuenta(private var id: Int, private var name: String, private val initialA
     }
 
     companion object CREATOR : Parcelable.Creator<Cuenta> {
-        @RequiresApi(Build.VERSION_CODES.Q)
         override fun createFromParcel(parcel: Parcel): Cuenta {
             return Cuenta(parcel)
         }

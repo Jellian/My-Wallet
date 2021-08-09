@@ -1,12 +1,17 @@
 package com.kotlin.mywallet
 
 import android.app.Activity
+import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import com.kotlin.mywallet.finance.Cargo
+import java.util.*
+import kotlin.collections.ArrayList
+
 
 class AddChargeActivity : AppCompatActivity() {
 
@@ -16,6 +21,7 @@ class AddChargeActivity : AppCompatActivity() {
     private lateinit var categorySpinner: Spinner
     private lateinit var addChargeButton: Button
     private lateinit var accountSpinner: Spinner
+    private lateinit var dateTextView: TextView
 
     private var chargeType: Int? = 0
     private var category: String = ""
@@ -31,6 +37,14 @@ class AddChargeActivity : AppCompatActivity() {
         categorySpinner = findViewById(R.id.spinner_addCharge_categories)
         accountSpinner = findViewById(R.id.spinner_addCharge_accounts)
         addChargeButton = findViewById(R.id.button_addCharge_add)
+        dateTextView = findViewById(R.id.textView_addCharge_date)
+
+        val calendar: Calendar = Calendar.getInstance()
+        val actualYear: Int = calendar.get(Calendar.YEAR)
+        val actualMonth: Int = calendar.get(Calendar.MONTH)
+        val dayOfMonth: Int = calendar.get(Calendar.DAY_OF_MONTH)
+
+        "$dayOfMonth/ ${actualMonth+1}/ $actualYear".also { dateTextView.text = it }
 
         chargeType = intent.getIntExtra(HomeActivity.TYPE, 0)
         val accounts = intent.getSerializableExtra(HomeActivity.ACCOUNT_LIST) as? ArrayList<*>
@@ -47,6 +61,13 @@ class AddChargeActivity : AppCompatActivity() {
         }
 
         addChargeButton.setOnClickListener( createCharge())
+
+        dateTextView.setOnClickListener {
+            val dateListener = { datePicker: DatePicker, year: Int, month: Int, day: Int -> dateTextView.text = ("$day/ ${month+1}/ $year")}
+
+            val datePickerDialog = DatePickerDialog(this, dateListener, actualYear, actualMonth, dayOfMonth)
+            datePickerDialog.show()
+        }
 
         categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -82,21 +103,14 @@ class AddChargeActivity : AppCompatActivity() {
         val amount = amountEditText.text.toString().toFloat()
         val note = noteEditText.text.toString()
 
-        intent.putExtra(HomeActivity.ACCOUNT, accountName)
+        val charge = if (chargeType == 1) { Cargo(amount, category, note, dateTextView.text.toString()) }
+        else{ Cargo(-amount, category, note, dateTextView.text.toString()) }
 
-        if (chargeType == 1) {
-            val charge = Cargo(amount, category, note)
-            intent.putExtra(HomeActivity.TYPE, 1 )
-            intent.putExtra(HomeActivity.CHARGE, charge )
-        }
-        else{
-            val charge = Cargo(-amount, category, note)
-            intent.putExtra(HomeActivity.TYPE, -1 )
-            intent.putExtra(HomeActivity.CHARGE, charge )
-        }
+        intent.putExtra(HomeActivity.ACCOUNT, accountName)
+        intent.putExtra(HomeActivity.TYPE, chargeType )
+        intent.putExtra(HomeActivity.CHARGE, charge )
 
         setResult(Activity.RESULT_OK, intent)
         finish()
     }
-
 }

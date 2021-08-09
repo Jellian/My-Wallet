@@ -6,20 +6,16 @@ import android.os.Parcelable
 import androidx.annotation.RequiresApi
 import com.kotlin.mywallet.utils.Date
 
-class Cargo(private var amount: Float = 0.0f, private var category: String = "", private var note: String = ""): Parcelable {
+class Cargo(private var amount: Float = 0.0f, private var category: String = "", private var note: String = "", private var date: String = ""): Parcelable {
 
     private var type: String = ""
-    @RequiresApi(Build.VERSION_CODES.O)
-    private var date: String = Date().now()
-
-    @RequiresApi(Build.VERSION_CODES.O)
     constructor(parcel: Parcel) : this(
         parcel.readFloat(),
+        parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!
     ) {
         type = parcel.readString()!!
-        date = parcel.readString()!!
     }
 
     init{
@@ -43,13 +39,16 @@ class Cargo(private var amount: Float = 0.0f, private var category: String = "",
         return this.note
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    fun getDate(): String{
+        return this.date
+    }
+
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeFloat(amount)
         parcel.writeString(category)
         parcel.writeString(note)
-        parcel.writeString(type)
         parcel.writeString(date)
+        parcel.writeString(type)
     }
 
     override fun describeContents(): Int {
@@ -57,7 +56,6 @@ class Cargo(private var amount: Float = 0.0f, private var category: String = "",
     }
 
     companion object CREATOR : Parcelable.Creator<Cargo> {
-        @RequiresApi(Build.VERSION_CODES.O)
         override fun createFromParcel(parcel: Parcel): Cargo {
             return Cargo(parcel)
         }

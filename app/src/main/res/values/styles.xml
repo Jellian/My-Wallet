@@ -14,6 +14,13 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="principal_Text">
+        <item name="android:fontFamily">casual </item>
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textSize">24sp</item>
+        </style>
+
     <style name="Toolbar">
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/primaryTextColor</item>

@@ -26,12 +26,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:fontFamily="casual"
+        style="@style/principal_Text"
         android:text="@string/nueva_cuenta"
         android:textAlignment="center"
-        android:textColor="@color/primaryTextColor"
-        android:textSize="24sp"
-        android:textStyle="bold|italic"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout_addAccount_appBar" />

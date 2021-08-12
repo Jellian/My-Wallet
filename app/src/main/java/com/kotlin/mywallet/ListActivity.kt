@@ -4,8 +4,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.widget.Toolbar
 import com.kotlin.mywallet.finance.Cuenta
 import java.lang.Exception
+//import android.R
+import android.view.View
+
 
 class ListActivity : AppCompatActivity() {
 
@@ -26,6 +30,11 @@ class ListActivity : AppCompatActivity() {
                 startActivity(intent)
         }
 
+
+    }
+
+    fun finishActivity() {
+        finish()
     }
 
     fun getAccounts(): MutableList<Cuenta>{

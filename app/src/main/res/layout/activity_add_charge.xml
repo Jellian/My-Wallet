@@ -13,7 +13,7 @@
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
-            app:navigationIcon="@drawable/menu"
+            app:navigationIcon="@drawable/ic_previous_arrow"
             android:id="@+id/toolbar_addCharge_appBar"
             style="@style/Widget.Toolbar"
             android:layout_width="match_parent"

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kotlin.mywallet.finance.Cuenta
@@ -15,8 +16,21 @@ class ListFragment : Fragment() {
     private var listener: (Cuenta) -> Unit ={}
 
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
         // Infla el layout para este Fragment
-        return inflater.inflate(R.layout.fragment_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_list, container, false)
+
+        val parentActivity = activity as ListActivity
+        val appBar = view.findViewById<Toolbar>(R.id.toolbar_listAccounts_AppBar)
+        parentActivity.setSupportActionBar(appBar)
+
+        //appBar.setNavigationIcon(resources.getDrawable(R.drawable.ic_action_back))
+        appBar.setNavigationOnClickListener(View.OnClickListener {
+            parentActivity.finishActivity()
+        })
+
+        return view
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

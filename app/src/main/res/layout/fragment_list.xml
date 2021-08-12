@@ -15,8 +15,8 @@
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
-            app:navigationIcon="@drawable/menu"
-            android:id="@+id/toolbar_addCharge_appBar"
+            app:navigationIcon="@drawable/ic_previous_arrow"
+            android:id="@+id/toolbar_listAccounts_AppBar"
             style="@style/Widget.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"

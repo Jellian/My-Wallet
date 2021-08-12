@@ -41,6 +41,7 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var user: Usuario
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -55,6 +56,9 @@ class HomeActivity : AppCompatActivity() {
         val email = intent.getStringExtra(MainActivity.USER_EMAIL)
 
         user = Usuario(userName)
+
+        val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
+
 
         val navView = findViewById<NavigationView>(R.id.nav_view)
         val headerView = navView.getHeaderView(0)
@@ -79,6 +83,23 @@ class HomeActivity : AppCompatActivity() {
 
         addAccountButton.setOnClickListener(addAccount())
         showAccountsButton.setOnClickListener(showAccounts())
+
+        navView.setNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_accounts -> {
+                    val intent = Intent(this, ListActivity::class.java)
+
+                    // Se agrega cada cuenta con su nombre al intent
+                    user.getAccounts().forEach {
+                        intent.putExtra( it.getName(), it)
+                    }
+                    // Se envía lista de strings que corresponden a los nombres de todas las cuentas del usuario
+                    intent.putExtra(ACCOUNT_LIST ,user.getAccountNames())
+                    startActivity(intent)
+                    true }
+                else -> false
+            }
+        }
 
     }
 

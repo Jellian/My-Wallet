@@ -36,9 +36,6 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var addIncomeButton: Button
     private lateinit var addExpenseButton: Button
 
-    //private lateinit var addAccountButton: Button
-    //private lateinit var showAccountsButton: Button
-
     private lateinit var user: Usuario
 
 
@@ -73,16 +70,10 @@ class HomeActivity : AppCompatActivity() {
         addExpenseButton = findViewById(R.id.button_home_addExpense)
         totalAmountTextView = findViewById(R.id.textView_home_totalAmount)
 
-        //addAccountButton = findViewById(R.id.addAcountButton)
-        //showAccountsButton = findViewById(R.id.showAccountsButton)
-
         "Bienvenido \n $userName".also { welcomeTextView.text = it }
 
         addIncomeButton.setOnClickListener(prepareCharge())
         addExpenseButton.setOnClickListener(prepareCharge())
-
-        //addAccountButton.setOnClickListener(addAccount())
-        //showAccountsButton.setOnClickListener(showAccounts())
 
         navView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {

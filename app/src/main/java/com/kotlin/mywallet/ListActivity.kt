@@ -29,8 +29,6 @@ class ListActivity : AppCompatActivity() {
                 intent.putExtra(ACCOUNT, it)
                 startActivity(intent)
         }
-
-
     }
 
     fun finishActivity() {

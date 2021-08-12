@@ -31,7 +31,7 @@ class ChargeListFragment : Fragment() {
 
         val parentActivity = activity as DetailActivity?
 
-        val chargeList = parentActivity?.getChargesList()
+        //val chargeList = parentActivity?.getChargesList()
 
         // indicamos que tiene un tamaño fijo
         recycler2.setHasFixedSize(true)

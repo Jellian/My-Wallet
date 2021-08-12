@@ -3,14 +3,13 @@
     package="com.kotlin.mywallet">
 
     <application
-        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyWallet">
-        <activity android:name=".AvisoPrivacidad"></activity>
-        <activity android:name=".AboutOf" />
+        <activity android:name=".PrivacyActivity" />
+        <activity android:name=".AboutOfActivity" />
         <activity android:name=".DetailActivity" />
         <activity android:name=".ListActivity" />
         <activity android:name=".AddAccountActivity" />

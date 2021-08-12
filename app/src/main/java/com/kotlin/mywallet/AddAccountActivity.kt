@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import com.google.android.material.button.MaterialButton
 
 class AddAccountActivity : AppCompatActivity() {
@@ -23,8 +24,15 @@ class AddAccountActivity : AppCompatActivity() {
         accountNameEditText = findViewById(R.id.textView_addAccount_accountName)
         initialAmountEditText = findViewById(R.id.textView_addAccount_initialAmount)
 
+        val appBar = findViewById<Toolbar>(R.id.toolbar_addAccount_appBar)
+        setSupportActionBar(appBar)
+
         acceptButton.setOnClickListener(returnNewAccountData())
 
+        appBar.setNavigationOnClickListener {
+            setResult(Activity.RESULT_CANCELED)
+            finish()
+        }
     }
 
     private fun returnNewAccountData() = View.OnClickListener {

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    tools:context=".AboutOf">
+    tools:context=".AboutOfActivity">
 
     <TextView
         android:id="@+id/textView_register_appName"
@@ -34,15 +34,28 @@
     <TextView
         android:id="@+id/about_of"
         style="@style/principal_Text"
-        android:layout_marginTop="24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:layout_marginTop="24dp"
+        android:padding="16dp"
         android:text="@string/about_of"
         android:textAlignment="center"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView_register_appIcon" />
+
+    <Button
+        android:id="@+id/button_about_genial"
+        style="@style/Wallet.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="@string/genial"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/about_of" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

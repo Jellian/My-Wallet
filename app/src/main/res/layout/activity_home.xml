@@ -101,28 +101,6 @@
         app:layout_constraintTop_toBottomOf="@+id/textView_home_welcome"
         app:layout_constraintVertical_bias="0.1" />
 
-    <Button
-        android:id="@+id/addAcountButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="AGREGAR"
-        app:layout_constraintBottom_toTopOf="@+id/button_home_addIncome"
-        app:layout_constraintEnd_toStartOf="@+id/showAccountsButton"
-        app:layout_constraintHorizontal_bias="0.451"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_home_totalAmount"
-        app:layout_constraintVertical_bias="0.528" />
-
-    <Button
-        android:id="@+id/showAccountsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="68dp"
-        android:text="MOSTRAR"
-        app:layout_constraintBottom_toTopOf="@+id/button_home_addExpense"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_home_totalAmount"
-        app:layout_constraintVertical_bias="0.528" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView

@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.kotlin.mywallet.finance.Cargo
 import java.util.*
 import kotlin.collections.ArrayList
@@ -38,6 +39,9 @@ class AddChargeActivity : AppCompatActivity() {
         accountSpinner = findViewById(R.id.spinner_addCharge_accounts)
         addChargeButton = findViewById(R.id.button_addCharge_add)
         dateTextView = findViewById(R.id.textView_addCharge_date)
+
+        val appBar = findViewById<Toolbar>(R.id.toolbar_addCharge_appBar)
+        setSupportActionBar(appBar)
 
         val calendar: Calendar = Calendar.getInstance()
         val actualYear: Int = calendar.get(Calendar.YEAR)
@@ -94,6 +98,12 @@ class AddChargeActivity : AppCompatActivity() {
             accountAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             accountSpinner.adapter = accountAdapter
         }
+
+        appBar.setNavigationOnClickListener {
+            setResult(Activity.RESULT_CANCELED)
+            finish()
+        }
+
     }
 
     private fun createCharge() = View.OnClickListener {

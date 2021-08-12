@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.Window
 import android.widget.Button
@@ -19,6 +18,7 @@ import com.kotlin.mywallet.personal.Usuario
 
 private const val ONE = 1   // PARA AGREGAR CARGO
 private const val TWO = 2   // PARA AGREGAR CUENTA
+
 class HomeActivity : AppCompatActivity() {
 
     companion object {
@@ -35,8 +35,8 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var addIncomeButton: Button
     private lateinit var addExpenseButton: Button
 
-    private lateinit var addAccountButton: Button
-    private lateinit var showAccountsButton: Button
+    //private lateinit var addAccountButton: Button
+    //private lateinit var showAccountsButton: Button
 
     private lateinit var user: Usuario
 
@@ -72,59 +72,53 @@ class HomeActivity : AppCompatActivity() {
         addExpenseButton = findViewById(R.id.button_home_addExpense)
         totalAmountTextView = findViewById(R.id.textView_home_totalAmount)
 
-        addAccountButton = findViewById(R.id.addAcountButton)
-        showAccountsButton = findViewById(R.id.showAccountsButton)
+        //addAccountButton = findViewById(R.id.addAcountButton)
+        //showAccountsButton = findViewById(R.id.showAccountsButton)
 
         "Bienvenido \n $userName".also { welcomeTextView.text = it }
 
         addIncomeButton.setOnClickListener(prepareCharge())
         addExpenseButton.setOnClickListener(prepareCharge())
 
-        addAccountButton.setOnClickListener(addAccount())
-        showAccountsButton.setOnClickListener(showAccounts())
+        //addAccountButton.setOnClickListener(addAccount())
+        //showAccountsButton.setOnClickListener(showAccounts())
 
         navView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_about->{
-                    val intent = Intent(this, AboutOf::class.java)
+                    val intent = Intent(this, AboutOfActivity::class.java)
                     startActivity(intent)
                     true
                 }
-
                 R.id.nav_privacy->{
-                    val intent = Intent(this, AboutOf::class.java)
+                    val intent = Intent(this, PrivacyActivity::class.java)
                     startActivity(intent)
                     true
                 }
-
-
-               R.id.nav_accounts -> {
-                    val intent = Intent(this, ListActivity::class.java)
-
-                    // Se agrega cada cuenta con su nombre al intent
-                    user.getAccounts().forEach {
-                        intent.putExtra( it.getName(), it)
-                    }
-
-                    // Se envía lista de strings que corresponden a los nombres de todas las cuentas del usuario
-                    intent.putExtra(ACCOUNT_LIST ,user.getAccountNames())
-                    startActivity(intent)
-                    true }
+                R.id.nav_accounts -> {
+                    showAccounts()
+                    true
+                }
+                R.id.nav_home -> {
+                    drawerLayout.closeDrawers()
+                    true
+                }
+                R.id.nav_addAccount -> {
+                    addAccount()
+                    true
+                }
                 else -> false
-
-
             }
-
         }
 
     }
 
-    private fun addAccount() = View.OnClickListener {
+    private fun addAccount() {
         val intent = Intent(this, AddAccountActivity::class.java)
         startActivityForResult(intent, TWO)
     }
 
-    private fun showAccounts() = View.OnClickListener {
+    private fun showAccounts(){
         val intent = Intent(this, ListActivity::class.java)
 
         // Se agrega cada cuenta con su nombre al intent

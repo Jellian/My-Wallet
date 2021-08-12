@@ -23,6 +23,7 @@
     </item>
 
     <item android:title="@string/drawer.extra">
+        <group android:checkableBehavior="single">
         <menu>
             <item
                 android:id="@+id/nav_about"
@@ -34,5 +35,6 @@
                 android:icon="@drawable/privacy"
                 android:title="@string/drawer.privacy" />
         </menu>
+        </group>
     </item>
 </menu>

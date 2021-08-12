@@ -19,7 +19,6 @@ import com.kotlin.mywallet.personal.Usuario
 
 private const val ONE = 1   // PARA AGREGAR CARGO
 private const val TWO = 2   // PARA AGREGAR CUENTA
-
 class HomeActivity : AppCompatActivity() {
 
     companion object {
@@ -86,19 +85,36 @@ class HomeActivity : AppCompatActivity() {
 
         navView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_accounts -> {
+                R.id.nav_about->{
+                    val intent = Intent(this, AboutOf::class.java)
+                    startActivity(intent)
+                    true
+                }
+
+                R.id.nav_privacy->{
+                    val intent = Intent(this, AboutOf::class.java)
+                    startActivity(intent)
+                    true
+                }
+
+
+               R.id.nav_accounts -> {
                     val intent = Intent(this, ListActivity::class.java)
 
                     // Se agrega cada cuenta con su nombre al intent
                     user.getAccounts().forEach {
                         intent.putExtra( it.getName(), it)
                     }
+
                     // Se envía lista de strings que corresponden a los nombres de todas las cuentas del usuario
                     intent.putExtra(ACCOUNT_LIST ,user.getAccountNames())
                     startActivity(intent)
                     true }
                 else -> false
+
+
             }
+
         }
 
     }

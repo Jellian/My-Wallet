@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyWallet">
-        <activity android:name=".DetailActivity"></activity>
+        <activity android:name=".AvisoPrivacidad"></activity>
+        <activity android:name=".AboutOf" />
+        <activity android:name=".DetailActivity" />
         <activity android:name=".ListActivity" />
         <activity android:name=".AddAccountActivity" />
         <activity android:name=".LoginActivity" />
@@ -18,7 +20,6 @@
             android:name=".AddChargeActivity"
             android:windowSoftInputMode="adjustNothing" />
         <activity android:name=".HomeActivity" />
-        <activity android:name=".MenuActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

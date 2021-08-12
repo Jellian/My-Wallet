@@ -35,8 +35,8 @@
 
     <style name="Wallet.Button" parent="Widget.MaterialComponents.Button">
         <item name="android:textColor">@color/primaryTextColor</item>
-        <item name="backgroundTint">@color/primaryColor</item>
-        <item name="cornerRadius">8dp</item>
+        <item name="backgroundTint">#323232</item>
+        <item name="cornerRadius">8dp</item>|
         <item name="android:textAlignment">center</item>
         <item name="fontFamily">casual</item>
         <item name="android:textStyle">bold</item>

@@ -57,5 +57,7 @@
     <string name="category">category</string>
     <string name="note">Note</string>
     <string name="_00_00_00">00/00/00</string>
-
+    <string name="about_of">Esta aplicación permite "Administrar tu dinero, dar seguimiento a tus finanzas, planear para el futuro"<br /><br /> Podras controlar: <br /> *Cuentas <br /> *Ingresos  <br /> *Egresos</string>
+    <string name="aviso_privacidad">Aviso de Privacidad</string>
+    <string name="exclusividad">Exclusivo para el uso de los programadores &amp; contribuidores:</string>
 </resources>

@@ -122,5 +122,6 @@ class AddChargeActivity : AppCompatActivity() {
 
         setResult(Activity.RESULT_OK, intent)
         finish()
+
     }
 }

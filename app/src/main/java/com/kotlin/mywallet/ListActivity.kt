@@ -1,5 +1,7 @@
 package com.kotlin.mywallet
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -51,5 +53,10 @@ class ListActivity : AppCompatActivity() {
                 }
             }
             return accountsToShow
+    }
+
+    fun showDialog(title:String,message:String) {
+        AlertDialog.Builder(this).setTitle(title).setMessage(message)
+            .setPositiveButton("OK") { _, _ -> finish() }.create().show()
     }
 }

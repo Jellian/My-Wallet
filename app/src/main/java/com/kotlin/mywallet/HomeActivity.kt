@@ -8,6 +8,7 @@ import android.view.View
 import android.view.Window
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -132,15 +133,20 @@ class HomeActivity : AppCompatActivity() {
 
     private fun prepareCharge() = View.OnClickListener { view ->
 
-        val intent = Intent(this, AddChargeActivity::class.java)
-        // Qué botón llamó a la función?
-        when(view.id){
-            R.id.button_home_addIncome -> intent.putExtra(TYPE, +1)
-            else -> intent.putExtra(TYPE, -1)
+        if(user.getAccountNames().size == 0){
+            showDialog("No tan rápido...", "Primero debes \"Agregar una cuenta\"")
+        }
+        else{
+            val intent = Intent(this, AddChargeActivity::class.java)
+            // Qué botón llamó a la función?
+            when(view.id){
+                R.id.button_home_addIncome -> intent.putExtra(TYPE, +1)
+                else -> intent.putExtra(TYPE, -1)
         }
         intent.putExtra(ACCOUNT_LIST ,user.getAccountNames())
 
         startActivityForResult(intent, ONE )
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

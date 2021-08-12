@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
+import android.widget.Toast
 import com.google.android.material.button.MaterialButton
 
 class RegisterActivity : AppCompatActivity() {
@@ -25,15 +26,18 @@ class RegisterActivity : AppCompatActivity() {
         passwordEditText = findViewById(R.id.editText_register_password)
 
         acceptButton.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
+            if(userNameEditText.text.isNullOrEmpty() || emailEditText.text.isNullOrEmpty() || passwordEditText.text.isNullOrEmpty())
+                Toast.makeText(this, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show()
+            else {
+                val intent = Intent(this, RegisterActivity::class.java)
 
-            intent.putExtra(MainActivity.USER_NAME, userNameEditText.text.toString())
-            intent.putExtra(MainActivity.USER_EMAIL, emailEditText.text.toString())
-            intent.putExtra(MainActivity.USER_PASSWORD, passwordEditText.text.toString())
+                intent.putExtra(MainActivity.USER_NAME, userNameEditText.text.toString())
+                intent.putExtra(MainActivity.USER_EMAIL, emailEditText.text.toString())
+                intent.putExtra(MainActivity.USER_PASSWORD, passwordEditText.text.toString())
 
-            setResult(Activity.RESULT_OK, intent)
-
-            finish()
+                setResult(Activity.RESULT_OK, intent)
+                finish()
+            }
         }
     }
 

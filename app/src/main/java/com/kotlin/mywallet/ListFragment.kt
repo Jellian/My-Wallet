@@ -24,7 +24,6 @@ class ListFragment : Fragment() {
         val appBar = view.findViewById<Toolbar>(R.id.toolbar_listAccounts_AppBar)
         parentActivity.setSupportActionBar(appBar)
 
-        //appBar.setNavigationIcon(resources.getDrawable(R.drawable.ic_action_back))
         appBar.setNavigationOnClickListener(View.OnClickListener {
             parentActivity.finishActivity()
         })
@@ -43,17 +42,23 @@ class ListFragment : Fragment() {
 
         // Obtenemos la activity padre
         val parentActivity = activity as ListActivity?
+        val accountList = parentActivity?.getAccounts()
 
-        // Indicamos que tiene un tamaño fijo
-        recycler.setHasFixedSize(true)
-        // Indicamos el tipo de layoutManager
-        recycler.layoutManager = LinearLayoutManager(activity)
-        // Verificamos que la activity padre no sea nulla,
-        // Despues obtenemos la lista de cuentas (verificando que no sean nulas tambien) y despues...
-        // Seteamos el Adapter
-        mAdapter = parentActivity?.getAccounts()?.let { RecyclerAdapter( activity!!, it, listener) }!!
-        // Asignando el Adapter al RecyclerView
-        recycler.adapter = mAdapter
+        if(accountList.isNullOrEmpty()){
+            parentActivity?.showDialog("Ups...","No hay nada que mostrar. \nPodrías considerar: \"Agregar una cuenta\".")
+        }
+        else{
+            // Indicamos que tiene un tamaño fijo
+            recycler.setHasFixedSize(true)
+            // Indicamos el tipo de layoutManager
+            recycler.layoutManager = LinearLayoutManager(activity)
+            // Verificamos que la activity padre no sea nulla,
+            // Despues obtenemos la lista de cuentas (verificando que no sean nulas tambien) y despues...
+            // Seteamos el Adapter
+            mAdapter = RecyclerAdapter( activity!!, accountList, listener) !!
+            // Asignando el Adapter al RecyclerView
+            recycler.adapter = mAdapter
+        }
     }
 
     fun setListener(l: (Cuenta) -> Unit){

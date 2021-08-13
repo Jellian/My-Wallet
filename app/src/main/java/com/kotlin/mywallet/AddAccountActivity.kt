@@ -1,6 +1,7 @@
 package com.kotlin.mywallet
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -37,8 +38,13 @@ class AddAccountActivity : AppCompatActivity() {
 
     private fun returnNewAccountData() = View.OnClickListener {
 
+        val accountList = intent.getSerializableExtra(ListActivity.ACCOUNT_LIST) as? ArrayList<*> //Lista de nombres de las cuentas)
+
         if(accountNameEditText.text.isNullOrEmpty() || initialAmountEditText.text.isNullOrEmpty()){
             Toast.makeText(this, "Por favor llena todos los campos", Toast.LENGTH_SHORT).show()
+        }
+        else if(accountList?.contains(accountNameEditText.text.toString())== true){
+            showDialog("Espera...", "Ya existe una cuenta con este nombre.\nPor favor, elige otro nombre.")
         }
         else {
             val intent = Intent(this, AddAccountActivity::class.java)
@@ -52,5 +58,10 @@ class AddAccountActivity : AppCompatActivity() {
             finish()
         }
 
+    }
+
+    private fun showDialog(title:String,message:String){
+        AlertDialog.Builder(this).setTitle(title).setMessage(message)
+            .setPositiveButton("OK"){ _, _ -> }.create().show()
     }
 }

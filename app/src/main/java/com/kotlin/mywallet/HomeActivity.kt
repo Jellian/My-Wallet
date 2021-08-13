@@ -110,6 +110,8 @@ class HomeActivity : AppCompatActivity() {
 
     private fun addAccount() {
         val intent = Intent(this, AddAccountActivity::class.java)
+        // Se envía lista de strings que corresponden a los nombres de todas las cuentas del usuario
+        intent.putExtra(ACCOUNT_LIST ,user.getAccountNames())
         startActivityForResult(intent, TWO)
     }
 

@@ -1,10 +1,10 @@
 # My Wallet
 ## Proyecto Android Bedu
 
-### Descripcion
+### Descripción
 Este es un proyecto que busca realizar una aplicación móvil en la que se puedan manejar las finanzas personales. Esto será realizado mediante la interfaz principal en la que se espera añadir ingresos y gastos
 
-Ademas se añadió una interfaz de registro e inicio de sesion, los cuales permiten iniciar en la pantalla Home, donde se indica la cantidad de dinero existente, luego de aplicar los cargos,
+Ademas se añadió una interfaz de registro e inicio de sesión, los cuales permiten iniciar en la pantalla Home, donde se indica la cantidad de dinero existente, luego de aplicar los cargos,
 
 ### Alcance
 

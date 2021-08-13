@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import com.google.android.material.button.MaterialButton
+import java.util.regex.Pattern
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -28,6 +29,10 @@ class RegisterActivity : AppCompatActivity() {
         acceptButton.setOnClickListener {
             if(userNameEditText.text.isNullOrEmpty() || emailEditText.text.isNullOrEmpty() || passwordEditText.text.isNullOrEmpty())
                 Toast.makeText(this, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show()
+            else if (!isEmailValid(emailEditText.text.toString()))
+                Toast.makeText(this, "Por favor, ingresa un email válido", Toast.LENGTH_SHORT).show()
+            else if (passwordEditText.text.toString().length < 8)
+                Toast.makeText(this, "La contraseña debe ser mayor a 8 caracteres", Toast.LENGTH_SHORT).show()
             else {
                 val intent = Intent(this, RegisterActivity::class.java)
 
@@ -41,5 +46,8 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    fun isEmailValid(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
 
 }

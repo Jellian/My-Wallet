@@ -61,4 +61,5 @@
     <string name="aviso_privacidad">Aviso de Privacidad</string>
     <string name="exclusividad">Exclusivo para el uso de los programadores &amp; contribuidores:</string>
     <string name="genial">¡Genial!</string>
+    <string name="home_prompt">Tus ahorros totales son:</string>
 </resources>

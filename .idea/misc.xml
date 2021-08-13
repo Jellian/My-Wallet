@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/ic_previous_arrow.xml" value="0.27395833333333336" />
+        <entry key="app/src/main/res/layout/activity_about_of.xml" value="0.2578125" />
         <entry key="app/src/main/res/layout/activity_add_account.xml" value="0.1328125" />
         <entry key="app/src/main/res/layout/activity_add_charge.xml" value="0.21105072463768115" />
         <entry key="app/src/main/res/layout/activity_detail.xml" value="0.1328125" />

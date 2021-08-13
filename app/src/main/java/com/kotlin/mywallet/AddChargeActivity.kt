@@ -48,7 +48,9 @@ class AddChargeActivity : AppCompatActivity() {
         val actualMonth: Int = calendar.get(Calendar.MONTH)
         val dayOfMonth: Int = calendar.get(Calendar.DAY_OF_MONTH)
 
-        "$dayOfMonth/ ${actualMonth+1}/ $actualYear".also { dateTextView.text = it }
+        "${actualMonth+1}/ $dayOfMonth/ $actualYear".also { dateTextView.text = it }
+
+        //dateTextView.text = String.format("%02d/%02d/%04d", actualMonth+1, dayOfMonth, actualYear)
 
         chargeType = intent.getIntExtra(HomeActivity.TYPE, 0)
         val accounts = intent.getSerializableExtra(HomeActivity.ACCOUNT_LIST) as? ArrayList<*>
@@ -67,6 +69,10 @@ class AddChargeActivity : AppCompatActivity() {
         addChargeButton.setOnClickListener( createCharge())
 
         dateTextView.setOnClickListener {
+//            val dateListener = { datePicker: DatePicker, year: Int, month: Int, day: Int ->
+//                //dateTextView.text = (String.format("%02d/%02d/%04d",month+1,day, year))
+//
+//            }
             val dateListener = { datePicker: DatePicker, year: Int, month: Int, day: Int -> dateTextView.text = ("$day/ ${month+1}/ $year")}
 
             val datePickerDialog = DatePickerDialog(this, dateListener, actualYear, actualMonth, dayOfMonth)

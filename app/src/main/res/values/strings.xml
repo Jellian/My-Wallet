@@ -26,7 +26,7 @@
 
     <string name="drawer.account">Cuenta</string>
     <string name="drawer.accounts">Mis cuentas</string>
-    <string name="drawer.add_account">Agregar cuenta</string>
+    <string name="drawer.add_account">Agregar una cuenta</string>
 
     <string name="drawer.extra">Adicional</string>
     <string name="drawer.about">Acerca de</string>

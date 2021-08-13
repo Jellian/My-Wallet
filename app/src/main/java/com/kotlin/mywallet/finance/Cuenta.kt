@@ -44,8 +44,7 @@ class Cuenta(private var id: Int, private var name: String, private val initialA
         allCharges.addAll(this.incomes)
         allCharges.addAll(this.expenses)
 
-
-        allCharges.sortByDescending { it.getDate() }
+        //allCharges.sortByDescending { it.getDate() }
 
 
         return allCharges

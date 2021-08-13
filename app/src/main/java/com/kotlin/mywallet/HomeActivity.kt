@@ -16,6 +16,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.kotlin.mywallet.finance.Cargo
 import com.kotlin.mywallet.personal.Usuario
+import java.text.DecimalFormat
 
 private const val ONE = 1   // PARA AGREGAR CARGO
 private const val TWO = 2   // PARA AGREGAR CUENTA
@@ -88,6 +89,7 @@ class HomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_accounts -> {
+                    drawerLayout.closeDrawers()
                     showAccounts()
                     true
                 }
@@ -96,6 +98,7 @@ class HomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_addAccount -> {
+                    drawerLayout.closeDrawers()
                     addAccount()
                     true
                 }
@@ -188,7 +191,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun refreshTotal(){
-        totalAmountTextView.text = user.getGrandTotal().toString()
+        val dec = DecimalFormat("#,###.##")
+        totalAmountTextView.text = dec.format(user.getGrandTotal())
     }
 
 }

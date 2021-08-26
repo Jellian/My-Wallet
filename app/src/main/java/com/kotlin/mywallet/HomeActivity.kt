@@ -37,6 +37,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var totalAmountTextView: TextView
     private lateinit var addIncomeButton: FloatingActionButton
     private lateinit var addExpenseButton: FloatingActionButton
+    private lateinit var btnShowAccount:Button
 
     private lateinit var user: Usuario
 
@@ -64,6 +65,7 @@ class HomeActivity : AppCompatActivity() {
         val userNameNav = headerView.findViewById<TextView>(R.id.textView_drawerMenu_userName)
         val emailNav = headerView.findViewById<TextView>(R.id.textView_drawerMenu_email)
 
+
         userNameNav.text = userName
         emailNav.text = email
 
@@ -71,11 +73,15 @@ class HomeActivity : AppCompatActivity() {
         addIncomeButton = findViewById(R.id.button_home_addIncome)
         addExpenseButton = findViewById(R.id.button_home_addExpense)
         totalAmountTextView = findViewById(R.id.textView_home_totalAmount)
+        btnShowAccount = findViewById(R.id.btnShowAccount)
 
         "Hola de nuevo, $userName".also { welcomeTextView.text = it }
 
         addIncomeButton.setOnClickListener(prepareCharge())
         addExpenseButton.setOnClickListener(prepareCharge())
+        btnShowAccount.setOnClickListener{
+            showAccounts()
+        }
 
         navView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {

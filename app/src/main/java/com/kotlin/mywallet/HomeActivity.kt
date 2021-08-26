@@ -13,6 +13,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.kotlin.mywallet.finance.Cargo
 import com.kotlin.mywallet.personal.Usuario
@@ -34,8 +35,8 @@ class HomeActivity : AppCompatActivity() {
 
     private lateinit var welcomeTextView: TextView
     private lateinit var totalAmountTextView: TextView
-    private lateinit var addIncomeButton: Button
-    private lateinit var addExpenseButton: Button
+    private lateinit var addIncomeButton: FloatingActionButton
+    private lateinit var addExpenseButton: FloatingActionButton
 
     private lateinit var user: Usuario
 
@@ -71,7 +72,7 @@ class HomeActivity : AppCompatActivity() {
         addExpenseButton = findViewById(R.id.button_home_addExpense)
         totalAmountTextView = findViewById(R.id.textView_home_totalAmount)
 
-        "Bienvenido \n $userName".also { welcomeTextView.text = it }
+        "Hola de nuevo, $userName".also { welcomeTextView.text = it }
 
         addIncomeButton.setOnClickListener(prepareCharge())
         addExpenseButton.setOnClickListener(prepareCharge())
@@ -194,7 +195,8 @@ class HomeActivity : AppCompatActivity() {
 
     private fun refreshTotal(){
         val dec = DecimalFormat("#,###.##")
-        totalAmountTextView.text = dec.format(user.getGrandTotal())
+        var total = dec.format(user.getGrandTotal())
+        totalAmountTextView.text = "$ $total"
     }
 
 }

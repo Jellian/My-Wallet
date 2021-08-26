@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:paddingStart="24dp"
-    android:paddingEnd="0dp"
-    android:paddingTop="48dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="28dp"
+    android:paddingTop="56dp"
+    android:paddingEnd="28dp">
+
     <ImageView
-        android:layout_width="72dp"
+        android:layout_width="match_parent"
         android:layout_height="72dp"
-        android:src="@drawable/default_user"
-        android:contentDescription="@string/imagen_de_usuario" />
+        android:contentDescription="@string/imagen_de_usuario"
+        android:src="@drawable/default_user" />
 
     <TextView
         android:id="@+id/textView_drawerMenu_userName"
-        android:layout_marginTop="8dp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="@string/user"
         android:textSize="24sp" />
 
     <TextView
         android:id="@+id/textView_drawerMenu_email"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/email"
         android:textSize="14sp" />

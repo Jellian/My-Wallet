@@ -35,6 +35,8 @@
     <string name="registrarse">Registrarse</string>
     <string name="ingresar">Ingresar</string>
     <string name="aceptar">Aceptar</string>
+    <string name="register">Registrarme</string>
+    <string name="login">Iniciar Sesion</string>
     <string name="plus">+</string>
     <string name="minus">-</string>
     <string name="pesos">$</string>

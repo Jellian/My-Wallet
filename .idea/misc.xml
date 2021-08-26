@@ -3,6 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/APPS/My-Wallet/app/src/main/res/layout/activity_home.xml" value="0.33605072463768115" />
+        <entry key="..\:/APPS/My-Wallet/app/src/main/res/layout/activity_login.xml" value="0.2793819655521783" />
+        <entry key="..\:/APPS/My-Wallet/app/src/main/res/layout/activity_main.xml" value="0.2793819655521783" />
+        <entry key="..\:/APPS/My-Wallet/app/src/main/res/layout/activity_register.xml" value="0.2793819655521783" />
+        <entry key="..\:/APPS/My-Wallet/app/src/main/res/layout/drawer_header.xml" value="0.3120471014492754" />
+        <entry key="..\:/APPS/My-Wallet/app/src/main/res/layout/fragment_detail.xml" value="0.33605072463768115" />
+        <entry key="..\:/APPS/My-Wallet/app/src/main/res/layout/fragment_list.xml" value="0.16767983789260385" />
+        <entry key="..\:/APPS/My-Wallet/app/src/main/res/layout/item_account.xml" value="0.16767983789260385" />
+        <entry key="..\:/APPS/My-Wallet/app/src/main/res/layout/item_charge.xml" value="0.16767983789260385" />
+        <entry key="..\:/APPS/My-Wallet/app/src/main/res/menu/drawer_menu.xml" value="0.3394871794871795" />
         <entry key="app/src/main/res/drawable/ic_previous_arrow.xml" value="0.27395833333333336" />
         <entry key="app/src/main/res/layout/activity_about_of.xml" value="0.2578125" />
         <entry key="app/src/main/res/layout/activity_add_account.xml" value="0.1328125" />
@@ -18,7 +28,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

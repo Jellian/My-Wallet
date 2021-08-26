@@ -109,25 +109,28 @@ class AddChargeActivity : AppCompatActivity() {
             setResult(Activity.RESULT_CANCELED)
             finish()
         }
-
     }
 
     private fun createCharge() = View.OnClickListener {
+        //validar que el monto es mayor a cero
+        if (amountEditText.text.toString().toFloat() <= 0){
+            Toast.makeText(applicationContext,"La cantidad debe ser mayor a 0",Toast.LENGTH_SHORT).show()
+        }
+        else {
+            val intent = Intent(this, AddChargeActivity::class.java)
+            val amount = amountEditText.text.toString().toFloat()
+            val note = noteEditText.text.toString()
 
-        val intent = Intent(this, AddChargeActivity::class.java)
+            val charge = if (chargeType == 1) { Cargo(amount, category, note, dateTextView.text.toString()) }
+            else{ Cargo(-amount, category, note, dateTextView.text.toString()) }
 
-        val amount = amountEditText.text.toString().toFloat()
-        val note = noteEditText.text.toString()
+            intent.putExtra(HomeActivity.ACCOUNT, accountName)
+            intent.putExtra(HomeActivity.TYPE, chargeType )
+            intent.putExtra(HomeActivity.CHARGE, charge )
 
-        val charge = if (chargeType == 1) { Cargo(amount, category, note, dateTextView.text.toString()) }
-        else{ Cargo(-amount, category, note, dateTextView.text.toString()) }
-
-        intent.putExtra(HomeActivity.ACCOUNT, accountName)
-        intent.putExtra(HomeActivity.TYPE, chargeType )
-        intent.putExtra(HomeActivity.CHARGE, charge )
-
-        setResult(Activity.RESULT_OK, intent)
-        finish()
+            setResult(Activity.RESULT_OK, intent)
+            finish()
+        }
 
     }
 }

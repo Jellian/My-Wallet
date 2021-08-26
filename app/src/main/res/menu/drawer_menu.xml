@@ -21,20 +21,19 @@
             </group>
         </menu>
     </item>
-
     <item android:title="@string/drawer.extra">
-        <group android:checkableBehavior="single">
         <menu>
-            <item
-                android:id="@+id/nav_about"
-                android:icon="@drawable/info"
-                android:title="@string/drawer.about" />
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_about"
+                    android:icon="@drawable/info"
+                    android:title="@string/drawer.about" />
 
-            <item
-                android:id="@+id/nav_privacy"
-                android:icon="@drawable/privacy"
-                android:title="@string/drawer.privacy" />
+                <item
+                    android:id="@+id/nav_privacy"
+                    android:icon="@drawable/privacy"
+                    android:title="@string/drawer.privacy" />
+            </group>
         </menu>
-        </group>
     </item>
 </menu>

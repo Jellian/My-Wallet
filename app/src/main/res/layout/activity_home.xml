@@ -34,50 +34,65 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_home_addIncome"
         style="@style/Wallet.Button.Rounded"
-        android:layout_marginStart="64dp"
+        android:layout_marginStart="28dp"
         android:text="@string/plus"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.811" />
+        app:layout_constraintVertical_bias="0.949" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_home_addExpense"
         style="@style/Wallet.Button.Rounded"
-        android:layout_marginEnd="64dp"
+        android:layout_marginEnd="24dp"
         android:text="@string/minus"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.811" />
+        app:layout_constraintVertical_bias="0.949" />
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="128dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/banner"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.084" />
 
     <TextView
         android:id="@+id/textView_home_welcome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         style="@style/principal_Text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:freezesText="false"
         android:text="@string/text_welcome_home"
         android:textAlignment="center"
+        android:textSize="34sp"
+        android:textStyle="bold|italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.125" />
+        app:layout_constraintVertical_bias="0.291" />
 
     <TextView
         android:id="@+id/textView_home_prompt"
         style="@style/secondary_Text"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/home_prompt"
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/textView_home_totalAmount"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_home_welcome"
-        app:layout_constraintVertical_bias="0.75" />
+        app:layout_constraintVertical_bias="0.525" />
 
     <TextView
         android:id="@+id/textView_home_totalAmount"
@@ -92,9 +107,10 @@
         android:textSize="64sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.576"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_home_welcome"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintVertical_bias="0.221" />
 
     <TextView
         android:id="@+id/textView_home_pesos"
@@ -102,8 +118,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
         android:fontFamily="casual"
         android:text="@string/pesos"
         android:textAlignment="center"
@@ -111,10 +127,10 @@
         android:textSize="64sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/textView_home_totalAmount"
-        app:layout_constraintHorizontal_bias="0.961"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_home_welcome"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintVertical_bias="0.221" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

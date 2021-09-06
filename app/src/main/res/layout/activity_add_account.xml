@@ -13,11 +13,11 @@
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
-            app:navigationIcon="@drawable/ic_previous_arrow"
             android:id="@+id/toolbar_addAccount_appBar"
             style="@style/Widget.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_previous_arrow"
             app:title="@string/nueva_cuenta" />
     </com.google.android.material.appbar.AppBarLayout>
 

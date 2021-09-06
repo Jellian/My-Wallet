@@ -8,6 +8,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyWallet">
+        <activity
+            android:name=".GoalActivity"
+            android:exported="true" />
         <activity android:name=".PrivacyActivity" />
         <activity android:name=".AboutOfActivity" />
         <activity android:name=".DetailActivity" />

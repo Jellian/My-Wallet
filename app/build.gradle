@@ -3,11 +3,9 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-android-extensions'
 }
-
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
-
     defaultConfig {
         applicationId "com.kotlin.mywallet"
         minSdkVersion 18
@@ -17,7 +15,9 @@ android {
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    buildFeatures{
+        viewBinding = true
+    }
     buildTypes {
         release {
             minifyEnabled false

@@ -64,8 +64,17 @@
     <string name="exclusividad">Exclusivo para el uso de los programadores &amp; contribuidores:</string>
     <string name="genial">¡Genial!</string>
     <string name="home_prompt">Estos son tus ahorros totales.</string>
-    
-<!--    botones-->
+
+    <!--    botones-->
     <string name="account">Cuentas</string>
     <string name="history">Historial</string>
+
+    <!--    Goal Fragment Strings -->
+    <string name="title_goal">Agrega una meta</string>
+    <string name="description_goal">Una meta te ayudará a mantener un saldo positivo. Te indicaremos cuando alcances la meta </string>
+    <string name="add_goal">Agregar</string>
+    <string name="back_goal">Regresar</string>
+    <string name="input_goal">Ingresa tu meta</string>
+    <string name="goal">Mi meta</string>
+    <string name="drawer.add_goal">Agrega una meta</string>
 </resources>

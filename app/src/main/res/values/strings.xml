@@ -77,4 +77,5 @@
     <string name="input_goal">Ingresa tu meta</string>
     <string name="goal">Mi meta</string>
     <string name="drawer.add_goal">Agrega una meta</string>
+    <string name="cambiar_imagen">cambiar</string>
 </resources>

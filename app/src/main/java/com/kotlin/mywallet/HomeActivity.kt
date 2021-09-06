@@ -11,6 +11,7 @@ import android.view.View
 import android.view.Window
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -231,14 +232,16 @@ class HomeActivity : AppCompatActivity() {
         val dec = DecimalFormat("#,###.##")
         var total = dec.format(user.getGrandTotal())
         totalAmountTextView.text = "$ $total"
+        isGoalReach()
     }
     private  fun getCurrentGoal(): Float{
         return preferences.getFloat(GOAL,0f)
     }
     private fun isGoalReach() {
-        if( getCurrentGoal() > user.getGrandTotal())
+        if( getCurrentGoal() < user.getGrandTotal())
         {
-//            binding.cardGoal.background = getDrawable(android.R.color.holo_green_dark)
+            binding.cardGoal.setBackgroundColor(Color.parseColor("#4FA64F"))
+            Toast.makeText(applicationContext,"Meta alcanzada",Toast.LENGTH_SHORT).show()
         }
     }
 }

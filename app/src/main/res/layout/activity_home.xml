@@ -129,7 +129,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:orientation="horizontal">
@@ -147,6 +147,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/history" />
+
+                    <TextView
+                        android:id="@+id/textView_home_totalAmountDollars"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+
+                        android:text="@string/text_account_status"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="20sp" />
+
                 </LinearLayout>
 
             </LinearLayout>

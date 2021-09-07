@@ -14,6 +14,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.view.Window
 import android.widget.Button
@@ -29,6 +30,13 @@ import com.kotlin.mywallet.finance.Cargo
 import com.kotlin.mywallet.personal.Usuario
 import kotlinx.android.synthetic.main.drawer_header.*
 import kotlinx.android.synthetic.main.drawer_header.view.*
+import okhttp3.Callback
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import org.json.JSONException
+import org.json.JSONObject
+import java.io.IOException
 import java.text.DecimalFormat
 
 private const val ONE = 1   // PARA AGREGAR CARGO
@@ -287,7 +295,8 @@ class HomeActivity : AppCompatActivity() {
     private fun refreshTotal(){
         val dec = DecimalFormat("#,###.##")
         val total = dec.format(user.getGrandTotal())
-        totalAmountTextView.text = "$ $total"
+        totalAmountTextView.text = "$ $total MXN"
+        llamadaAppi()
         isGoalReach()
     }
 
@@ -302,6 +311,41 @@ class HomeActivity : AppCompatActivity() {
             binding.cardGoal.setBackgroundColor(resources.getColor(R.color.primaryColor))
             Toast.makeText(applicationContext,"Meta alcanzada",Toast.LENGTH_SHORT).show()
         }
+    }
+
+    fun llamadaAppi(){
+        val okHttpClient = OkHttpClient()
+        val url = "https://api.frankfurter.app/latest?from=MXN&to=USD"
+
+        val request = Request.Builder()
+            .url(url)
+            .build()
+        okHttpClient.newCall(request).enqueue(object: Callback {
+
+            override fun onFailure(call: okhttp3.Call, e: IOException) {
+                Log.e("Response", e.toString())
+            }
+
+            override fun onResponse(call: okhttp3.Call, response: Response) {
+                val body = response.body?.string()
+                Log.d( "Response", body!!)
+
+                try {
+                    val json = JSONObject(body)
+                    val dec = DecimalFormat("#,###.##")
+
+                    val rate = json.getJSONObject("rates").getString("USD")
+                    val totalUsd = dec.format(rate.toDouble()*user.getGrandTotal())
+
+                    binding.textViewHomeTotalAmountDollars.text= "$ $totalUsd USD"
+
+
+                } catch (e: JSONException){
+
+                }
+
+            }
+        } )
     }
 
 }

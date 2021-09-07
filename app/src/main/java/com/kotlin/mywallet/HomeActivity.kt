@@ -1,7 +1,6 @@
 package com.kotlin.mywallet
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.ContentValues
@@ -29,7 +28,6 @@ import com.kotlin.mywallet.databinding.ActivityHomeBinding
 import com.kotlin.mywallet.finance.Cargo
 import com.kotlin.mywallet.personal.Usuario
 import kotlinx.android.synthetic.main.drawer_header.*
-import kotlinx.android.synthetic.main.drawer_header.view.*
 import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -296,7 +294,7 @@ class HomeActivity : AppCompatActivity() {
         val dec = DecimalFormat("#,###.##")
         val total = dec.format(user.getGrandTotal())
         totalAmountTextView.text = "$ $total MXN"
-        llamadaAppi()
+        appiCall()
         isGoalReach()
     }
 
@@ -313,7 +311,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    fun llamadaAppi(){
+    fun appiCall(){
         val okHttpClient = OkHttpClient()
         val url = "https://api.frankfurter.app/latest?from=MXN&to=USD"
 

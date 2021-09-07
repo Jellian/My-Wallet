@@ -1,5 +1,6 @@
 package com.kotlin.mywallet
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -25,9 +26,12 @@ import java.text.DecimalFormat
 
 private const val ONE = 1   // PARA AGREGAR CARGO
 private const val TWO = 2   // PARA AGREGAR CUENTA
+private const val THREE = 3 // PARA AGREGAR META
 
 class HomeActivity : AppCompatActivity() {
+
     lateinit var binding: ActivityHomeBinding
+
     companion object {
         const val ACCOUNT_LIST = "ACCOUNT_LIST"
         const val TYPE = "TYPE"
@@ -141,7 +145,7 @@ class HomeActivity : AppCompatActivity() {
         val intent = Intent(this, GoalActivity::class.java)
         intent.putExtra(MainActivity.USER_NAME, userName)
         intent.putExtra(MainActivity.USER_EMAIL, email)
-        startActivityForResult(intent, TWO)
+        startActivityForResult(intent, THREE)
     }
     private fun addAccount() {
         val intent = Intent(this, AddAccountActivity::class.java)
@@ -230,18 +234,22 @@ class HomeActivity : AppCompatActivity() {
 
     private fun refreshTotal(){
         val dec = DecimalFormat("#,###.##")
-        var total = dec.format(user.getGrandTotal())
+        val total = dec.format(user.getGrandTotal())
         totalAmountTextView.text = "$ $total"
         isGoalReach()
     }
+
     private  fun getCurrentGoal(): Float{
         return preferences.getFloat(GOAL,0f)
     }
+
     private fun isGoalReach() {
         if( getCurrentGoal() < user.getGrandTotal())
         {
             binding.cardGoal.setBackgroundColor(Color.parseColor("#4FA64F"))
+            binding.cardGoal.setBackgroundColor(resources.getColor(R.color.primaryColor))
             Toast.makeText(applicationContext,"Meta alcanzada",Toast.LENGTH_SHORT).show()
         }
     }
+
 }

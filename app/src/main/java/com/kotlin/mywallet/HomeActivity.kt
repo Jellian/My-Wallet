@@ -265,7 +265,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setupDrawer(toolbar: Toolbar){
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
-        val drawerToggle = ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open_drawer,R.string.close_drawer)
+        ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open_drawer,R.string.close_drawer)
     }
 
     private fun showDialog(title:String,message:String){
@@ -347,5 +347,4 @@ class HomeActivity : AppCompatActivity() {
             }
         } )
     }
-
 }

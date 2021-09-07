@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.mywallet.finance.Cargo
+import java.text.DecimalFormat
 
 class RecyclerAdapter2(private val context: Context, private val charges : List<Cargo>) : RecyclerView.Adapter<RecyclerAdapter2.ViewHolder2>(){
 
@@ -20,9 +21,13 @@ class RecyclerAdapter2(private val context: Context, private val charges : List<
         private val arrow = view.findViewById<ImageView>(R.id.imageView_itemCharge_arrowIcon)
         private val date = view.findViewById<TextView>(R.id.textView_itemCharge_date)
 
-        fun bind(charge: Cargo, context: Context){
+        fun bind(charge: Cargo){
             type.text = charge.getType()
-            amount.text = charge.getAmount().toString()
+
+            val dec = DecimalFormat("#,###.##")
+            val total = dec.format(charge.getAmount())
+            amount.text = "$ $total MXN"
+
             category.text = charge.getCategory()
             note.text = charge.getNote()
             date.text = charge.getDate()
@@ -44,7 +49,7 @@ class RecyclerAdapter2(private val context: Context, private val charges : List<
 
     override fun onBindViewHolder(holder: ViewHolder2, position: Int) {
         val charge = charges[position]
-        holder.bind(charge, context)
+        holder.bind(charge)
     }
 
     override fun getItemCount(): Int {

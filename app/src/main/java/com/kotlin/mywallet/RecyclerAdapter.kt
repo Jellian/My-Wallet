@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.mywallet.finance.Cuenta
+import java.text.DecimalFormat
 
 class RecyclerAdapter( private val context: Context, private val accounts: MutableList<Cuenta>, private val clickListener: (Cuenta) -> Unit):
     RecyclerView.Adapter<RecyclerAdapter.ViewHolder>(){
@@ -17,9 +18,11 @@ class RecyclerAdapter( private val context: Context, private val accounts: Mutab
         private val amount = view.findViewById<TextView>(R.id.textView_itemAccount_amount)
 
         //"atando" los datos a las Views
-        fun bind(account: Cuenta, context: Context){
+        fun bind(account: Cuenta){
             name.text = account.getName()
-            amount.text = account.getTotalAmount().toString()
+            val dec = DecimalFormat("#,###.##")
+            val total = dec.format(account.getTotalAmount())
+            amount.text = "$ $total MXN"
         }
     }
 
@@ -30,7 +33,7 @@ class RecyclerAdapter( private val context: Context, private val accounts: Mutab
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val account = accounts[position]
-        holder.bind(account, context)
+        holder.bind(account)
 
         holder.view.setOnClickListener{clickListener(account)}
     }

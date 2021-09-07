@@ -34,6 +34,7 @@ import java.text.DecimalFormat
 private const val ONE = 1   // PARA AGREGAR CARGO
 private const val TWO = 2   // PARA AGREGAR CUENTA
 private const val THREE = 3 // PARA AGREGAR META
+private const val REQUEST_CAMERA = 4 // PARA ABRIR CAMARA
 
 class HomeActivity : AppCompatActivity() {
 
@@ -49,7 +50,7 @@ class HomeActivity : AppCompatActivity() {
         const val GOAL = "GOAL"
         const val PREFS_NAME = "com.kotlin.mywallet"
     }
-    private val REQUEST_CAMERA=1
+
     var picture: Uri? = null
     private lateinit var preferences: SharedPreferences
     private lateinit var welcomeTextView: TextView
@@ -149,30 +150,34 @@ class HomeActivity : AppCompatActivity() {
                 else -> false
             }
         }
-        cambiarImagen.setOnClickListener {
-            if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
-                if(checkSelfPermission(Manifest.permission.CAMERA)== PackageManager.PERMISSION_DENIED||checkSelfPermission(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_DENIED){
-                    //GET PERMISSIONS//
-                    val permissionCamera= arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    requestPermissions(permissionCamera, REQUEST_CAMERA)
-                }else
-                    opencamera()
+        cambiarImagen.setOnClickListener { changePicture()}
+    }
+
+    private fun changePicture(){
+        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
+            if(checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED
+                ||checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
+                //GET PERMISSIONS//
+                val permissionCamera= arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                requestPermissions(permissionCamera, REQUEST_CAMERA)
             }
-            else{
-                opencamera()
-            }
+            else opencamera()
+        }
+        else{
+            opencamera()
         }
     }
+
     private fun opencamera(){
         //recuperar los bits de una foto--espacio de memoria vacio ContentValues
         val value= ContentValues()
         value.put(MediaStore.Images.Media.TITLE, "${System.currentTimeMillis()}.jpg")
-        picture=contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, value)
-        val camaraIntent=Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        picture = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, value)
+        val camaraIntent= Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         camaraIntent.putExtra(MediaStore.EXTRA_OUTPUT, picture)
         startActivityForResult(camaraIntent, REQUEST_CAMERA)
     }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when(requestCode){
@@ -231,9 +236,6 @@ class HomeActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(resultCode==Activity.RESULT_OK && requestCode==REQUEST_CAMERA){
-            foto_perfil.setImageURI(picture)
-        }
         if(resultCode == Activity.RESULT_OK && data != null){
             // Viene de hacer el cargo
             if(requestCode == ONE) {
@@ -244,6 +246,9 @@ class HomeActivity : AppCompatActivity() {
                 val newAccountName = data.getStringExtra(NEW_ACCOUNT_NAME)?: ""
                 val newAccountAmount = data.getStringExtra(NEW_ACCOUNT_AMOUNT)?.toFloat() ?: 0.0f
                 user.addAccount(newAccountName, newAccountAmount)
+            }
+            else if(requestCode == REQUEST_CAMERA){
+                foto_perfil.setImageURI(picture)
             }
             refreshTotal()
             binding.myGoal.text = getCurrentGoal().toString()

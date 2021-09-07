@@ -1,13 +1,19 @@
 package com.kotlin.mywallet
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import android.view.Window
 import android.widget.Button
@@ -21,6 +27,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.kotlin.mywallet.databinding.ActivityHomeBinding
 import com.kotlin.mywallet.finance.Cargo
 import com.kotlin.mywallet.personal.Usuario
+import kotlinx.android.synthetic.main.drawer_header.*
 import kotlinx.android.synthetic.main.drawer_header.view.*
 import java.text.DecimalFormat
 
@@ -42,6 +49,8 @@ class HomeActivity : AppCompatActivity() {
         const val GOAL = "GOAL"
         const val PREFS_NAME = "com.kotlin.mywallet"
     }
+    private val REQUEST_CAMERA=1
+    var picture: Uri? = null
     private lateinit var preferences: SharedPreferences
     private lateinit var welcomeTextView: TextView
     private lateinit var totalAmountTextView: TextView
@@ -80,6 +89,7 @@ class HomeActivity : AppCompatActivity() {
         val headerView = navView.getHeaderView(0)
         val userNameNav = headerView.findViewById<TextView>(R.id.textView_drawerMenu_userName)
         val emailNav = headerView.findViewById<TextView>(R.id.textView_drawerMenu_email)
+        val cambiarImagen=headerView.findViewById<Button>(R.id.cambiarImagen)
         //agregando las preferencias para guardar los datos de meta
         preferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
@@ -139,6 +149,40 @@ class HomeActivity : AppCompatActivity() {
                 else -> false
             }
         }
+        cambiarImagen.setOnClickListener {
+            if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.M){
+                if(checkSelfPermission(Manifest.permission.CAMERA)== PackageManager.PERMISSION_DENIED||checkSelfPermission(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_DENIED){
+                    //GET PERMISSIONS//
+                    val permissionCamera= arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    requestPermissions(permissionCamera, REQUEST_CAMERA)
+                }else
+                    opencamera()
+            }
+            else{
+                opencamera()
+            }
+        }
+    }
+    private fun opencamera(){
+        //recuperar los bits de una foto--espacio de memoria vacio ContentValues
+        val value= ContentValues()
+        value.put(MediaStore.Images.Media.TITLE, "${System.currentTimeMillis()}.jpg")
+        picture=contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, value)
+        val camaraIntent=Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        camaraIntent.putExtra(MediaStore.EXTRA_OUTPUT, picture)
+        startActivityForResult(camaraIntent, REQUEST_CAMERA)
+    }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode){
+            REQUEST_CAMERA -> {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    opencamera()
+                else
+                    Toast.makeText(applicationContext, "No puedes acceder a la cámara", Toast.LENGTH_SHORT).show()
+            }
+        }
 
     }
     private  fun addGoal(){
@@ -187,6 +231,9 @@ class HomeActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        if(resultCode==Activity.RESULT_OK && requestCode==REQUEST_CAMERA){
+            foto_perfil.setImageURI(picture)
+        }
         if(resultCode == Activity.RESULT_OK && data != null){
             // Viene de hacer el cargo
             if(requestCode == ONE) {

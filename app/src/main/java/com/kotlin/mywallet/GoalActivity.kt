@@ -13,16 +13,12 @@ class GoalActivity : AppCompatActivity() {
 
     lateinit var preferences: SharedPreferences
     lateinit var binding: ActivityGoalBinding
-    lateinit var userName:String
-    lateinit var email:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGoalBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        userName = intent.getStringExtra(MainActivity.USER_NAME)!!
-        email = intent.getStringExtra(MainActivity.USER_EMAIL)!!
         preferences = getSharedPreferences(HomeActivity.PREFS_NAME, Context.MODE_PRIVATE)
 
         with(binding){

@@ -8,22 +8,23 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.view.Window
-import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import androidx.core.graphics.drawable.RoundedBitmapDrawable
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import com.kotlin.mywallet.databinding.ActivityHomeBinding
 import com.kotlin.mywallet.finance.Cargo
 import com.kotlin.mywallet.personal.Usuario
@@ -37,14 +38,12 @@ import org.json.JSONObject
 import java.io.IOException
 import java.text.DecimalFormat
 
-private const val ONE = 1   // PARA AGREGAR CARGO
-private const val TWO = 2   // PARA AGREGAR CUENTA
-private const val THREE = 3 // PARA AGREGAR META
+private const val ADD_CHARGE = 1   // PARA AGREGAR CUENTA
+private const val ADD_ACCOUNT = 2   // PARA AGREGAR CARGO
+private const val ADD_GOAL = 3 // PARA AGREGAR META
 private const val REQUEST_CAMERA = 4 // PARA ABRIR CAMARA
 
 class HomeActivity : AppCompatActivity() {
-
-    lateinit var binding: ActivityHomeBinding
 
     companion object {
         const val ACCOUNT_LIST = "ACCOUNT_LIST"
@@ -53,77 +52,66 @@ class HomeActivity : AppCompatActivity() {
         const val ACCOUNT = "ACCOUNT"
         const val NEW_ACCOUNT_NAME = "NEW_ACCOUNT_NAME"
         const val NEW_ACCOUNT_AMOUNT = "NEW_ACCOUNT_AMOUNT"
-        const val GOAL = "GOAL"
+
         const val PREFS_NAME = "com.kotlin.mywallet"
+        const val GOAL = "GOAL"
+        const val IS_LOGGED = "IS_LOGGED"
+        const val USER_NAME = "USER_NAME"
+        const val USER_EMAIL = "USER_EMAIL"
+
+        const val ALERT = "ALERT"
+        const val EXIT = "EXIT"
     }
 
-    var picture: Uri? = null
+    private lateinit var binding: ActivityHomeBinding
+
     private lateinit var preferences: SharedPreferences
-    private lateinit var welcomeTextView: TextView
-    private lateinit var totalAmountTextView: TextView
-    private lateinit var addIncomeButton: FloatingActionButton
-    private lateinit var addExpenseButton: FloatingActionButton
-    private lateinit var btnShowAccount:Button
-    lateinit var userName:String
-    lateinit var email:String
-
+    private lateinit var userName: String
+    private lateinit var email: String
     private lateinit var user: Usuario
-
+    private var pictureUriReference: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        //requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
 
-        val appBar = binding.toolbarHomeAppBar
+        setupDrawer()
 
-//        val appBar = findViewById<Toolbar>(R.id.toolbar_home_appBar)
-        this.setSupportActionBar(appBar)
+        // Agregando las preferencias para guardar los datos de meta
+        preferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-        setupDrawer(appBar)
-
-        userName = intent.getStringExtra(MainActivity.USER_NAME)!!
-        email = intent.getStringExtra(MainActivity.USER_EMAIL)!!
+        userName = intent.getStringExtra(MainActivity.USER_NAME).toString()
+        email = intent.getStringExtra(MainActivity.USER_EMAIL).toString()
 
         user = Usuario(userName)
 
-//        val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
-        val drawerLayout = binding.drawerLayout
-
-//        val navView = findViewById<NavigationView>(R.id.nav_view)
-        val navView = binding.navView
-        val headerView = navView.getHeaderView(0)
+        val headerView = binding.navView.getHeaderView(0)
         val userNameNav = headerView.findViewById<TextView>(R.id.textView_drawerMenu_userName)
         val emailNav = headerView.findViewById<TextView>(R.id.textView_drawerMenu_email)
-        val cambiarImagen=headerView.findViewById<Button>(R.id.cambiarImagen)
-        //agregando las preferencias para guardar los datos de meta
-        preferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val changePictureNav = headerView.findViewById<ImageView>(R.id.imageView_drawerMenu_camera)
 
         userNameNav.text = userName
         emailNav.text = email
 
-        welcomeTextView = binding.textViewHomeWelcome
-        addIncomeButton = binding.buttonHomeAddIncome
-        addExpenseButton = binding.buttonHomeAddExpense
-        totalAmountTextView = binding.textViewHomeTotalAmount
-        btnShowAccount = binding.btnShowAccount
-
         binding.myGoal.text = getCurrentGoal().toString()
 
-        "Hola de nuevo, $userName".also { welcomeTextView.text = it }
+        "Hola de nuevo, $userName".also { binding.textViewHomeWelcome.text = it }
 
-        addIncomeButton.setOnClickListener(prepareCharge())
-        addExpenseButton.setOnClickListener(prepareCharge())
-        btnShowAccount.setOnClickListener{
-            showAccounts()
-        }
-        binding.cardGoal.setOnClickListener {
-            addGoal()
-        }
+        changePictureNav.setOnClickListener{ changePicture() }
 
-        navView.setNavigationItemSelectedListener { item ->
+        binding.buttonHomeAddIncome.setOnClickListener( prepareCharge() )
+        binding.buttonHomeAddExpense.setOnClickListener( prepareCharge() )
+        binding.buttonShowAccount.setOnClickListener{ showAccounts() }
+        binding.cardGoal.setOnClickListener { addGoal() }
+
+        binding.navView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
+                R.id.nav_home -> {
+                    binding.drawerLayout.closeDrawers()
+                    true
+                }
                 R.id.nav_about->{
                     val intent = Intent(this, AboutOfActivity::class.java)
                     startActivity(intent)
@@ -135,28 +123,27 @@ class HomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_accounts -> {
-                    drawerLayout.closeDrawers()
                     showAccounts()
-                    true
-                }
-                R.id.nav_home -> {
-                    drawerLayout.closeDrawers()
+                    binding.drawerLayout.closeDrawers()
                     true
                 }
                 R.id.nav_addAccount -> {
-                    drawerLayout.closeDrawers()
                     addAccount()
+                    binding.drawerLayout.closeDrawers()
                     true
                 }
                 R.id.nav_addGoal ->{
-                    drawerLayout.closeDrawers()
                     addGoal()
+                    binding.drawerLayout.closeDrawers()
+                    true
+                }
+                R.id.nav_signOut ->{
+                    showDialog("Cerrando sesión...", "¿Estás seguro que deseas salir?", EXIT)
                     true
                 }
                 else -> false
             }
         }
-        cambiarImagen.setOnClickListener { changePicture()}
     }
 
     private fun changePicture(){
@@ -167,20 +154,20 @@ class HomeActivity : AppCompatActivity() {
                 val permissionCamera= arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 requestPermissions(permissionCamera, REQUEST_CAMERA)
             }
-            else opencamera()
+            else openCamera()
         }
-        else{
-            opencamera()
-        }
+        else openCamera()
     }
 
-    private fun opencamera(){
-        //recuperar los bits de una foto--espacio de memoria vacio ContentValues
+    private fun openCamera(){
+        // Recuperar los bits de una foto--espacio de memoria vacio ContentValues
         val value= ContentValues()
         value.put(MediaStore.Images.Media.TITLE, "${System.currentTimeMillis()}.jpg")
-        picture = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, value)
+
+        pictureUriReference = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, value)
+
         val camaraIntent= Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        camaraIntent.putExtra(MediaStore.EXTRA_OUTPUT, picture)
+        camaraIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUriReference)
         startActivityForResult(camaraIntent, REQUEST_CAMERA)
     }
 
@@ -188,28 +175,25 @@ class HomeActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when(requestCode){
             REQUEST_CAMERA -> {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    opencamera()
-                else
-                    Toast.makeText(applicationContext, "No puedes acceder a la cámara", Toast.LENGTH_SHORT).show()
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) openCamera()
+                else Toast.makeText(applicationContext, "No puedes acceder a la cámara", Toast.LENGTH_SHORT).show()
             }
         }
+    }
 
-    }
-    private  fun addGoal(){
+    private  fun addGoal() {
         val intent = Intent(this, GoalActivity::class.java)
-        intent.putExtra(MainActivity.USER_NAME, userName)
-        intent.putExtra(MainActivity.USER_EMAIL, email)
-        startActivityForResult(intent, THREE)
+        startActivityForResult(intent, ADD_GOAL)
     }
+
     private fun addAccount() {
         val intent = Intent(this, AddAccountActivity::class.java)
         // Se envía lista de strings que corresponden a los nombres de todas las cuentas del usuario
-        intent.putExtra(ACCOUNT_LIST ,user.getAccountNames())
-        startActivityForResult(intent, TWO)
+        intent.putExtra( ACCOUNT_LIST, user.getAccountNames() )
+        startActivityForResult(intent, ADD_ACCOUNT)
     }
 
-    private fun showAccounts(){
+    private fun showAccounts() {
         val intent = Intent(this, ListActivity::class.java)
 
         // Se agrega cada cuenta con su nombre al intent
@@ -217,25 +201,24 @@ class HomeActivity : AppCompatActivity() {
             intent.putExtra( it.getName(), it)
         }
         // Se envía lista de strings que corresponden a los nombres de todas las cuentas del usuario
-        intent.putExtra(ACCOUNT_LIST ,user.getAccountNames())
+        intent.putExtra( ACCOUNT_LIST, user.getAccountNames() )
         startActivity(intent)
     }
 
     private fun prepareCharge() = View.OnClickListener { view ->
-
         if(user.getAccountNames().size == 0){
             showDialog("No tan rápido...", "Primero debes \"Agregar una cuenta\"")
         }
         else{
             val intent = Intent(this, AddChargeActivity::class.java)
-            // Qué botón llamó a la función?
+            // Boton que ha llamado a la funcion
             when(view.id){
                 R.id.button_home_addIncome -> intent.putExtra(TYPE, +1)
                 else -> intent.putExtra(TYPE, -1)
         }
-        intent.putExtra(ACCOUNT_LIST ,user.getAccountNames())
+        intent.putExtra(ACCOUNT_LIST, user.getAccountNames() )
 
-        startActivityForResult(intent, ONE )
+        startActivityForResult(intent, ADD_CHARGE )
         }
     }
 
@@ -243,32 +226,51 @@ class HomeActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if(resultCode == Activity.RESULT_OK && data != null){
-            // Viene de hacer el cargo
-            if(requestCode == ONE) {
-                doCharge(data)
-            }
-            // Viene de agregar cuenta
-            else if(requestCode == TWO){
-                val newAccountName = data.getStringExtra(NEW_ACCOUNT_NAME)?: ""
-                val newAccountAmount = data.getStringExtra(NEW_ACCOUNT_AMOUNT)?.toFloat() ?: 0.0f
-                user.addAccount(newAccountName, newAccountAmount)
-            }
-            else if(requestCode == REQUEST_CAMERA){
-                foto_perfil.setImageURI(picture)
+            when (requestCode) {
+                // Viene de hacer el cargo
+                ADD_CHARGE -> { doCharge(data) }
+                // Viene de agregar cuenta
+                ADD_ACCOUNT -> {
+                    val newAccountName = data.getStringExtra(NEW_ACCOUNT_NAME)?: ""
+                    val newAccountAmount = data.getStringExtra(NEW_ACCOUNT_AMOUNT)?.toFloat() ?: 0.0f
+                    user.addAccount(newAccountName, newAccountAmount)
+                }
+                REQUEST_CAMERA -> {
+                    // Obtenemos bitmap desde URI REFERENCE
+                    val bitmap = if(Build.VERSION.SDK_INT < 28) {
+                       MediaStore.Images.Media.getBitmap( this.contentResolver, pictureUriReference)
+                    } else{
+                        val source = pictureUriReference?.let { ImageDecoder.createSource(this.contentResolver, it) }
+                        source?.let { ImageDecoder.decodeBitmap(it) }
+                    }
+                    // Create the RoundedBitmapDrawable.
+                    val roundDrawable: RoundedBitmapDrawable = RoundedBitmapDrawableFactory.create(resources, bitmap)
+                    roundDrawable.isCircular = true
+                    imageView_drawerMenu_profilePicture.setImageDrawable(roundDrawable)
+                }
+                ADD_GOAL -> { binding.myGoal.text = getCurrentGoal().toString() }
             }
             refreshTotal()
-            binding.myGoal.text = getCurrentGoal().toString()
         }
     }
 
-    private fun setupDrawer(toolbar: Toolbar){
-        val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
-        ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open_drawer,R.string.close_drawer)
+    private fun setupDrawer(){
+        val appBar = binding.toolbarHomeAppBar
+        this.setSupportActionBar(appBar)
+        ActionBarDrawerToggle(this,binding.drawerLayout, appBar,R.string.open_drawer,R.string.close_drawer)
     }
 
-    private fun showDialog(title:String,message:String){
-        AlertDialog.Builder(this).setTitle(title).setMessage(message)
-            .setPositiveButton("OK"){ _, _ -> }.create().show()
+    private fun showDialog(title:String, message:String, type: String = ALERT){
+        if (type == ALERT)
+            AlertDialog.Builder(this).setTitle(title).setMessage(message)
+            .setPositiveButton("OK") { _, _ -> }.create().show()
+        else if (type == EXIT)
+            AlertDialog.Builder(this).setTitle(title).setMessage(message)
+                .setPositiveButton("Sí") { _, _ ->
+                    preferences.edit().putString(HomeActivity.IS_LOGGED, "FALSE").apply()
+                    finish()
+                }
+                .setNegativeButton("No", null).create().show()
     }
 
     private fun doCharge(intent: Intent?){
@@ -293,8 +295,8 @@ class HomeActivity : AppCompatActivity() {
     private fun refreshTotal(){
         val dec = DecimalFormat("#,###.##")
         val total = dec.format(user.getGrandTotal())
-        totalAmountTextView.text = "$ $total MXN"
-        appiCall()
+        binding.textViewHomeTotalAmount.text = "$ $total MXN"
+        apiCall()
         isGoalReach()
     }
 
@@ -303,45 +305,37 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun isGoalReach() {
-        if( getCurrentGoal() < user.getGrandTotal())
-        {
+        if( getCurrentGoal() < user.getGrandTotal()) {
             binding.cardGoal.setBackgroundColor(Color.parseColor("#4FA64F"))
             binding.cardGoal.setBackgroundColor(resources.getColor(R.color.primaryColor))
             Toast.makeText(applicationContext,"Meta alcanzada",Toast.LENGTH_SHORT).show()
         }
     }
 
-    fun appiCall(){
+    private fun apiCall(){
         val okHttpClient = OkHttpClient()
         val url = "https://api.frankfurter.app/latest?from=MXN&to=USD"
 
-        val request = Request.Builder()
-            .url(url)
-            .build()
+        val request = Request.Builder().url(url).build()
         okHttpClient.newCall(request).enqueue(object: Callback {
 
             override fun onFailure(call: okhttp3.Call, e: IOException) {
-                Log.e("Response", e.toString())
+                //Log.e("Response", e.toString())
             }
 
             override fun onResponse(call: okhttp3.Call, response: Response) {
                 val body = response.body?.string()
-                Log.d( "Response", body!!)
+                //Log.d( "Response", body!!)
 
                 try {
                     val json = JSONObject(body)
                     val dec = DecimalFormat("#,###.##")
-
                     val rate = json.getJSONObject("rates").getString("USD")
                     val totalUsd = dec.format(rate.toDouble()*user.getGrandTotal())
 
                     binding.textViewHomeTotalAmountDollars.text= "$ $totalUsd USD"
 
-
-                } catch (e: JSONException){
-
-                }
-
+                } catch (e: JSONException){ }
             }
         } )
     }

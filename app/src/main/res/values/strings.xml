@@ -78,4 +78,5 @@
     <string name="goal">Mi meta</string>
     <string name="drawer.add_goal">Agrega una meta</string>
     <string name="cambiar_imagen">cambiar</string>
+    <string name="drawer.exit">Salir</string>
 </resources>

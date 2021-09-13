@@ -2,7 +2,9 @@ package com.kotlin.mywallet
 
 import android.animation.AnimatorInflater
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Window
 import android.widget.ImageView
@@ -16,6 +18,8 @@ class MainActivity : Activity() {  // Extends Activity y no AppCompatActivity, p
         const val USER_PASSWORD = "USER_PASSWORD"
     }
 
+    private lateinit var preferences: SharedPreferences
+
     private lateinit var signUpButton: MaterialButton
     private lateinit var signInButton: MaterialButton
     private lateinit var iconImageView: ImageView
@@ -28,6 +32,8 @@ class MainActivity : Activity() {  // Extends Activity y no AppCompatActivity, p
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_main)
+
+        preferences = getSharedPreferences(HomeActivity.PREFS_NAME, Context.MODE_PRIVATE)
 
         iconImageView= findViewById(R.id.imageView_register_appIcon)
         signUpButton= findViewById(R.id.button_main_signUp)
@@ -48,6 +54,27 @@ class MainActivity : Activity() {  // Extends Activity y no AppCompatActivity, p
             startActivity(intent)
         }
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if( isLogged() ){ goToHome() }
+    }
+
+    private fun goToHome(){
+        userName = preferences.getString(HomeActivity.USER_NAME, "").toString()
+        userEmail = preferences.getString(HomeActivity.USER_EMAIL, "").toString()
+
+        val intent = Intent(this, HomeActivity::class.java)
+        intent.putExtra(USER_NAME, userName)
+        intent.putExtra(USER_EMAIL, userEmail)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+    }
+
+    private fun isLogged(): Boolean {
+        val isLogged = preferences.getString(HomeActivity.IS_LOGGED, "")
+        return isLogged == "TRUE"
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

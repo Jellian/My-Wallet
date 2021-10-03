@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "123685709618",
+    "project_id": "bedupracticas-4592d",
+    "storage_bucket": "bedupracticas-4592d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123685709618:android:9508b4f17a23b26dbb192b",
+        "android_client_info": {
+          "package_name": "com.kotlin.mywallet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "123685709618-i8qeielbmg7f3jh2qj04vutb8sep1u5d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7FPuMr8lPDI-eydcQwo9AqIjroezxF10"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "123685709618-i8qeielbmg7f3jh2qj04vutb8sep1u5d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123685709618:android:f79966504612e2f3bb192b",
+        "android_client_info": {
+          "package_name": "org.bedu.crashlitycs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "123685709618-i8qeielbmg7f3jh2qj04vutb8sep1u5d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7FPuMr8lPDI-eydcQwo9AqIjroezxF10"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "123685709618-i8qeielbmg7f3jh2qj04vutb8sep1u5d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

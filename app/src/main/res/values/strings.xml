@@ -79,4 +79,11 @@
     <string name="drawer.add_goal">Agrega una meta</string>
     <string name="cambiar_imagen">cambiar</string>
     <string name="drawer.exit">Salir</string>
+
+    <!--texto de notificaciones -->
+    <string name="nombre_canal">Anuncios sobre la app</string>
+    <string name="nombrenotificacion">My Walet se está ejecutando</string>
+    <string name="notificacion1">¡My Wallet es la mejor APP para tus finanzas!</string>
+    <string name="notificacion2">¡Recuerda que puedes modificar o agregar METAS para seguir teniendo saldo positivo! Da clic en esta NOTIFICACIÓN para ir al modulo y agregar una meta. </string>
+
 </resources>

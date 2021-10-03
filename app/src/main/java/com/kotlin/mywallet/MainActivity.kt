@@ -6,9 +6,16 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.Window
 import android.widget.ImageView
+import android.widget.Toast
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.button.MaterialButton
+import com.google.firebase.FirebaseApp.getInstance
+import java.util.Calendar.getInstance
+import com.google.firebase.messaging.FirebaseMessaging
+
 
 class MainActivity : Activity() {  // Extends Activity y no AppCompatActivity, para ocultar barra de titulo
 
@@ -54,7 +61,21 @@ class MainActivity : Activity() {  // Extends Activity y no AppCompatActivity, p
             startActivity(intent)
         }
 
+        //firebase
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("Error", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            val token = task.result
+
+            Log.d("FCM_TOKEN",token!!)
+            Toast.makeText(baseContext,"FCM token: $token", Toast.LENGTH_SHORT).show()
+        })
+        //fin firebase
     }
+
 
     override fun onStart() {
         super.onStart()
@@ -97,4 +118,6 @@ class MainActivity : Activity() {  // Extends Activity y no AppCompatActivity, p
             start()
         }
     }
+
+
 }

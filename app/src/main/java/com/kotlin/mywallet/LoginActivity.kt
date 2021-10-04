@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -18,10 +17,8 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.google.android.material.button.MaterialButton
-import com.kotlin.mywallet.data.User
 import com.kotlin.mywallet.data.UserDb
 import com.kotlin.mywallet.databinding.ActivityLoginBinding
-import java.lang.Exception
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -51,24 +48,26 @@ class LoginActivity : AppCompatActivity() {
         userNameEditText = findViewById(R.id.editText_register_userName)
         passwordEditText = findViewById(R.id.editText_register_password)
 
-        val userName = intent.getStringExtra(MainActivity.USER_NAME)
-        val userEmail = intent.getStringExtra(MainActivity.USER_EMAIL)
-        val userPassword = intent.getStringExtra(MainActivity.USER_PASSWORD)
 
         //Se agrega el binding para llamada a la notificación
         val binding: ActivityLoginBinding by lazy { ActivityLoginBinding.inflate((layoutInflater)) }
 
         binding.run {
             signInButton.setOnClickListener {
-                checkDatabase()
+                if (userNameEditText.text.isNullOrEmpty())
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "Nombre de usuario vacío",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                else
+                    checkDatabase()
             }
         }
     }
 
 
     fun checkDatabase() {
-
-
         val executor: ExecutorService = Executors.newSingleThreadExecutor()
         executor.execute(
             Runnable {
@@ -94,12 +93,9 @@ class LoginActivity : AppCompatActivity() {
                         notificationOne()
 
                     } else {
-                        Toast.makeText(this, "Wrong email or password", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Tu username/email y/o tu password son incorrectos", Toast.LENGTH_SHORT).show()
                     }
-
-
                 })
-
             }
         )
     }
@@ -111,8 +107,8 @@ class LoginActivity : AppCompatActivity() {
         val descriptionText = "Notificacion al iniciar sesión en MW"
         val importance = NotificationManager.IMPORTANCE_DEFAULT
         val channel = NotificationChannel(CHANNEL_ANOUNCES, name, importance).apply {
-                description = descriptionText
-            }
+            description = descriptionText
+        }
         /*
         val channel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel(CHANNEL_ANOUNCES, name, importance).apply {
@@ -144,26 +140,15 @@ class LoginActivity : AppCompatActivity() {
 
 
     private fun logIn(userName: String?, userEmail: String?, userPassword: String?) {
+        preferences.edit().putString(HomeActivity.IS_LOGGED, "TRUE").apply()
+        preferences.edit().putString(HomeActivity.USER_NAME, userName).apply()
+        preferences.edit().putString(HomeActivity.USER_EMAIL, userEmail).apply()
 
-        if (userNameEditText.text.isNullOrEmpty()) {
-            Toast.makeText(this, "Nombre de usuario vacío", Toast.LENGTH_SHORT).show()
-        } else {
-            /*if (userNameEditText.text.toString() == userName || userNameEditText.text.toString() == userEmail
-                && passwordEditText.text.toString() == userPassword
-            ) {*/
+        val intent = Intent(this, HomeActivity::class.java)
+        intent.putExtra(MainActivity.USER_NAME, userName)
+        intent.putExtra(MainActivity.USER_EMAIL, userEmail)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
 
-            preferences.edit().putString(HomeActivity.IS_LOGGED, "TRUE").apply()
-            preferences.edit().putString(HomeActivity.USER_NAME, userName).apply()
-            preferences.edit().putString(HomeActivity.USER_EMAIL, userEmail).apply()
-
-            val intent = Intent(this, HomeActivity::class.java)
-            intent.putExtra(MainActivity.USER_NAME, userName)
-            intent.putExtra(MainActivity.USER_EMAIL, userEmail)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-            /*} else {
-                Toast.makeText(this, "Wrong email or password", Toast.LENGTH_SHORT).show()
-            }*/
-        }
     }
 }

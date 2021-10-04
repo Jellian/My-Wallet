@@ -64,7 +64,7 @@ class RegisterActivity : AppCompatActivity() {
                         )
                     )
                         Handler(Looper.getMainLooper()).post(Runnable {
-                            Toast.makeText(this, "Si se guardo en DB", Toast.LENGTH_LONG).show()
+                            Toast.makeText(this, "Has sido correctamente registrado", Toast.LENGTH_LONG).show()
                         })
 
 

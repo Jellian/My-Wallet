@@ -19,7 +19,6 @@ class Usuario(private var nombre: String? = "") {
     fun getAccountNames(): ArrayList<String> {
         val namesList = ArrayList<String>()
         cuentas.forEach{namesList.add(it.getName())}
-
         return namesList
     }
 

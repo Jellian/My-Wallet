@@ -1,14 +1,10 @@
 package com.kotlin.mywallet.finance
 
-import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
-import android.util.Log
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 
 
-class Cuenta(private var id: Int, private var name: String, private val initialAmount:Float = 0.0f) : Parcelable{
+class Cuenta(private var id: Int, private var name: String, private val initialAmount: Float = 0.0f) : Parcelable{
     private var currency = "MXN"
     private var totalAmount = 0f
     private var expenses = mutableListOf<Cargo>()
@@ -17,7 +13,7 @@ class Cuenta(private var id: Int, private var name: String, private val initialA
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readString()!!,
-        parcel.readFloat()
+            parcel.readFloat()
     ) {
         currency = parcel.readString()!!
         totalAmount = parcel.readFloat()

@@ -10,3 +10,6 @@ internal fun getNumberAccounts(accounts: List<Cuenta>?):Int{
     return accounts?.size ?: 0
 
 }
+
+//internal fun verifyExpenseorIncome(){
+//}

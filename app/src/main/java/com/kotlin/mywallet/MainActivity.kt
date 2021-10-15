@@ -12,9 +12,12 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.button.MaterialButton
+import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseApp.getInstance
 import java.util.Calendar.getInstance
 import com.google.firebase.messaging.FirebaseMessaging
+import com.kotlin.mywallet.databinding.ActivityHomeBinding
+import com.kotlin.mywallet.databinding.ActivityMainBinding
 
 
 class MainActivity : Activity() {  // Extends Activity y no AppCompatActivity, para ocultar barra de titulo
@@ -25,43 +28,32 @@ class MainActivity : Activity() {  // Extends Activity y no AppCompatActivity, p
         const val USER_PASSWORD = "USER_PASSWORD"
     }
 
+    private lateinit var binding: ActivityMainBinding
     private lateinit var preferences: SharedPreferences
-
-    private lateinit var signUpButton: MaterialButton
-    private lateinit var signInButton: MaterialButton
-    private lateinit var iconImageView: ImageView
-
-    private var userName: String = ""
-    private var userEmail: String = ""
-    private var userPassword: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        setContentView(R.layout.activity_main)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         preferences = getSharedPreferences(HomeActivity.PREFS_NAME, Context.MODE_PRIVATE)
 
-        iconImageView= findViewById(R.id.imageView_register_appIcon)
-        signUpButton= findViewById(R.id.button_main_signUp)
-        signInButton= findViewById(R.id.button_main_signIn)
+        FirebaseApp.initializeApp(this)
 
         animateIcon()
 
-        signUpButton.setOnClickListener {
+        binding.buttonMainSignUp.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
-            startActivityForResult(intent, 1)
-        }
-
-        signInButton.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            intent.putExtra(USER_NAME, userName)
-            intent.putExtra(USER_EMAIL, userEmail)
-            intent.putExtra(USER_PASSWORD, userPassword)
             startActivity(intent)
         }
 
-        //firebase
+        binding.buttonMainSignIn.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
+
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.w("Error", "Fetching FCM registration token failed", task.exception)
@@ -70,12 +62,10 @@ class MainActivity : Activity() {  // Extends Activity y no AppCompatActivity, p
 
             val token = task.result
 
-            Log.d("FCM_TOKEN",token!!)
-            Toast.makeText(baseContext,"FCM token: $token", Toast.LENGTH_SHORT).show()
+            //Log.d("FCM_TOKEN",token!!)
+            //Toast.makeText(baseContext,"FCM token: $token", Toast.LENGTH_SHORT).show()
         })
-        //fin firebase
     }
-
 
     override fun onStart() {
         super.onStart()
@@ -83,8 +73,8 @@ class MainActivity : Activity() {  // Extends Activity y no AppCompatActivity, p
     }
 
     private fun goToHome(){
-        userName = preferences.getString(HomeActivity.USER_NAME, "").toString()
-        userEmail = preferences.getString(HomeActivity.USER_EMAIL, "").toString()
+        val userName = preferences.getString(HomeActivity.USER_NAME, "").toString()
+        val userEmail = preferences.getString(HomeActivity.USER_EMAIL, "").toString()
 
         val intent = Intent(this, HomeActivity::class.java)
         intent.putExtra(USER_NAME, userName)
@@ -98,15 +88,6 @@ class MainActivity : Activity() {  // Extends Activity y no AppCompatActivity, p
         return isLogged == "TRUE"
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        animateIcon()
-        if(resultCode == RESULT_OK && data!= null)
-            userName = data.getStringExtra(USER_NAME).toString()
-            userEmail = data?.getStringExtra(USER_EMAIL).toString()
-            userPassword = data?.getStringExtra(USER_PASSWORD).toString()
-    }
-
     override fun onResume() {
         super.onResume()
         animateIcon()
@@ -114,10 +95,9 @@ class MainActivity : Activity() {  // Extends Activity y no AppCompatActivity, p
 
     private fun animateIcon(){
         AnimatorInflater.loadAnimator(this, R.animator.bouncing).apply {
-            setTarget(iconImageView)
+            setTarget(binding.imageViewRegisterAppIcon)
             start()
         }
     }
-
 
 }

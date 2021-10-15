@@ -1,62 +1,33 @@
 {
   "project_info": {
-    "project_number": "123685709618",
-    "project_id": "bedupracticas-4592d",
-    "storage_bucket": "bedupracticas-4592d.appspot.com"
+    "project_number": "950957675008",
+    "project_id": "mywallet-bae8b",
+    "storage_bucket": "mywallet-bae8b.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:123685709618:android:9508b4f17a23b26dbb192b",
+        "mobilesdk_app_id": "1:950957675008:android:07e652ba3e14eac83abee5",
         "android_client_info": {
           "package_name": "com.kotlin.mywallet"
         }
       },
       "oauth_client": [
         {
-          "client_id": "123685709618-i8qeielbmg7f3jh2qj04vutb8sep1u5d.apps.googleusercontent.com",
+          "client_id": "950957675008-stcmafp9aq8ldvl0gu8f6oa6m5iu16cv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB7FPuMr8lPDI-eydcQwo9AqIjroezxF10"
+          "current_key": "AIzaSyC8KOr01MfFyeccc6DnO_wvmj1k3a7xC3A"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "123685709618-i8qeielbmg7f3jh2qj04vutb8sep1u5d.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:123685709618:android:f79966504612e2f3bb192b",
-        "android_client_info": {
-          "package_name": "org.bedu.crashlitycs"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "123685709618-i8qeielbmg7f3jh2qj04vutb8sep1u5d.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyB7FPuMr8lPDI-eydcQwo9AqIjroezxF10"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "123685709618-i8qeielbmg7f3jh2qj04vutb8sep1u5d.apps.googleusercontent.com",
+              "client_id": "950957675008-stcmafp9aq8ldvl0gu8f6oa6m5iu16cv.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

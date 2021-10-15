@@ -9,6 +9,7 @@ import com.kotlin.mywallet.utils.Date
 class Cargo(private var amount: Float = 0.0f, private var category: String = "", private var note: String = "", private var date: String = ""): Parcelable {
 
     private var type: String = ""
+
     constructor(parcel: Parcel) : this(
         parcel.readFloat(),
         parcel.readString()!!,

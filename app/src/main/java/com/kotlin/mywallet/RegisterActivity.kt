@@ -6,82 +6,124 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.View
 import android.widget.EditText
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.room.Room
 import com.google.android.material.button.MaterialButton
-import com.kotlin.mywallet.data.User
-import com.kotlin.mywallet.data.UserDb
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.kotlin.mywallet.data.entities.User
+import com.kotlin.mywallet.data.UserDatabase
+import com.kotlin.mywallet.databinding.ActivityMainBinding
+import com.kotlin.mywallet.databinding.ActivityRegisterBinding
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import java.util.regex.Pattern
 
 class RegisterActivity : AppCompatActivity() {
 
-    private lateinit var acceptButton: MaterialButton
-    private lateinit var emailEditText: EditText
-    private lateinit var passwordEditText: EditText
-    private lateinit var userNameEditText: EditText
+    private lateinit var binding: ActivityRegisterBinding
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register)
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        acceptButton = findViewById(R.id.button_register_accept)
-        userNameEditText = findViewById(R.id.editText_register_userName)
-        emailEditText = findViewById(R.id.editText_register_email)
-        passwordEditText = findViewById(R.id.editText_register_password)
+        auth = Firebase.auth
 
-        acceptButton.setOnClickListener {
-            if(userNameEditText.text.isNullOrEmpty() || emailEditText.text.isNullOrEmpty() || passwordEditText.text.isNullOrEmpty())
-                Toast.makeText(this, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show()
-            else if (!isEmailValid(emailEditText.text.toString()))
-                Toast.makeText(this, "Por favor, ingresa un email válido", Toast.LENGTH_SHORT).show()
-            else if (passwordEditText.text.toString().length < 8)
-                Toast.makeText(this, "La contraseña debe ser mayor a 8 caracteres", Toast.LENGTH_SHORT).show()
-            else {
+        binding.buttonRegisterAccept.setOnClickListener { signUp() }
 
-                val executor: ExecutorService = Executors.newSingleThreadExecutor()
+    }
 
-                executor.execute(
-                    Runnable {
+    private fun signUp(){
 
-                    /*val db = Room.databaseBuilder(
-                        applicationContext,
-                        UserDb::class.java, "MyWallet_DB"
-                    ).build()
-                    val userDao = db.userDao()*/
+        with(binding){
+            if(editTextRegisterUserName.text.isNullOrEmpty() || editTextRegisterEmail.text.isNullOrEmpty() || editTextRegisterPassword.text.isNullOrEmpty())
+                Toast.makeText(applicationContext, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show()
+            else if(editTextRegisterPassword.text.toString().length < 8)
+                Toast.makeText(applicationContext, "La contraseña debe ser mayor a 8 caracteres", Toast.LENGTH_SHORT).show()
+            else if(!isEmailValid(editTextRegisterEmail.text.toString()))
+                Toast.makeText(applicationContext, "Por favor, ingresa un email válido", Toast.LENGTH_SHORT).show()
+            else{
+                executeDbProcess()
+                val intent = Intent(applicationContext, RegisterActivity::class.java)
 
-                    UserDb.getInstance(context = applicationContext)
-                        ?.userDao()
-                        ?.insertAll(
-                        User(
-                            email = emailEditText.text.toString(),
-                            password = passwordEditText.text.toString(),
-                            user_name = userNameEditText.text.toString()
-                        )
-                    )
-                        Handler(Looper.getMainLooper()).post(Runnable {
-                            Toast.makeText(this, "Has sido correctamente registrado", Toast.LENGTH_LONG).show()
-                        })
-
-
-                    //val users: List<User> = userDao.getAll()
-                })
-
-
-                val intent = Intent(this, RegisterActivity::class.java)
-
-                intent.putExtra(MainActivity.USER_NAME, userNameEditText.text.toString())
-                intent.putExtra(MainActivity.USER_EMAIL, emailEditText.text.toString())
-                intent.putExtra(MainActivity.USER_PASSWORD, passwordEditText.text.toString())
+                intent.putExtra(MainActivity.USER_NAME, binding.editTextRegisterUserName.text.toString())
+                intent.putExtra(MainActivity.USER_EMAIL, binding.editTextRegisterEmail.text.toString())
+                intent.putExtra(MainActivity.USER_PASSWORD, binding.editTextRegisterPassword.text.toString())
 
                 setResult(Activity.RESULT_OK, intent)
                 finish()
             }
         }
+
+//
+//        if(binding.editTextRegisterUserName.text.isNullOrEmpty() || binding.editTextRegisterEmail.text.isNullOrEmpty() || binding.editTextRegisterPassword.text.isNullOrEmpty())
+//            Toast.makeText(this, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show()
+//        else if (!isEmailValid(binding.editTextRegisterEmail.text.toString()))
+//            Toast.makeText(this, "Por favor, ingresa un email válido", Toast.LENGTH_SHORT).show()
+//        else if (binding.editTextRegisterPassword.text.toString().length < 8)
+//            Toast.makeText(this, "La contraseña debe ser mayor a 8 caracteres", Toast.LENGTH_SHORT).show()
+//        else {
+//            executeDbProcess()
+//            val intent = Intent(this, RegisterActivity::class.java)
+//
+//            intent.putExtra(MainActivity.USER_NAME, binding.editTextRegisterUserName.text.toString())
+//            intent.putExtra(MainActivity.USER_EMAIL, binding.editTextRegisterEmail.text.toString())
+//            intent.putExtra(MainActivity.USER_PASSWORD, binding.editTextRegisterPassword.text.toString())
+//
+//            setResult(Activity.RESULT_OK, intent)
+//            finish()
+//        }
+    }
+
+    private fun executeDbProcess(){
+
+        val executor: ExecutorService = Executors.newSingleThreadExecutor()
+
+        executor.execute(
+            Runnable {
+
+                /*val db = Room.databaseBuilder(
+                    applicationContext,
+                    UserDb::class.java, "MyWallet_DB"
+                ).build()
+                val userDao = db.userDao()*/
+
+                UserDatabase.getInstance(context = applicationContext)
+                    ?.userDao
+                    ?.insertAll(
+                        User(
+                            email = binding.editTextRegisterEmail.text.toString(),
+                            password = binding.editTextRegisterPassword.text.toString(),
+                            userName = binding.editTextRegisterUserName.text.toString()
+                        )
+                    )
+                Handler(Looper.getMainLooper()).post(Runnable {
+                    Toast.makeText(this, "Has sido correctamente registrado", Toast.LENGTH_LONG).show()
+
+                })
+
+
+                //val users: List<User> = userDao.getAll()
+            })
+
+
+        /*
+                    auth.createUserWithEmailAndPassword(emailEditText.text.toString(), passwordEditText.text.toString())
+                        .addOnCompleteListener(this) { task ->
+                            if (task.isSuccessful) {
+                                //Log.d(TAG, "createUserWithEmail:success")
+                                Toast.makeText(this, "Has sido correctamente registrado", Toast.LENGTH_LONG).show()
+                                //updateUI(user, null)
+                            } else {
+                                //Log.w(TAG, "createUserWithEmail:failure", task.exception)
+                                Toast.makeText(this, "Nope", Toast.LENGTH_LONG).show()
+                            }
+                        }
+    */
+
+
     }
 
     private fun isEmailValid(email: String): Boolean {

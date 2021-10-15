@@ -3,7 +3,6 @@ package com.kotlin.mywallet.finance
 import android.os.Parcel
 import android.os.Parcelable
 
-
 class Cuenta(private var id: Int, private var name: String, private val initialAmount: Float = 0.0f) : Parcelable{
     private var currency = "MXN"
     private var totalAmount = 0f

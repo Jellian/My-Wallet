@@ -1,80 +1,88 @@
 package com.kotlin.mywallet
 
+import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.kotlin.mywallet.data.UserDatabase
-import com.kotlin.mywallet.databinding.ActivityLoginBinding
+import com.kotlin.mywallet.databinding.FragmentSignInBinding
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class LoginActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityLoginBinding
-    private lateinit var preferences: SharedPreferences
+class SignInFragment : Fragment() {
 
     companion object {
         const val CHANNEL_ANOUNCES = "CHANNEL_ANOUNCES"
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    private lateinit var preferences: SharedPreferences
+    private lateinit var binding: FragmentSignInBinding
+
+    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        // Inflate the layout for this fragment
+        binding = FragmentSignInBinding.inflate(inflater, container, false)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             setNotificationChannel()
         }
 
-        preferences = getSharedPreferences(HomeActivity.PREFS_NAME, Context.MODE_PRIVATE)
+        preferences = activity?.getSharedPreferences(HomeActivity.PREFS_NAME, Context.MODE_PRIVATE) as SharedPreferences
 
-        binding.buttonRegisterAccept.setOnClickListener {
-            if (binding.editTextRegisterUserName.text.isNullOrEmpty())
-                Toast.makeText(this@LoginActivity, "Nombre de usuario vacío", Toast.LENGTH_SHORT).show()
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.buttonSignInAccept.setOnClickListener {
+            if (binding.editTextSignInUserName.text.isNullOrEmpty())
+                Toast.makeText(context, "Nombre de usuario vacío", Toast.LENGTH_SHORT).show()
             else checkDatabase()
         }
     }
 
-    fun checkDatabase() {
+    private fun checkDatabase() {
         val executor: ExecutorService = Executors.newSingleThreadExecutor()
         executor.execute(
             Runnable {
-                val emailAndPass = UserDatabase.getInstance(context = applicationContext)
+                val emailAndPass = UserDatabase.getInstance(requireContext())
                     ?.userDao
                     ?.findByEmailAndPassword(
-                        binding.editTextRegisterUserName.text.toString(),
-                        binding.editTextRegisterPassword.text.toString()
+                        binding.editTextSignInUserName.text.toString(),
+                        binding.editTextSignInPassword.text.toString()
                     )
-                val userAndPass = UserDatabase.getInstance(context = applicationContext)
+                val userAndPass = UserDatabase.getInstance(requireContext())
                     ?.userDao
                     ?.findByUsernameAndPassword(
-                        binding.editTextRegisterUserName.text.toString(),
-                        binding.editTextRegisterPassword.text.toString()
+                        binding.editTextSignInUserName.text.toString(),
+                        binding.editTextSignInPassword.text.toString()
                     )
                 Handler(Looper.getMainLooper()).post(Runnable {
                     when {
                         emailAndPass != null -> {
-                            logIn(emailAndPass.userName, emailAndPass.email, emailAndPass.password)
+                            signIn(emailAndPass.userName, emailAndPass.email, emailAndPass.password)
                             notificationOne()
                         }
                         userAndPass != null -> {
-                            logIn(userAndPass.userName, userAndPass.email, userAndPass.password)
+                            signIn(userAndPass.userName, userAndPass.email, userAndPass.password)
                             notificationOne()
                         }
-                        else -> { Toast.makeText(this, "Tu username/email y/o tu password son incorrectos", Toast.LENGTH_SHORT).show() }
+                        else -> { Toast.makeText(requireContext(), "Tu username/email y/o tu password son incorrectos", Toast.LENGTH_SHORT).show() }
                     }
                 })
             }
@@ -89,34 +97,42 @@ class LoginActivity : AppCompatActivity() {
         val importance = NotificationManager.IMPORTANCE_DEFAULT
         val channel = NotificationChannel(CHANNEL_ANOUNCES, name, importance).apply { description = descriptionText }
 
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager = activity?.getSystemService(Activity.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
 
     //PRIMERA NOTIFICACION
     private fun notificationOne() {
-        val notification = NotificationCompat.Builder(this, CHANNEL_ANOUNCES)
+        val notification = NotificationCompat.Builder(requireContext(), CHANNEL_ANOUNCES)
             .setSmallIcon(R.drawable.wallet3)
-            .setColor(ContextCompat.getColor(this, R.color.primaryColor))
+            .setColor(ContextCompat.getColor(requireContext(), R.color.primaryColor))
             .setContentTitle(getString(R.string.nombrenotificacion))
             .setContentText(getString(R.string.notificacion1))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .build()
 
-        with(NotificationManagerCompat.from(this)) {
+        with(NotificationManagerCompat.from(requireContext())) {
             notify(20, notification)
         }
     }
 
-    private fun logIn(userName: String?, userEmail: String?, userPassword: String?) {
+    private fun signIn(userName: String?, userEmail: String?, userPassword: String?) {
         preferences.edit().putString(HomeActivity.IS_LOGGED, "TRUE").apply()
         preferences.edit().putString(HomeActivity.USER_NAME, userName).apply()
         preferences.edit().putString(HomeActivity.USER_EMAIL, userEmail).apply()
 
-        val intent = Intent(this, HomeActivity::class.java)
+        val intent = Intent(context, HomeActivity::class.java)
         intent.putExtra(MainActivity.USER_NAME, userName)
         intent.putExtra(MainActivity.USER_EMAIL, userEmail)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
     }
+
 }
+
+
+
+
+
+
+

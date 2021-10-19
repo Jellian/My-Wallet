@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:inputType="text"
             android:maxLines="1"
-            app:layout_constraintStart_toStartOf="@+id/layout_register_userName" />
+            app:layout_constraintStart_toStartOf="@+id/layout_signUp_userName" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
             android:maxLines="1"
-            app:layout_constraintStart_toStartOf="@+id/layout_register_userName" />
+            app:layout_constraintStart_toStartOf="@+id/layout_signUp_userName" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton

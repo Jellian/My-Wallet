@@ -15,7 +15,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.google.android.material.button.MaterialButton
-import com.kotlin.mywallet.databinding.ActivityLoginBinding
+import com.kotlin.mywallet.databinding.ActivityAddAccountBinding
 
 class AddAccountActivity : AppCompatActivity() {
 
@@ -23,7 +23,7 @@ class AddAccountActivity : AppCompatActivity() {
     private lateinit var initialAmountEditText: EditText
     private lateinit var acceptButton: MaterialButton
 
-    val binding: ActivityLoginBinding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
+    val binding: ActivityAddAccountBinding by lazy { ActivityAddAccountBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +50,7 @@ class AddAccountActivity : AppCompatActivity() {
         }
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
-        val notification = NotificationCompat.Builder(this, LoginActivity.CHANNEL_ANOUNCES)
+        val notification = NotificationCompat.Builder(this, SignInFragment.CHANNEL_ANOUNCES)
             .setSmallIcon(R.drawable.wallet3)
             .setColor(ContextCompat.getColor(this, R.color.teal_200))
             .setContentTitle(getString(R.string.nombre_canal))

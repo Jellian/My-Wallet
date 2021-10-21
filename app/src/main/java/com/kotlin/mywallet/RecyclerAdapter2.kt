@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.kotlin.mywallet.data.entities.Charge
 import com.kotlin.mywallet.finance.Cargo
 import java.text.DecimalFormat
 
-class RecyclerAdapter2(private val context: Context, private val charges : List<Cargo>) : RecyclerView.Adapter<RecyclerAdapter2.ViewHolder2>(){
+class RecyclerAdapter2(private val context: Context, private val charges : MutableList<Charge>) : RecyclerView.Adapter<RecyclerAdapter2.ViewHolder2>(){
 
     class ViewHolder2(view: View) : RecyclerView.ViewHolder(view) {
 
@@ -21,18 +22,18 @@ class RecyclerAdapter2(private val context: Context, private val charges : List<
         private val arrow = view.findViewById<ImageView>(R.id.imageView_itemCharge_arrowIcon)
         private val date = view.findViewById<TextView>(R.id.textView_itemCharge_date)
 
-        fun bind(charge: Cargo){
-            type.text = charge.getType()
+        fun bind(charge: Charge){
+            type.text = charge.type
 
             val dec = DecimalFormat("#,###.##")
-            val total = dec.format(charge.getAmount())
+            val total = dec.format(charge.amount)
             amount.text = "$ $total MXN"
 
-            category.text = charge.getCategory()
-            note.text = charge.getNote()
-            date.text = charge.getDate()
+            category.text = charge.category
+            note.text = charge.note
+            date.text = charge.date
 
-            if (charge.getType() != "Ingreso"){
+            if (charge.type != "Ingreso"){
                 arrow.setImageResource(R.drawable.ic_arrow_red)
             }
             else{

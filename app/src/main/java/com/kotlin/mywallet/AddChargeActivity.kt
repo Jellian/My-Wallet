@@ -1,16 +1,25 @@
 package com.kotlin.mywallet
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContentProviderCompat
+import androidx.core.content.ContentProviderCompat.requireContext
+import com.kotlin.mywallet.data.UserDatabase
+import com.kotlin.mywallet.data.entities.Charge
 import com.kotlin.mywallet.finance.Cargo
 import java.util.*
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 import kotlin.collections.ArrayList
 
 
@@ -25,6 +34,7 @@ class AddChargeActivity : AppCompatActivity() {
     private lateinit var dateTextView: TextView
 
     private var chargeType: Int? = 0
+    private var username: String = ""
     private var category: String = ""
     private var accountName: String = ""
 
@@ -53,9 +63,11 @@ class AddChargeActivity : AppCompatActivity() {
         //dateTextView.text = String.format("%02d/%02d/%04d", actualMonth+1, dayOfMonth, actualYear)
 
         chargeType = intent.getIntExtra(HomeActivity.TYPE, 0)
-        val accounts = intent.getSerializableExtra(HomeActivity.ACCOUNT_LIST) as? ArrayList<*>
+        username = intent.getStringExtra(HomeActivity.USER_NAME).toString()
 
         val categories : List<String>
+
+        getAccounts()
 
         if (chargeType != +1) {
             categories = Categories.expendOptions
@@ -66,7 +78,7 @@ class AddChargeActivity : AppCompatActivity() {
             headerActionTextView.text = getString(R.string.anadir_ingreso)
         }
 
-        addChargeButton.setOnClickListener( createCharge())
+        addChargeButton.setOnClickListener( createCharge() )
 
         dateTextView.setOnClickListener {
 //            val dateListener = { datePicker: DatePicker, year: Int, month: Int, day: Int ->
@@ -87,28 +99,39 @@ class AddChargeActivity : AppCompatActivity() {
             }
         }
 
-        accountSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                accountName = accounts?.get(position) as String
-            }
-        }
-
         val categoryAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         categorySpinner.adapter = categoryAdapter
 
-        if(accounts != null) {
-            val accountAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, accounts.toList())
-            accountAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            accountSpinner.adapter = accountAdapter
-        }
 
-        appBar.setNavigationOnClickListener {
-            setResult(Activity.RESULT_CANCELED)
-            finish()
-        }
+        appBar.setNavigationOnClickListener { finish() }
+    }
+
+    private fun getAccounts() {
+
+        val executor: ExecutorService = Executors.newSingleThreadExecutor()
+        executor.execute(
+            Runnable {
+                val accountList = UserDatabase.getInstance(this)
+                    ?.userDao
+                    ?.findAccountNamesByUser(username)
+
+                Handler(Looper.getMainLooper()).post(Runnable {
+                    if(accountList != null) {
+                        val accountAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, accountList.toList())
+                        accountAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        accountSpinner.adapter = accountAdapter
+                    }
+
+                    accountSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+                        }
+                        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                            accountName = accountList?.get(position) as String
+                        }
+                    }
+                })
+            })
     }
 
     private fun createCharge() = View.OnClickListener {
@@ -117,20 +140,38 @@ class AddChargeActivity : AppCompatActivity() {
             Toast.makeText(applicationContext,"La cantidad debe ser mayor a 0",Toast.LENGTH_SHORT).show()
         }
         else {
-            val intent = Intent(this, AddChargeActivity::class.java)
-            val amount = amountEditText.text.toString().toFloat()
-            val note = noteEditText.text.toString()
 
-            val charge = if (chargeType == 1) { Cargo(amount, category, note, dateTextView.text.toString()) }
-            else{ Cargo(-amount, category, note, dateTextView.text.toString()) }
+            val executor: ExecutorService = Executors.newSingleThreadExecutor()
+            val amount = if(chargeType == 1) amountEditText.text.toString().toFloat()
+            else -amountEditText.text.toString().toFloat()
 
-            intent.putExtra(HomeActivity.ACCOUNT, accountName)
-            intent.putExtra(HomeActivity.TYPE, chargeType )
-            intent.putExtra(HomeActivity.CHARGE, charge )
+            val charge = Charge( amount = amount,
+                        category = category,
+                        note = noteEditText.text.toString(),
+                        date = dateTextView.text.toString(),
+                        userName = username,
+                        accountName = accountName )
 
-            setResult(Activity.RESULT_OK, intent)
-            finish()
+            executor.execute(
+                Runnable {
+                    UserDatabase.getInstance(this)
+                        ?.userDao
+                        ?.insertCharge(charge)
+
+                    Handler(Looper.getMainLooper()).post(Runnable {
+                        if(chargeType == 1)
+                            Toast.makeText(this, "Ingreso creado. ${amount} MXN a cuenta $accountName en categoría ${category}.", Toast.LENGTH_SHORT).show()
+                        else
+                            Toast.makeText(this, "Egreso creado. -${amount} MXN a cuenta $accountName en categoría ${category}.", Toast.LENGTH_SHORT).show()
+                        //("Egreso creado.", "-${amount} MXN a cuenta $accountName en categoría ${category}.")
+                        finish()
+                    })
+                })
         }
+    }
 
+    private fun showDialog(title:String, message:String) {
+        AlertDialog.Builder(this).setTitle(title).setMessage(message)
+            .setPositiveButton("OK") { _, _ -> }.create().show()
     }
 }

@@ -43,21 +43,36 @@ interface UserDao {
     // THIS IS FOR RELATION USER - ACCOUNTS
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertAccount(account: Account)
+    fun insertAccount(account: Account)
 
     @Transaction
     @Query("SELECT * FROM user WHERE userName = :userName")
-    suspend fun getUserWithAccounts(userName: String): List<UserWithAccounts>
+    fun getUserWithAccounts(userName: String): List<UserWithAccounts>
 
+    @Transaction
+    @Query("SELECT accountName FROM account WHERE userName = :userName")
+    fun findAccountNamesByUser(userName: String): List<String>
 
-    // THIS IS FOR RELATION ACCOUNT - TRANSACTIONS
+    @Transaction
+    @Query("SELECT * FROM account WHERE userName = :userName")
+    fun findAccountsByUser(userName: String): List<Account>
+
+    @Transaction
+    @Query("SELECT * FROM account WHERE userName = :userName AND accountName = :accountName")
+    fun findAccountByUserAndName(userName: String, accountName: String): Account
+
+    // THIS IS FOR RELATION ACCOUNT - CHARGES
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertCharge(charge: Charge)
+    fun insertCharge(vararg charge: Charge)
 
     @Transaction
     @Query("SELECT * FROM account WHERE accountName = :accountName")
     suspend fun getAccountWithCharges(accountName: String): List<AccountWithCharges>
+
+    @Transaction
+    @Query("SELECT * FROM charge WHERE userName = :userName AND accountName= :accountName")
+    fun findChargesByUserAndAccount(userName: String, accountName: String): List<Charge>
 
 
 }

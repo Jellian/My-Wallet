@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/signInFragment"
-        android:name="com.kotlin.mywallet.SignInFragment"
+        android:name="com.kotlin.mywallet.login.SignInFragment"
         android:label="SignInFragment"
         tools:layout="@layout/fragment_sign_in"/>
 
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.kotlin.mywallet.SignUpFragment"
+        android:name="com.kotlin.mywallet.login.SignUpFragment"
         android:label="SignUpFragment"
         tools:layout="@layout/fragment_sign_up">
         <action
@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.kotlin.mywallet.MainFragment"
+        android:name="com.kotlin.mywallet.login.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" >
         <action

@@ -16,7 +16,7 @@ import com.kotlin.mywallet.finance.Cuenta
         Account::class,
         Charge::class
                ],
-    version = 1,
+    version = 2,
     exportSchema = false)
 
 abstract class UserDatabase : RoomDatabase() {

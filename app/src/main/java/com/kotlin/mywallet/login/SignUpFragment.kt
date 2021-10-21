@@ -1,4 +1,4 @@
-package com.kotlin.mywallet
+package com.kotlin.mywallet.login
 
 import android.os.Bundle
 import android.os.Handler
@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.kotlin.mywallet.R
 import com.kotlin.mywallet.data.UserDatabase
 import com.kotlin.mywallet.data.entities.User
 import com.kotlin.mywallet.databinding.FragmentSignUpBinding
@@ -37,20 +38,16 @@ class SignUpFragment : Fragment() {
     private fun signUp() {
 
         with(binding) {
+
             if (editTextSignUpUserName.text.isNullOrEmpty() || editTextSignUpEmail.text.isNullOrEmpty() || editTextSignUpPassword.text.isNullOrEmpty())
-                Toast.makeText(context, "Por favor, llena todos los campos", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(context, "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show()
             else if (editTextSignUpPassword.text.toString().length < 8)
-                Toast.makeText(
-                    context,
-                    "La contraseña debe ser mayor a 8 caracteres",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(context, "La contraseña debe ser mayor a 8 caracteres", Toast.LENGTH_SHORT).show()
             else if (!isEmailValid(editTextSignUpEmail.text.toString()))
-                Toast.makeText(context, "Por favor, ingresa un email válido", Toast.LENGTH_SHORT)
-                    .show()
+                Toast.makeText(context, "Por favor, ingresa un email válido", Toast.LENGTH_SHORT).show()
             else {
                 executeDbProcess()
+                auth()
                 findNavController().navigate(R.id.mainFragment, null, null)
             }
         }
@@ -72,27 +69,31 @@ class SignUpFragment : Fragment() {
                         )
                     )
                 Handler(Looper.getMainLooper()).post(Runnable {
-                    Toast.makeText(context, "Has sido correctamente registrado", Toast.LENGTH_LONG).show()
-
+                    //Toast.makeText(context, "Has sido correctamente registrado", Toast.LENGTH_LONG).show()
                 })
             })
-
-        /*
-                    auth.createUserWithEmailAndPassword(emailEditText.text.toString(), passwordEditText.text.toString())
-                        .addOnCompleteListener(this) { task ->
-                            if (task.isSuccessful) {
-                                //Log.d(TAG, "createUserWithEmail:success")
-                                Toast.makeText(this, "Has sido correctamente registrado", Toast.LENGTH_LONG).show()
-                                //updateUI(user, null)
-                            } else {
-                                //Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                                Toast.makeText(this, "Nope", Toast.LENGTH_LONG).show()
-                            }
-                        }
-    */
     }
 
     private fun isEmailValid(email: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    private fun auth(){
+        auth.createUserWithEmailAndPassword(
+
+            binding.editTextSignUpEmail.text.toString(),
+            binding.editTextSignUpPassword.text.toString()
+
+        ).addOnCompleteListener( requireActivity() ) { task ->
+                if (task.isSuccessful) {
+                    //Log.d(TAG, "createUserWithEmail:success")
+                    Toast.makeText(context, "Has sido correctamente registrado", Toast.LENGTH_LONG).show()
+                    //updateUI(user, null)
+                } else {
+                    //Log.w(TAG, "createUserWithEmail:failure", task.exception)
+                    Toast.makeText(context, "Nope", Toast.LENGTH_LONG).show()
+                }
+            }
+
     }
 }

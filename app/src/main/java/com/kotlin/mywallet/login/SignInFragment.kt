@@ -1,4 +1,4 @@
-package com.kotlin.mywallet
+package com.kotlin.mywallet.login
 
 import android.app.Activity
 import android.app.NotificationChannel
@@ -19,16 +19,14 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import com.kotlin.mywallet.HomeActivity
+import com.kotlin.mywallet.R
 import com.kotlin.mywallet.data.UserDatabase
 import com.kotlin.mywallet.databinding.FragmentSignInBinding
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class SignInFragment : Fragment() {
-
-    companion object {
-        const val CHANNEL_ANOUNCES = "CHANNEL_ANOUNCES"
-    }
 
     private lateinit var preferences: SharedPreferences
     private lateinit var binding: FragmentSignInBinding
@@ -37,9 +35,8 @@ class SignInFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentSignInBinding.inflate(inflater, container, false)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             setNotificationChannel()
-        }
 
         preferences = activity?.getSharedPreferences(HomeActivity.PREFS_NAME, Context.MODE_PRIVATE) as SharedPreferences
 
@@ -72,15 +69,16 @@ class SignInFragment : Fragment() {
                         binding.editTextSignInUserName.text.toString(),
                         binding.editTextSignInPassword.text.toString()
                     )
+
                 Handler(Looper.getMainLooper()).post(Runnable {
                     when {
                         emailAndPass != null -> {
-                            signIn(emailAndPass.userName, emailAndPass.email, emailAndPass.password)
                             notificationOne()
+                            signIn(emailAndPass.userName, emailAndPass.email)
                         }
                         userAndPass != null -> {
-                            signIn(userAndPass.userName, userAndPass.email, userAndPass.password)
                             notificationOne()
+                            signIn(userAndPass.userName, userAndPass.email)
                         }
                         else -> { Toast.makeText(requireContext(), "Tu username/email y/o tu password son incorrectos", Toast.LENGTH_SHORT).show() }
                     }
@@ -89,21 +87,21 @@ class SignInFragment : Fragment() {
         )
     }
 
-    //CREACIÓN DEL CANAL DE ANUNCIOS DE LA APLICACIÓN
+    //Creación del canal de anuncios de la app
     @RequiresApi(Build.VERSION_CODES.O)
     fun setNotificationChannel() {
         val name = "Anuncios My Wallet"
         val descriptionText = "Notificacion al iniciar sesión en MW"
         val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel(CHANNEL_ANOUNCES, name, importance).apply { description = descriptionText }
+        val channel = NotificationChannel(MainActivity.CHANNEL_ANNOUNCES, name, importance).apply { description = descriptionText }
 
         val notificationManager = activity?.getSystemService(Activity.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
 
-    //PRIMERA NOTIFICACION
+    //Primera notificación
     private fun notificationOne() {
-        val notification = NotificationCompat.Builder(requireContext(), CHANNEL_ANOUNCES)
+        val notification = NotificationCompat.Builder(requireContext(), MainActivity.CHANNEL_ANNOUNCES)
             .setSmallIcon(R.drawable.wallet3)
             .setColor(ContextCompat.getColor(requireContext(), R.color.primaryColor))
             .setContentTitle(getString(R.string.nombrenotificacion))
@@ -116,7 +114,8 @@ class SignInFragment : Fragment() {
         }
     }
 
-    private fun signIn(userName: String?, userEmail: String?, userPassword: String?) {
+    private fun signIn(userName: String?, userEmail: String?) {
+
         preferences.edit().putString(HomeActivity.IS_LOGGED, "TRUE").apply()
         preferences.edit().putString(HomeActivity.USER_NAME, userName).apply()
         preferences.edit().putString(HomeActivity.USER_EMAIL, userEmail).apply()
@@ -127,7 +126,6 @@ class SignInFragment : Fragment() {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
     }
-
 }
 
 

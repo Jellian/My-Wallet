@@ -1,56 +1,109 @@
 package com.kotlin.mywallet
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
-import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
-import com.google.android.material.button.MaterialButton
+import com.kotlin.mywallet.data.UserDatabase
+import com.kotlin.mywallet.data.entities.Account
 import com.kotlin.mywallet.databinding.ActivityAddAccountBinding
+import com.kotlin.mywallet.login.MainActivity
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 class AddAccountActivity : AppCompatActivity() {
 
-    private lateinit var accountNameEditText: EditText
-    private lateinit var initialAmountEditText: EditText
-    private lateinit var acceptButton: MaterialButton
-
-    val binding: ActivityAddAccountBinding by lazy { ActivityAddAccountBinding.inflate(layoutInflater) }
+    private lateinit var binding: ActivityAddAccountBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_account)
 
-        acceptButton= findViewById(R.id.button_addAccount_accept)
-        accountNameEditText = findViewById(R.id.textView_addAccount_accountName)
-        initialAmountEditText = findViewById(R.id.textView_addAccount_initialAmount)
+        binding = ActivityAddAccountBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val appBar = findViewById<Toolbar>(R.id.toolbar_addAccount_appBar)
         setSupportActionBar(appBar)
 
-        binding.run{ acceptButton.setOnClickListener(returnNewAccountData())
+        binding.buttonAddAccountAccept.setOnClickListener(checkNewAccountInfo())
+
         notificationTwo()
+
+        appBar.setNavigationOnClickListener { finish() }
+
+    }
+
+    private fun checkNewAccountInfo() = View.OnClickListener {
+
+        if(binding.textViewAddAccountAccountName.text.isNullOrEmpty() || binding.textViewAddAccountInitialAmount.text.isNullOrEmpty()){
+            Toast.makeText(this, "Por favor llena todos los campos", Toast.LENGTH_SHORT).show()
         }
-        appBar.setNavigationOnClickListener {
-            setResult(Activity.RESULT_CANCELED)
-            finish()
+
+        else{
+            val username = intent.getStringExtra(HomeActivity.USER_NAME).toString()
+
+            val executor: ExecutorService = Executors.newSingleThreadExecutor()
+            executor.execute(
+                Runnable {
+
+                    val accountNameList = UserDatabase.getInstance(this)
+                        ?.userDao
+                        ?.findAccountNamesByUser(username)
+
+                    Handler(Looper.getMainLooper()).post(Runnable {
+
+                        if (accountNameList?.contains(binding.textViewAddAccountAccountName.text.toString()) == true)
+                            showDialog("Espera...", "Ya existe una cuenta con este nombre.\nPor favor, elige otro nombre.")
+                        else
+                            addAccount(username)
+                    })
+                })
         }
     }
+
+    fun addAccount(username: String){
+
+        val amount = binding.textViewAddAccountInitialAmount.text.toString()
+        val name = binding.textViewAddAccountAccountName.text.toString()
+
+        val account = Account(name, amount.toFloat(), username)
+
+        val executor: ExecutorService = Executors.newSingleThreadExecutor()
+
+        executor.execute(
+            Runnable {
+                UserDatabase.getInstance(this)
+                    ?.userDao
+                    ?.insertAccount(account)
+
+                Handler(Looper.getMainLooper()).post(Runnable {
+                    Toast.makeText(this, "Cuenta $name agregada.", Toast.LENGTH_SHORT).show()
+                    finish()
+                })
+            })
+    }
+
+    private fun showDialog(title:String,message:String){
+        AlertDialog.Builder(this).setTitle(title).setMessage(message)
+            .setPositiveButton("OK"){ _, _ -> }.create().show()
+    }
+
     private fun notificationTwo() {
         val intent = Intent(this, GoalActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
-        val notification = NotificationCompat.Builder(this, SignInFragment.CHANNEL_ANOUNCES)
+        val notification = NotificationCompat.Builder(this, MainActivity.CHANNEL_ANNOUNCES)
             .setSmallIcon(R.drawable.wallet3)
             .setColor(ContextCompat.getColor(this, R.color.teal_200))
             .setContentTitle(getString(R.string.nombre_canal))
@@ -65,33 +118,5 @@ class AddAccountActivity : AppCompatActivity() {
         with(NotificationManagerCompat.from(this)) {
             notify(22, notification)
         }
-    }
-    private fun returnNewAccountData() = View.OnClickListener {
-
-        val accountList = intent.getSerializableExtra(ListActivity.ACCOUNT_LIST) as? ArrayList<*> //Lista de nombres de las cuentas)
-
-        if(accountNameEditText.text.isNullOrEmpty() || initialAmountEditText.text.isNullOrEmpty()){
-            Toast.makeText(this, "Por favor llena todos los campos", Toast.LENGTH_SHORT).show()
-        }
-        else if(accountList?.contains(accountNameEditText.text.toString())== true){
-            showDialog("Espera...", "Ya existe una cuenta con este nombre.\nPor favor, elige otro nombre.")
-        }
-        else {
-            val intent = Intent(this, AddAccountActivity::class.java)
-            val amount = initialAmountEditText.text.toString()
-            val name = accountNameEditText.text.toString()
-
-            intent.putExtra(HomeActivity.NEW_ACCOUNT_NAME, name)
-            intent.putExtra(HomeActivity.NEW_ACCOUNT_AMOUNT, amount)
-            setResult(Activity.RESULT_OK, intent)
-            Toast.makeText(this, "Cuenta $name agregada.", Toast.LENGTH_SHORT).show()
-            finish()
-        }
-
-    }
-
-    private fun showDialog(title:String,message:String){
-        AlertDialog.Builder(this).setTitle(title).setMessage(message)
-            .setPositiveButton("OK"){ _, _ -> }.create().show()
     }
 }

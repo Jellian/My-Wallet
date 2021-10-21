@@ -12,7 +12,8 @@ data class Charge(
     @ColumnInfo var category: String,
     @ColumnInfo var note: String = "",
     @ColumnInfo var date: String,
-    @ColumnInfo val accountName: String
+    @ColumnInfo val accountName: String,
+    @ColumnInfo val userName: String
     ){
 
     @ColumnInfo

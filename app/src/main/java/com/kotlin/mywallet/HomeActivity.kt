@@ -8,25 +8,27 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.graphics.drawable.RoundedBitmapDrawable
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
+import com.kotlin.mywallet.data.UserDatabase
 import com.kotlin.mywallet.databinding.ActivityHomeBinding
 import com.kotlin.mywallet.finance.Cargo
+import com.kotlin.mywallet.login.MainActivity
 import com.kotlin.mywallet.personal.Usuario
 import kotlinx.android.synthetic.main.drawer_header.*
 import okhttp3.Callback
@@ -37,9 +39,10 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 import java.text.DecimalFormat
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 private const val ADD_CHARGE = 1   // PARA AGREGAR CUENTA
-private const val ADD_ACCOUNT = 2   // PARA AGREGAR CARGO
 private const val ADD_GOAL = 3 // PARA AGREGAR META
 private const val REQUEST_CAMERA = 4 // PARA ABRIR CAMARA
 
@@ -50,8 +53,6 @@ class HomeActivity : AppCompatActivity() {
         const val TYPE = "TYPE"
         const val CHARGE = "CHARGE"
         const val ACCOUNT = "ACCOUNT"
-        const val NEW_ACCOUNT_NAME = "NEW_ACCOUNT_NAME"
-        const val NEW_ACCOUNT_AMOUNT = "NEW_ACCOUNT_AMOUNT"
 
         const val PREFS_NAME = "com.kotlin.mywallet"
         const val GOAL = "GOAL"
@@ -64,8 +65,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityHomeBinding
-
     private lateinit var preferences: SharedPreferences
+
     private lateinit var userName: String
     private lateinit var email: String
     private lateinit var user: Usuario
@@ -85,7 +86,7 @@ class HomeActivity : AppCompatActivity() {
         userName = intent.getStringExtra(MainActivity.USER_NAME).toString()
         email = intent.getStringExtra(MainActivity.USER_EMAIL).toString()
 
-        user = Usuario(userName)
+        //user = Usuario(userName)
 
         val headerView = binding.navView.getHeaderView(0)
         val userNameNav = headerView.findViewById<TextView>(R.id.textView_drawerMenu_userName)
@@ -189,37 +190,49 @@ class HomeActivity : AppCompatActivity() {
     private fun addAccount() {
         val intent = Intent(this, AddAccountActivity::class.java)
         // Se envía lista de strings que corresponden a los nombres de todas las cuentas del usuario
-        intent.putExtra( ACCOUNT_LIST, user.getAccountNames() )
-        startActivityForResult(intent, ADD_ACCOUNT)
+        //intent.putExtra( ACCOUNT_LIST, user.getAccountNames() )
+        //startActivityForResult(intent, ADD_ACCOUNT)
+        intent.putExtra(USER_NAME, userName)
+        startActivity(intent)
     }
 
     private fun showAccounts() {
         val intent = Intent(this, ListActivity::class.java)
-
-        // Se agrega cada cuenta con su nombre al intent
-        user.getAccounts().forEach {
-            intent.putExtra( it.getName(), it)
-        }
-        // Se envía lista de strings que corresponden a los nombres de todas las cuentas del usuario
-        intent.putExtra( ACCOUNT_LIST, user.getAccountNames() )
+        intent.putExtra(USER_NAME, userName)
         startActivity(intent)
     }
 
     private fun prepareCharge() = View.OnClickListener { view ->
-        if(user.getAccountNames().size == 0){
-            showDialog("No tan rápido...", "Primero debes \"Agregar una cuenta\"")
-        }
-        else{
-            val intent = Intent(this, AddChargeActivity::class.java)
-            // Boton que ha llamado a la funcion
-            when(view.id){
-                R.id.button_home_addIncome -> intent.putExtra(TYPE, +1)
-                else -> intent.putExtra(TYPE, -1)
-        }
-        intent.putExtra(ACCOUNT_LIST, user.getAccountNames() )
 
-        startActivityForResult(intent, ADD_CHARGE )
-        }
+        val executor: ExecutorService = Executors.newSingleThreadExecutor()
+        executor.execute(
+            Runnable {
+                val accountList = UserDatabase.getInstance(this)
+                    ?.userDao
+                    ?.findAccountNamesByUser(userName)
+
+                Handler(Looper.getMainLooper()).post(Runnable {
+
+                    if(accountList.isNullOrEmpty())
+                        showDialog("No tan rápido...", "Primero debes \"Agregar una cuenta\"")
+                    else {
+                        val intent = Intent(this, AddChargeActivity::class.java)
+                        // Boton que ha llamado a la funcion
+                        when (view.id) {
+                            R.id.button_home_addIncome -> intent.putExtra(TYPE, +1)
+                            else ->
+                                intent.putExtra(TYPE, -1)
+                        }
+                        intent.putExtra(USER_NAME, userName)
+                        startActivity(intent)
+                    }
+                })
+            })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        //refreshTotal()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -227,14 +240,7 @@ class HomeActivity : AppCompatActivity() {
 
         if(resultCode == Activity.RESULT_OK && data != null){
             when (requestCode) {
-                // Viene de hacer el cargo
-                ADD_CHARGE -> { doCharge(data) }
-                // Viene de agregar cuenta
-                ADD_ACCOUNT -> {
-                    val newAccountName = data.getStringExtra(NEW_ACCOUNT_NAME)?: ""
-                    val newAccountAmount = data.getStringExtra(NEW_ACCOUNT_AMOUNT)?.toFloat() ?: 0.0f
-                    user.addAccount(newAccountName, newAccountAmount)
-                }
+
                 REQUEST_CAMERA -> {
                     // Obtenemos bitmap desde URI REFERENCE
                     val bitmap = if(Build.VERSION.SDK_INT < 28) {
@@ -250,7 +256,7 @@ class HomeActivity : AppCompatActivity() {
                 }
                 ADD_GOAL -> { binding.myGoal.text = getCurrentGoal().toString() }
             }
-            refreshTotal()
+            //refreshTotal()
         }
     }
 
@@ -271,25 +277,6 @@ class HomeActivity : AppCompatActivity() {
                     finish()
                 }
                 .setNegativeButton("No", null).create().show()
-    }
-
-    private fun doCharge(intent: Intent?){
-        if(intent != null) {
-            val type = intent.getIntExtra(TYPE, 0)
-            val accountName = intent.getStringExtra(ACCOUNT)
-            // INGRESO
-            if (type > 0) {
-                val charge = intent.getParcelableExtra<Cargo>(CHARGE)
-                user.addIncome(accountName, charge)
-                showDialog("Ingreso creado.", "${charge?.getAmount()} MXN a cuenta $accountName en categoría ${charge?.getCategory()}.")
-            }
-            // EGRESO
-            else {
-                val charge = intent.getParcelableExtra<Cargo>(CHARGE)
-                user.addExpense(accountName, charge)
-                showDialog("Egreso creado.", "-${charge?.getAmount()} MXN a cuenta $accountName en categoría ${charge?.getCategory()}.")
-            }
-        }
     }
 
     private fun refreshTotal(){

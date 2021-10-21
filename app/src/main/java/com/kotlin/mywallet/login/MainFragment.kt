@@ -1,4 +1,4 @@
-package com.kotlin.mywallet
+package com.kotlin.mywallet.login
 
 import android.animation.AnimatorInflater
 import android.content.Context
@@ -10,12 +10,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
-import com.kotlin.mywallet.databinding.ActivityMainBinding
+import com.kotlin.mywallet.HomeActivity
+import com.kotlin.mywallet.R
 import com.kotlin.mywallet.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
@@ -23,13 +23,13 @@ class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
     private lateinit var preferences: SharedPreferences
 
-    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
         binding = FragmentMainBinding.inflate(inflater, container, false)
 
         preferences = activity?.getSharedPreferences(HomeActivity.PREFS_NAME, Context.MODE_PRIVATE) as SharedPreferences
 
-        FirebaseApp.initializeApp( requireContext())
+        FirebaseApp.initializeApp( requireContext() )
 
         return binding.root
     }
@@ -47,14 +47,14 @@ class MainFragment : Fragment() {
             findNavController().navigate(R.id.signInFragment, null, MainActivity.options)
         }
 
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+        FirebaseMessaging.getInstance().token.addOnCompleteListener( OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.w("Error", "Fetching FCM registration token failed", task.exception)
                 return@OnCompleteListener
             }
 
             val token = task.result
-            //Log.d("FCM_TOKEN",token!!)
+            Log.d("FCM_TOKEN",token!!)
             //Toast.makeText(baseContext,"FCM token: $token", Toast.LENGTH_SHORT).show()
         })
     }
@@ -62,6 +62,11 @@ class MainFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         if( isLogged() ){ goToHome() }
+    }
+
+    private fun isLogged(): Boolean {
+        val isLogged = preferences.getString(HomeActivity.IS_LOGGED, "")
+        return isLogged == "TRUE"
     }
 
     private fun goToHome(){
@@ -73,11 +78,6 @@ class MainFragment : Fragment() {
         intent.putExtra(MainActivity.USER_EMAIL, userEmail)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
-    }
-
-    private fun isLogged(): Boolean {
-        val isLogged = preferences.getString(HomeActivity.IS_LOGGED, "")
-        return isLogged == "TRUE"
     }
 
     override fun onResume() {

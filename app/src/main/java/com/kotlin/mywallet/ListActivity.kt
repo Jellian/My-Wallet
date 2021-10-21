@@ -1,24 +1,19 @@
 package com.kotlin.mywallet
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.widget.Toolbar
-import com.kotlin.mywallet.finance.Cuenta
-import java.lang.Exception
-//import android.R
-import android.view.View
-
 
 class ListActivity : AppCompatActivity() {
 
     companion object {
         const val ACCOUNT = "ACCOUNT"
-        const val ACCOUNT_LIST = "ACCOUNT_LIST"
+        const val USERNAME = "USERNAME"
     }
+
+    private lateinit var username: String
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
@@ -26,33 +21,23 @@ class ListActivity : AppCompatActivity() {
 
         val listFragment = supportFragmentManager.findFragmentById(R.id.fragmentList) as ListFragment
 
+        username = intent.getStringExtra(HomeActivity.USER_NAME).toString()
+
         listFragment.setListener{
                 val intent = Intent(this, DetailActivity::class.java)
-                intent.putExtra(ACCOUNT, it)
+                intent.putExtra(USERNAME, username)
+                intent.putExtra(ACCOUNT, it.accountName)
                 startActivity(intent)
         }
+
     }
 
     fun finishActivity() {
         finish()
     }
 
-    fun getAccounts(): MutableList<Cuenta>{
-            // Obtenemos las cuentas existentes
-            val accountList = intent.getSerializableExtra(ACCOUNT_LIST) as? ArrayList<*> //Lista de nombres de las cuentas
-
-            val accountsToShow = mutableListOf<Cuenta>()
-            var account: Cuenta?
-
-            if (accountList?.none { it.toString().isEmpty() } == true) {
-                accountList.forEach {
-                    account = intent.getParcelableExtra<Cuenta>(it.toString())
-                    if (account != null) {
-                        accountsToShow.add(account!!)
-                    }
-                }
-            }
-            return accountsToShow
+    fun getUsername(): String{
+        return username
     }
 
     fun showDialog(title:String,message:String) {

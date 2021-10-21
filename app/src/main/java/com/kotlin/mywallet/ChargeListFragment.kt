@@ -1,6 +1,8 @@
 package com.kotlin.mywallet
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +10,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.kotlin.mywallet.data.UserDatabase
 import com.kotlin.mywallet.finance.Cargo
 import com.kotlin.mywallet.finance.Cuenta
 import kotlinx.android.synthetic.main.fragment_chargelist.*
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 class ChargeListFragment : Fragment() {
 
@@ -27,21 +32,34 @@ class ChargeListFragment : Fragment() {
     }
 
     //configuramos lo necesario para desplegar el RecyclerView
-    private fun setUpRecyclerView(){
+    private fun setUpRecyclerView() {
 
         val parentActivity = activity as DetailActivity?
 
-        //val chargeList = parentActivity?.getChargesList()
+        val executor: ExecutorService = Executors.newSingleThreadExecutor()
+        executor.execute(
+            Runnable {
 
-        // indicamos que tiene un tamaño fijo
-        recycler2.setHasFixedSize(true)
-        // indicamos el tipo de layoutManager
-        recycler2.layoutManager = LinearLayoutManager(activity)
-        //seteando el Adapter
-        mAdapter = parentActivity?.getChargesList()?.let { RecyclerAdapter2(activity!!, it) }!!
-        //asignando el Adapter al RecyclerView
-        recycler2.adapter = mAdapter
+                val chargeList = UserDatabase.getInstance(requireContext())
+                    ?.userDao
+                    ?.findChargesByUserAndAccount(
+                        parentActivity?.getUsername().toString(),
+                        parentActivity?.getAccountName().toString()) as MutableList
+
+                Handler(Looper.getMainLooper()).post(Runnable {
+
+                    if(chargeList.isNotEmpty()){
+                    // indicamos que tiene un tamaño fijo
+                    recycler2.setHasFixedSize(true)
+                    // indicamos el tipo de layoutManager
+                    recycler2.layoutManager = LinearLayoutManager(activity)
+                    //seteando el Adapter
+                    mAdapter = RecyclerAdapter2(requireActivity(), chargeList)
+                    //asignando el Adapter al RecyclerView
+                    recycler2.adapter = mAdapter
+                    }
+                })
+            })
     }
-
-
 }
+

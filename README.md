@@ -22,3 +22,4 @@ No es posible persistir la sesion, ya que no se utilizaron bases de datos o back
 - Luis Angel Alvarado Hernández
 - David Perez Morales
 - Jose Daniel Morales Ocampo
+- Nelly Almendarez Ibarra

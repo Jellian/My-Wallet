@@ -85,5 +85,6 @@
     <string name="nombrenotificacion">My Walet se está ejecutando</string>
     <string name="notificacion1">¡My Wallet es la mejor APP para tus finanzas!</string>
     <string name="notificacion2">¡Recuerda que puedes modificar o agregar METAS para seguir teniendo saldo positivo! Da clic en esta NOTIFICACIÓN para ir al modulo y agregar una meta. </string>
+    <string name="mxn">MXN</string>
 
 </resources>

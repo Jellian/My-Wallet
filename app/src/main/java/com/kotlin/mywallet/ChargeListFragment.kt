@@ -3,16 +3,12 @@ package com.kotlin.mywallet
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.mywallet.data.UserDatabase
-import com.kotlin.mywallet.finance.Cargo
-import com.kotlin.mywallet.finance.Cuenta
 import kotlinx.android.synthetic.main.fragment_chargelist.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -21,10 +17,10 @@ class ChargeListFragment : Fragment() {
 
     private lateinit var mAdapter : RecyclerAdapter2
 
-    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-            // infla el layout para este Fragment
-            return inflater.inflate(R.layout.fragment_chargelist, container, false)
-        }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        // infla el layout para este Fragment
+        return inflater.inflate(R.layout.fragment_chargelist, container, false)
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

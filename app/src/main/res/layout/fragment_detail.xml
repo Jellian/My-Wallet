@@ -1,95 +1,118 @@
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/detailView"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingVertical="16dp">
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardBackgroundColor="?attr/colorPrimaryDark"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp">
 
-    <TextView
-        android:id="@+id/textView_detail_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        style="@style/principal_Text"
-        android:text="@string/detalles"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="1dp"
+        android:background="#FFFFFF"
+        android:padding="8dp">
 
-    <ImageView
-        android:id="@+id/imageView_detail_accountIcon"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:src="@drawable/money"
-        app:layout_constraintTop_toBottomOf="@id/textView_detail_header"
-        app:layout_constraintStart_toStartOf="@id/detail_guideline3"
-        app:layout_constraintEnd_toEndOf="@id/detail_guideline4"
-        android:contentDescription="@string/icono_de_cuenta" />
+        <TextView
+            android:id="@+id/textView_detail_header"
+            style="@style/principal_Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/detalles"
+            android:textAlignment="center"
 
-    <TextView
-        android:id="@+id/textView_detail_accountName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="casual"
-        android:text="@string/cuenta"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/detail_guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/textView_detail_header" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="112dp"
-        android:text="@string/total_en_cuenta"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/detail_guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/textView_detail_accountName" />
+        <ImageView
+            android:id="@+id/imageView_detail_accountIcon"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/icono_de_cuenta"
+            android:rotation="10"
+            android:src="@drawable/money"
+            app:layout_constraintBottom_toTopOf="@id/textView_detail_totalAmount"
+            app:layout_constraintEnd_toEndOf="@id/detail_guideline4"
+            app:layout_constraintStart_toStartOf="@id/detail_guideline3"
+            app:layout_constraintTop_toBottomOf="@id/textView_detail_header" />
 
-    <TextView
-        android:id="@+id/textView_detail_totalAmount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="casual"
-        android:text="@string/_1000"
-        android:layout_marginTop="8sp"
-        android:textColor="#000"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@id/detail_guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        <TextView
+            android:id="@+id/textView_detail_accountName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="casual"
+            android:text="@string/cuenta"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/detail_guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/textView_detail_header" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/detail_guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent=".05" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/total_en_cuenta"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@+id/detail_guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/detail_guideline1" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/detail_guideline3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.30" />
+        <TextView
+            android:id="@+id/textView_detail_totalAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8sp"
+            android:fontFamily="casual"
+            android:text="@string/_1000"
+            android:textColor="#000"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/detail_guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/detail_guideline4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.70" />
+        <TextView
+            android:id="@+id/textView_detail_currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mxn"
+            android:fontFamily="casual"
+            android:textSize="18sp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView_detail_totalAmount"
+            app:layout_constraintStart_toEndOf="@+id/textView_detail_totalAmount"
+            app:layout_constraintTop_toTopOf="@+id/textView_detail_totalAmount" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/detail_guideline1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.45" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/detail_guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".05" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/detail_guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.32" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/detail_guideline4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.68" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/detail_guideline1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.65" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

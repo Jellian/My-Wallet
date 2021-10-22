@@ -17,7 +17,6 @@
         android:orientation="vertical"
         android:padding="8dp">
 
-
         <TextView
             android:id="@+id/textView_itemCharge_charge"
             android:layout_width="wrap_content"

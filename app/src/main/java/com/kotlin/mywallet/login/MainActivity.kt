@@ -13,6 +13,7 @@ class MainActivity : FragmentActivity() { // Fragment Activity
         const val USER_NAME = "USER_NAME"
         const val USER_EMAIL = "USER_EMAIL"
         const val CHANNEL_ANNOUNCES = "CHANNEL_ANNOUNCES"
+
         val options = navOptions {
             anim {
                 enter = R.anim.slide_in_right

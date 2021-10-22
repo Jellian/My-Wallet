@@ -14,6 +14,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.navigation.NavDeepLinkBuilder
 import com.kotlin.mywallet.data.UserDatabase
 import com.kotlin.mywallet.data.entities.Account
 import com.kotlin.mywallet.databinding.ActivityAddAccountBinding
@@ -98,10 +99,12 @@ class AddAccountActivity : AppCompatActivity() {
     }
 
     private fun notificationTwo() {
-        val intent = Intent(this, GoalActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+
+        val pendingIntent = NavDeepLinkBuilder(this)
+            .setComponentName(HomeActivity::class.java)
+            .setGraph(R.navigation.home_navigation)
+            .setDestination(R.id.goalFragment)
+            .createPendingIntent()
 
         val notification = NotificationCompat.Builder(this, MainActivity.CHANNEL_ANNOUNCES)
             .setSmallIcon(R.drawable.wallet3)

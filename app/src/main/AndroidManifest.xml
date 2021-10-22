@@ -26,12 +26,6 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="DEFAULT_CHANNEL" />
-
-        <activity
-            android:name=".GoalActivity"
-            android:exported="true" />
-        <activity android:name=".PrivacyActivity" />
-        <activity android:name=".AboutOfActivity" />
         <activity android:name=".DetailActivity" />
         <activity android:name=".ListActivity" />
         <activity android:name=".AddAccountActivity" />

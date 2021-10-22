@@ -3,7 +3,6 @@ package com.kotlin.mywallet
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kotlin.mywallet.data.UserDatabase
 import com.kotlin.mywallet.data.entities.Account
-import com.kotlin.mywallet.finance.Cuenta
 import kotlinx.android.synthetic.main.fragment_list.*
-import kotlinx.coroutines.runBlocking
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 

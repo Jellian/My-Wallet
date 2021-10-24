@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.kotlin.mywallet.HomeFragment"
+        android:name="com.kotlin.mywallet.home.HomeFragment"
         android:label="HomeFragment"
         tools:layout= "@layout/fragment_home" >
         <action

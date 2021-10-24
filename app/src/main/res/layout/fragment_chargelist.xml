@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DetailActivity">
+    tools:context=".charge.list.DetailActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler2"
+        android:id="@+id/recyclerCharge"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

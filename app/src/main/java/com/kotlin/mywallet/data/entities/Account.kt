@@ -6,18 +6,17 @@ import androidx.room.PrimaryKey
 import com.kotlin.mywallet.finance.Cargo
 
 @Entity
-data class Account (
+data class Account @JvmOverloads constructor(
 
-    @PrimaryKey(autoGenerate = false) //val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo val accountName: String,
     @ColumnInfo val initialAmount: Float,
-    @ColumnInfo val userName: String
+    @ColumnInfo val username: String
 
     ) {
 
     @ColumnInfo var currency = "MXN"
-    @ColumnInfo
-    var totalAmount = 0f
+    @ColumnInfo var totalAmount = 0f
 
     init {
         totalAmount = initialAmount

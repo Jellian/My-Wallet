@@ -1,4 +1,4 @@
-package com.kotlin.mywallet
+package com.kotlin.mywallet.home
 
 import android.Manifest
 import android.app.Activity
@@ -40,18 +40,32 @@ class HomeActivity : AppCompatActivity() {
         const val USER_NAME = "USER_NAME"
         const val USER_EMAIL = "USER_EMAIL"
 
+        const val ENTITY = "ENTITY"
+
         const val ALERT = "ALERT"
         const val EXIT = "EXIT"
     }
 
     private lateinit var binding: ActivityHomeBinding
+    private lateinit var preferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
+        preferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+
         requestWindowFeature(Window.FEATURE_NO_TITLE)
 
         setContentView(binding.root)
+    }
+
+    fun showDialog(title:String, message:String, type: String = ALERT){
+        if (type == ALERT) AlertDialog.Builder( this ).setTitle(title).setMessage(message).setPositiveButton("OK") { _, _ -> }.create().show()
+        else if (type == EXIT)
+            AlertDialog.Builder( this).setTitle(title).setMessage(message).setPositiveButton("Sí") { _, _ ->
+                preferences.edit().putString(IS_LOGGED, "FALSE").apply()
+                finish()
+            }.setNegativeButton("No", null).create().show()
     }
 
 }

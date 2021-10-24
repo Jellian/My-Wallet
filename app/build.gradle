@@ -17,9 +17,13 @@ android {
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    buildFeatures.dataBinding = true
+
     buildFeatures{
         viewBinding = true
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -64,5 +68,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-messaging-ktx'
 
-
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
 }

@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.kotlin.mywallet.R
-import com.kotlin.mywallet.data.UserDatabase
+import com.kotlin.mywallet.application.WalletApplication
 import com.kotlin.mywallet.data.entities.User
 import com.kotlin.mywallet.databinding.FragmentSignUpBinding
 import java.util.concurrent.ExecutorService
@@ -22,20 +22,29 @@ import java.util.concurrent.Executors
 class SignUpFragment : Fragment() {
 
     private lateinit var binding: FragmentSignUpBinding
+    private lateinit var viewModel: SignUpViewModel
     private lateinit var auth: FirebaseAuth
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
         binding = FragmentSignUpBinding.inflate(inflater, container, false)
 
-        auth = Firebase.auth
+        viewModel = SignUpViewModel(
+            (requireContext().applicationContext as WalletApplication).userRepository
+        )
 
-        binding.buttonSignUpAccept.setOnClickListener { signUp() }
+        auth = Firebase.auth
 
         return binding.root
     }
 
-    private fun signUp() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.buttonSignUpAccept.setOnClickListener { checkSignUpInfo() }
+    }
+
+    private fun checkSignUpInfo() {
 
         with(binding) {
 
@@ -46,32 +55,30 @@ class SignUpFragment : Fragment() {
             else if (!isEmailValid(editTextSignUpEmail.text.toString()))
                 Toast.makeText(context, "Por favor, ingresa un email válido", Toast.LENGTH_SHORT).show()
             else {
-                executeDbProcess()
-                auth()
-                findNavController().navigate(R.id.mainFragment, null, null)
+                signUp()
             }
         }
 
     }
-    private fun executeDbProcess(){
+    private fun signUp(){
 
         val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
-        executor.execute(
-            Runnable {
-                UserDatabase.getInstance(requireContext())
-                    ?.userDao
-                    ?.insertAll(
-                        User(
-                            email = binding.editTextSignUpEmail.text.toString(),
-                            password = binding.editTextSignUpPassword.text.toString(),
-                            userName = binding.editTextSignUpUserName.text.toString()
-                        )
-                    )
-                Handler(Looper.getMainLooper()).post(Runnable {
-                    //Toast.makeText(context, "Has sido correctamente registrado", Toast.LENGTH_LONG).show()
-                })
-            })
+        executor.execute {
+            viewModel.insertUser(
+                User(
+                    username = binding.editTextSignUpUserName.text.toString(),
+                    password = binding.editTextSignUpPassword.text.toString(),
+                    email = binding.editTextSignUpEmail.text.toString()
+                )
+            )
+
+            Handler(Looper.getMainLooper()).post {
+                Toast.makeText(context, "Has sido correctamente registrado", Toast.LENGTH_LONG).show()
+                auth()
+                findNavController().navigate(R.id.mainFragment, null, null)
+            }
+        }
     }
 
     private fun isEmailValid(email: String): Boolean {
@@ -94,6 +101,5 @@ class SignUpFragment : Fragment() {
                     Toast.makeText(context, "Nope", Toast.LENGTH_LONG).show()
                 }
             }
-
     }
 }

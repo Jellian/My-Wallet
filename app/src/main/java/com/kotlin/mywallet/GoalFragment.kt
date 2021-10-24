@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import com.kotlin.mywallet.databinding.FragmentGoalBinding
+import com.kotlin.mywallet.home.HomeActivity
 import com.kotlin.mywallet.login.MainActivity
 import kotlinx.android.synthetic.main.activity_home.*
 
@@ -21,7 +22,7 @@ class GoalFragment : Fragment() {
     lateinit var preferences: SharedPreferences
     lateinit var binding: FragmentGoalBinding
 
-    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
 
         binding = FragmentGoalBinding.inflate(layoutInflater)

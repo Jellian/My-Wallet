@@ -10,7 +10,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,10 +18,11 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import com.kotlin.mywallet.HomeActivity
+import androidx.fragment.app.Fragment
 import com.kotlin.mywallet.R
-import com.kotlin.mywallet.data.UserDatabase
+import com.kotlin.mywallet.application.WalletApplication
 import com.kotlin.mywallet.databinding.FragmentSignInBinding
+import com.kotlin.mywallet.home.HomeActivity
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -30,15 +30,19 @@ class SignInFragment : Fragment() {
 
     private lateinit var preferences: SharedPreferences
     private lateinit var binding: FragmentSignInBinding
+    private lateinit var viewModel: SignInViewModel
 
-    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
         binding = FragmentSignInBinding.inflate(inflater, container, false)
+        preferences = activity?.getSharedPreferences(HomeActivity.PREFS_NAME, Context.MODE_PRIVATE) as SharedPreferences
+
+        viewModel = SignInViewModel(
+            (requireContext().applicationContext as WalletApplication).userRepository
+        )
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             setNotificationChannel()
-
-        preferences = activity?.getSharedPreferences(HomeActivity.PREFS_NAME, Context.MODE_PRIVATE) as SharedPreferences
 
         return binding.root
     }
@@ -46,45 +50,42 @@ class SignInFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonSignInAccept.setOnClickListener {
-            if (binding.editTextSignInUserName.text.isNullOrEmpty())
-                Toast.makeText(context, "Nombre de usuario vacío", Toast.LENGTH_SHORT).show()
-            else checkDatabase()
-        }
+        binding.buttonSignInAccept.setOnClickListener { checkSignInInfo() }
     }
 
-    private fun checkDatabase() {
-        val executor: ExecutorService = Executors.newSingleThreadExecutor()
-        executor.execute(
-            Runnable {
-                val emailAndPass = UserDatabase.getInstance(requireContext())
-                    ?.userDao
-                    ?.findByEmailAndPassword(
-                        binding.editTextSignInUserName.text.toString(),
-                        binding.editTextSignInPassword.text.toString()
-                    )
-                val userAndPass = UserDatabase.getInstance(requireContext())
-                    ?.userDao
-                    ?.findByUsernameAndPassword(
-                        binding.editTextSignInUserName.text.toString(),
-                        binding.editTextSignInPassword.text.toString()
-                    )
+    private fun checkSignInInfo(){
 
-                Handler(Looper.getMainLooper()).post(Runnable {
+        if ( binding.editTextSignInUserName.text.isNullOrEmpty() )
+            Toast.makeText(context, "Nombre de usuario vacío", Toast.LENGTH_SHORT).show()
+        else {
+
+            val executor: ExecutorService = Executors.newSingleThreadExecutor()
+
+            executor.execute{
+                val nameAndPassUsr = viewModel.getUserByNameAndPassword(
+                    binding.editTextSignInUserName.text.toString(),
+                    binding.editTextSignInPassword.text.toString()
+                )
+                val emailAndPassUsr = viewModel.getUserByEmailAndPassword(
+                    binding.editTextSignInUserName.text.toString(),
+                    binding.editTextSignInPassword.text.toString()
+                )
+
+                Handler(Looper.getMainLooper()).post{
                     when {
-                        emailAndPass != null -> {
+                        nameAndPassUsr != null -> {
                             notificationOne()
-                            signIn(emailAndPass.userName, emailAndPass.email)
+                            signIn(nameAndPassUsr.username, nameAndPassUsr.email)
                         }
-                        userAndPass != null -> {
+                        emailAndPassUsr != null -> {
                             notificationOne()
-                            signIn(userAndPass.userName, userAndPass.email)
+                            signIn(emailAndPassUsr.username, emailAndPassUsr.email)
                         }
-                        else -> { Toast.makeText(requireContext(), "Tu username/email y/o tu password son incorrectos", Toast.LENGTH_SHORT).show() }
+                        else -> { Toast.makeText(requireContext(), "Tu nombre de usuario, email y/o tu contraseña son incorrectos", Toast.LENGTH_SHORT).show() }
                     }
-                })
+                }
             }
-        )
+        }
     }
 
     //Creación del canal de anuncios de la app

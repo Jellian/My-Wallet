@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DetailActivity">
+    tools:context=".charge.list.DetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         app:layout_constraintTop_toTopOf="parent"
@@ -19,22 +19,21 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="Detalles" />
-
     </com.google.android.material.appbar.AppBarLayout>
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentDetail"
-        class="com.kotlin.mywallet.DetailFragment"
+        android:name="com.kotlin.mywallet.charge.list.DetailFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/half"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_detail_appBar" />
+        app:layout_constraintTop_toBottomOf="@id/layout_detail_appBar" />
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentChargeList"
-        class="com.kotlin.mywallet.ChargeListFragment"
+        android:name="com.kotlin.mywallet.charge.list.ChargeListFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="@id/half"
@@ -48,5 +47,4 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.45" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

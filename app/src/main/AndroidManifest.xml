@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kotlin.mywallet">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+
     <application
+        android:name=".application.WalletApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyWallet">
+        <activity android:name=".add.entity.AddEntityActivity"></activity>
+
         <service
             android:name=".FirebaseMessaging"
             android:exported="false">
@@ -20,19 +25,17 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/wallet3" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="DEFAULT_CHANNEL" />
-        <activity android:name=".DetailActivity" />
-        <activity android:name=".ListActivity" />
-        <activity android:name=".AddAccountActivity" />
-        <activity
-            android:name=".AddChargeActivity"
-            android:windowSoftInputMode="adjustNothing" />
-        <activity android:name=".HomeActivity" />
+
+        <activity android:name=".charge.list.DetailActivity" />
+        <activity android:name=".account.list.AccountListActivity" />
+        <activity android:name=".home.HomeActivity" />
         <activity android:name=".login.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

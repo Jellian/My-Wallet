@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddChargeActivity">
+    tools:context=".add.entity.AddChargeFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         app:layout_constraintTop_toTopOf="parent"
@@ -29,7 +29,7 @@
         app:layout_constraintStart_toStartOf="@id/layout_addCharge_note"
         app:layout_constraintTop_toTopOf="@id/layout_addCharge_amount"
         app:layout_constraintBottom_toBottomOf="@id/layout_addCharge_amount"
-/>
+        />
 
     <TextView
         android:id="@+id/textView_addCharge_account"

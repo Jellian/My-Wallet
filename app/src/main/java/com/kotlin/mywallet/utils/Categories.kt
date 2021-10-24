@@ -1,4 +1,4 @@
-package com.kotlin.mywallet
+package com.kotlin.mywallet.utils
 
 class Categories() {
 
@@ -6,7 +6,7 @@ class Categories() {
 
         val incomeOptions = listOf(
             "Depósito", "Salario", "Inversión","Bono",
-            "Ahorro", "Renta", "Venta",
+            "Ahorro", "Renta", "Ventas",
         )
 
         val expendOptions = listOf(

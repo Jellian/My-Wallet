@@ -1,4 +1,4 @@
-package com.kotlin.mywallet
+package com.kotlin.mywallet.charge.list
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.kotlin.mywallet.R
 import com.kotlin.mywallet.data.entities.Charge
-import com.kotlin.mywallet.finance.Cargo
 import java.text.DecimalFormat
 
-class RecyclerAdapter2(private val context: Context, private val charges : MutableList<Charge>) : RecyclerView.Adapter<RecyclerAdapter2.ViewHolder2>(){
+class ChargeRecyclerAdapter(private val context: Context, private val charges : MutableList<Charge>) : RecyclerView.Adapter<ChargeRecyclerAdapter.ViewHolder2>(){
 
     class ViewHolder2(view: View) : RecyclerView.ViewHolder(view) {
 

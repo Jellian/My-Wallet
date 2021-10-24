@@ -9,8 +9,8 @@ data class UserWithAccounts(
 
     @Embedded val user: User,
     @Relation(
-        parentColumn = "userName",
-        entityColumn = "userName"
+        parentColumn = "username",
+        entityColumn = "username"
     )
 
     val accounts: List<Account>

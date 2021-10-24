@@ -1,8 +1,7 @@
-package com.kotlin.mywallet
+package com.kotlin.mywallet.home
 
 import android.Manifest
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -27,11 +26,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.RoundedBitmapDrawable
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 import androidx.navigation.fragment.findNavController
-import com.kotlin.mywallet.data.UserDatabase
+import com.kotlin.mywallet.R
+import com.kotlin.mywallet.account.list.AccountListActivity
+import com.kotlin.mywallet.add.entity.AddEntityActivity
+import com.kotlin.mywallet.application.WalletApplication
 import com.kotlin.mywallet.databinding.FragmentHomeBinding
 import com.kotlin.mywallet.login.MainActivity
-import com.kotlin.mywallet.personal.Usuario
-import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.drawer_header.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -41,16 +41,24 @@ private const val REQUEST_CAMERA = 1 // PARA ABRIR CAMARA
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
+    private lateinit var parentActivity: HomeActivity
     private lateinit var preferences: SharedPreferences
-
-    private var pictureUriReference: Uri? =null
+    private lateinit var viewModel: HomeViewModel
 
     private lateinit var email: String
     private lateinit var username: String
+    private var pictureUriReference: Uri? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        parentActivity = activity as HomeActivity
+
+        preferences = activity?.getSharedPreferences(HomeActivity.PREFS_NAME, Context.MODE_PRIVATE) as SharedPreferences
+
+        viewModel = HomeViewModel(
+            (requireContext().applicationContext as WalletApplication).userRepository
+        )
 
         return binding.root
     }
@@ -60,14 +68,8 @@ class HomeFragment : Fragment() {
 
         setupDrawer()
 
-        val parentActivity = activity as HomeActivity?
-
-        // Agregando las preferencias para guardar los datos de meta
-        preferences = activity?.getSharedPreferences(HomeActivity.PREFS_NAME, Context.MODE_PRIVATE) as SharedPreferences
-
-        username = parentActivity?.intent?.getStringExtra(HomeActivity.USER_NAME).toString()
-        email = parentActivity?.intent?.getStringExtra(MainActivity.USER_EMAIL).toString()
-
+        username = parentActivity.intent?.getStringExtra(HomeActivity.USER_NAME).toString()
+        email = parentActivity.intent?.getStringExtra(MainActivity.USER_EMAIL).toString()
 
         val headerView = binding.navView.getHeaderView(0)
         val userNameNav = headerView.findViewById<TextView>(R.id.textView_drawerMenu_userName)
@@ -77,7 +79,17 @@ class HomeFragment : Fragment() {
         userNameNav.text = username
         emailNav.text = email
 
+        binding.myGoal.text = preferences.getFloat(HomeActivity.GOAL,0f).toString()
+
+        "¡Hola, $username!".also { binding.textViewHomeWelcome.text = it }
+
+
         changePictureNav.setOnClickListener{ changePicture() }
+
+        binding.buttonHomeAddIncome.setOnClickListener( prepareCharge() )
+        binding.buttonHomeAddExpense.setOnClickListener( prepareCharge() )
+        binding.buttonShowAccount.setOnClickListener{ showAccounts() }
+        binding.cardGoal.setOnClickListener { findNavController().navigate(R.id.goalFragment, null, MainActivity.options) }
 
         binding.navView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -108,21 +120,13 @@ class HomeFragment : Fragment() {
                     true
                 }
                 R.id.nav_signOut ->{
-                    showDialog("Cerrando sesión...", "¿Estás seguro que deseas salir?", HomeActivity.EXIT)
+                    parentActivity.showDialog("Cerrando sesión...", "¿Estás seguro que deseas salir?", HomeActivity.EXIT)
                     true
                 }
                 else -> false
             }
         }
 
-        binding.myGoal.text = preferences.getFloat(HomeActivity.GOAL,0f).toString()
-
-        "¡Hola, $username!".also { binding.textViewHomeWelcome.text = it }
-
-        binding.buttonHomeAddIncome.setOnClickListener( prepareCharge() )
-        binding.buttonHomeAddExpense.setOnClickListener( prepareCharge() )
-        binding.buttonShowAccount.setOnClickListener{ showAccounts() }
-        binding.cardGoal.setOnClickListener { findNavController().navigate(R.id.goalFragment, null, MainActivity.options) }
     }
 
     private fun setupDrawer(){
@@ -134,44 +138,40 @@ class HomeFragment : Fragment() {
     private fun prepareCharge() = View.OnClickListener { view ->
 
         val executor: ExecutorService = Executors.newSingleThreadExecutor()
-        executor.execute(
-            Runnable {
-                val accountList = UserDatabase.getInstance(requireContext())
-                    ?.userDao
-                    ?.findAccountNamesByUser(username.toString())
 
-                Handler(Looper.getMainLooper()).post(Runnable {
+        executor.execute {
+            val accountNameList = viewModel.getAccountNamesByUser(username)
 
-                    if(accountList.isNullOrEmpty())
-                        showDialog("No tan rápido...", "Primero debes \"Agregar una cuenta\"")
-                    else {
-                        val intent = Intent(context, AddChargeActivity::class.java)
-                        // Boton que ha llamado a la funcion
-                        when (view.id) {
-                            R.id.button_home_addIncome -> intent.putExtra(HomeActivity.TYPE, +1)
-                            else ->
-                                intent.putExtra(HomeActivity.TYPE, -1)
-                        }
-                        intent.putExtra(HomeActivity.USER_NAME, username)
-                        startActivity(intent)
+            Handler(Looper.getMainLooper()).post {
+                if( accountNameList.isNullOrEmpty() )
+                    parentActivity.showDialog("No tan rápido...", "Primero debes \"Agregar una cuenta\"")
+                else {
+                    val intent = Intent(context, AddEntityActivity::class.java)
+                    // Boton que ha llamado a la funcion
+                    when (view.id) {
+                        R.id.button_home_addIncome -> intent.putExtra(HomeActivity.TYPE, +1)
+                        else -> intent.putExtra(HomeActivity.TYPE, -1)
                     }
-                })
-            })
+                    intent.putExtra(HomeActivity.USER_NAME, username)
+                    intent.putExtra(HomeActivity.ENTITY, "Charge")
+
+                    startActivity(intent)
+                }
+            }
+        }
     }
 
-    private fun showAccounts() {
-        val intent = Intent(context, ListActivity::class.java)
+    private fun addAccount() {
+        val intent = Intent(context, AddEntityActivity::class.java)
         intent.putExtra(HomeActivity.USER_NAME, username)
+        intent.putExtra(HomeActivity.ENTITY, "Account")
         startActivity(intent)
     }
 
-    private fun showDialog(title:String, message:String, type: String = HomeActivity.ALERT){
-        if (type == HomeActivity.ALERT) AlertDialog.Builder(context).setTitle(title).setMessage(message).setPositiveButton("OK") { _, _ -> }.create().show()
-        else if (type == HomeActivity.EXIT)
-            AlertDialog.Builder(context).setTitle(title).setMessage(message).setPositiveButton("Sí") { _, _ ->
-                preferences.edit().putString(HomeActivity.IS_LOGGED, "FALSE").apply()
-                activity?.finish()
-            }.setNegativeButton("No", null).create().show()
+    private fun showAccounts() {
+        val intent = Intent(context, AccountListActivity::class.java)
+        intent.putExtra(HomeActivity.USER_NAME, username)
+        startActivity(intent)
     }
 
     private fun changePicture(){
@@ -197,12 +197,6 @@ class HomeFragment : Fragment() {
         val camaraIntent= Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         camaraIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUriReference)
         startActivityForResult(camaraIntent, REQUEST_CAMERA)
-    }
-
-    private fun addAccount() {
-        val intent = Intent(context, AddAccountActivity::class.java)
-        intent.putExtra(HomeActivity.USER_NAME, username)
-        startActivity(intent)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

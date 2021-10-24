@@ -1,12 +1,14 @@
-package com.kotlin.mywallet
+package com.kotlin.mywallet.account.list
 
 import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import com.kotlin.mywallet.charge.list.DetailActivity
+import com.kotlin.mywallet.R
+import com.kotlin.mywallet.home.HomeActivity
 
-class ListActivity : AppCompatActivity() {
+class AccountListActivity : AppCompatActivity() {
 
     companion object {
         const val ACCOUNT = "ACCOUNT"
@@ -19,7 +21,7 @@ class ListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
 
-        val listFragment = supportFragmentManager.findFragmentById(R.id.fragmentList) as ListFragment
+        val listFragment = supportFragmentManager.findFragmentById(R.id.fragmentList) as AccountListFragment
 
         username = intent.getStringExtra(HomeActivity.USER_NAME).toString()
 

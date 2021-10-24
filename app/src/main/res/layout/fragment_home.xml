@@ -7,7 +7,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeActivity"
+    tools:context=".home.HomeActivity"
     tools:openDrawer="start">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -119,7 +119,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:gravity="right"
+                        android:gravity="end"
                         android:text="@string/text_account_status"
                         android:textAppearance="?attr/textAppearanceBody2"
                         android:textColor="?android:attr/textColorSecondary"
@@ -151,7 +151,7 @@
                         android:id="@+id/textView_home_totalAmountDollars"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="right"
+                        android:gravity="end"
 
                         android:text="@string/text_account_status"
                         android:textColor="?android:attr/textColorSecondary"

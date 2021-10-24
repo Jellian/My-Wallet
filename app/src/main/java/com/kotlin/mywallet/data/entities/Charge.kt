@@ -5,15 +5,15 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class Charge(
+data class Charge @JvmOverloads constructor(
 
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo var amount: Float = 0.0f,
     @ColumnInfo var category: String,
     @ColumnInfo var note: String = "",
     @ColumnInfo var date: String,
-    @ColumnInfo val accountName: String,
-    @ColumnInfo val userName: String
+    @ColumnInfo var accountName: String,
+    @ColumnInfo var username: String
     ){
 
     @ColumnInfo

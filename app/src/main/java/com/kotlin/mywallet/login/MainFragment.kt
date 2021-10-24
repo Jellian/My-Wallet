@@ -6,17 +6,17 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
-import com.kotlin.mywallet.HomeActivity
 import com.kotlin.mywallet.R
 import com.kotlin.mywallet.databinding.FragmentMainBinding
+import com.kotlin.mywallet.home.HomeActivity
 
 class MainFragment : Fragment() {
 

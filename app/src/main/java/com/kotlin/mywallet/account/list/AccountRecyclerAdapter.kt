@@ -1,4 +1,4 @@
-package com.kotlin.mywallet
+package com.kotlin.mywallet.account.list
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.kotlin.mywallet.R
 import com.kotlin.mywallet.data.entities.Account
-import com.kotlin.mywallet.finance.Cuenta
 import java.text.DecimalFormat
 
-class RecyclerAdapter(private val context: Context, private val accounts: MutableList<Account>, private val clickListener: (Account) -> Unit):
-    RecyclerView.Adapter<RecyclerAdapter.ViewHolder>(){
+class AccountRecyclerAdapter(private val context: Context, private val accounts: MutableList<Account>, private val clickListener: (Account) -> Unit):
+    RecyclerView.Adapter<AccountRecyclerAdapter.ViewHolder>(){
 
     class ViewHolder(val view : View) : RecyclerView.ViewHolder(view){
         //obteniendo las referencias a las Views

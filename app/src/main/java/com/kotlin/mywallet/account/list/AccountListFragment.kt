@@ -1,72 +1,105 @@
 package com.kotlin.mywallet.account.list
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.kotlin.mywallet.R
+import com.kotlin.mywallet.add.entity.AddEntityActivity
 import com.kotlin.mywallet.application.WalletApplication
 import com.kotlin.mywallet.data.entities.Account
+import com.kotlin.mywallet.databinding.FragmentListBinding
+import com.kotlin.mywallet.login.MainActivity
 import kotlinx.android.synthetic.main.fragment_list.*
+import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class AccountListFragment : Fragment() {
 
-    private lateinit var adapter: AccountRecyclerAdapter
+    private lateinit var adapter: AccountAdapter
     private var listener: (Account) -> Unit ={}
     private lateinit var viewModel: AccountListViewModel
+    private lateinit var binding: FragmentListBinding
 
+    private lateinit var parentActivity: AccountListActivity
+    private lateinit var username: String
 
-    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
-        // Infla el layout para este Fragment
-        val view = inflater.inflate(R.layout.fragment_list, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list, container, false)
+
+        parentActivity = activity as AccountListActivity
+        username = parentActivity.getUsername()
 
         viewModel = AccountListViewModel(
-            (requireContext().applicationContext as WalletApplication).userRepository
+            (requireContext().applicationContext as WalletApplication).userRepository, username
         )
 
         val parentActivity = activity as AccountListActivity
-        val appBar = view.findViewById<Toolbar>(R.id.toolbar_listAccounts_AppBar)
+        val appBar = binding.toolbarListAccountsAppBar
         parentActivity.setSupportActionBar(appBar)
 
         appBar.setNavigationOnClickListener { parentActivity.finishActivity() }
 
-        return view
+        return binding.root
 
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?){
         super.onActivityCreated(savedInstanceState)
+        setupEditAccount()
         setupAccountList()
     }
 
-    private fun setupAccountList(){
-
-        val parentActivity = activity as AccountListActivity?
+    private fun setupAccountList() {
 
         val executor: ExecutorService = Executors.newSingleThreadExecutor()
+        var howManyAccounts = 0
 
         executor.execute {
+            howManyAccounts = viewModel.getAnyAccountByUser(username)
+        }
+        Handler(Looper.getMainLooper()).post {
+            if (howManyAccounts == 0)
+                parentActivity.showDialog(
+                    "Ups...",
+                    "No hay nada que mostrar. \nPodrías considerar: \"Agregar una cuenta\"."
+                )
+            else {
+                adapter = AccountAdapter(requireContext(), viewModel, listener)
 
-            val accounts = viewModel.getAccountListByUser(parentActivity?.getUsername().toString())
+                viewModel.accounts.observe(viewLifecycleOwner, {
+                    adapter.submitList(it)
+                })
 
-            Handler(Looper.getMainLooper()).post{
-                if(accounts.isNullOrEmpty()){
-                    parentActivity?.showDialog("Ups...","No hay nada que mostrar. \nPodrías considerar: \"Agregar una cuenta\".")
-                }
-                else{
-                    adapter = AccountRecyclerAdapter(requireContext(), accounts.toMutableList(), listener )
-                    recyclerAccount.adapter = adapter
-                }
+                recyclerAccount.adapter = adapter
             }
         }
+    }
 
+    private fun setupEditAccount(){
+        with(viewModel) {
+            eventEditAccountId.observe(viewLifecycleOwner, {
+                if(eventEditAccountId.value != null){
+                    editAccount(eventEditAccountId.value!!)
+                }
+            })
+        }
+    }
+
+    private fun editAccount(accountId: Int) {
+        val intent = Intent(context, AddEntityActivity::class.java)
+        intent.putExtra(MainActivity.ID, accountId )
+        intent.putExtra(MainActivity.ENTITY, "Account")
+        startActivity(intent)
     }
 
     fun setListener(l: (Account) -> Unit){

@@ -16,6 +16,8 @@ class AddChargeViewModel(private val userRepository: UserRepository): ViewModel(
     fun insertCharge(charge: Charge){
         viewModelScope.launch {
             userRepository.insertCharge(charge)
+            userRepository.updateAccountTotalAmount(charge.accountName, charge.username, charge.amount)
+            userRepository.updateUserGrandTotal(charge.username, charge.amount)
         }
     }
 

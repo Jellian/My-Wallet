@@ -11,9 +11,9 @@ import com.kotlin.mywallet.R
 import com.kotlin.mywallet.data.entities.Charge
 import java.text.DecimalFormat
 
-class ChargeRecyclerAdapter(private val context: Context, private val charges : MutableList<Charge>) : RecyclerView.Adapter<ChargeRecyclerAdapter.ViewHolder2>(){
+class ChargeRecyclerAdapter(private val context: Context, private val charges : MutableList<Charge>) : RecyclerView.Adapter<ChargeRecyclerAdapter.ChargeViewHolder>(){
 
-    class ViewHolder2(view: View) : RecyclerView.ViewHolder(view) {
+    class ChargeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val type = view.findViewById<TextView>(R.id.textView_itemCharge_charge)
         private val amount = view.findViewById<TextView>(R.id.textView_itemCharge_amount)
@@ -43,14 +43,14 @@ class ChargeRecyclerAdapter(private val context: Context, private val charges : 
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder2 {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChargeViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_charge, parent, false)
-        return ViewHolder2(view)
+        return ChargeViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder2, position: Int) {
+    override fun onBindViewHolder(holderCharge: ChargeViewHolder, position: Int) {
         val charge = charges[position]
-        holder.bind(charge)
+        holderCharge.bind(charge)
     }
 
     override fun getItemCount(): Int {

@@ -16,7 +16,7 @@ import com.kotlin.mywallet.finance.Cuenta
         Account::class,
         Charge::class
                ],
-    version = 1,
+    version = 2,
     exportSchema = false)
 
 abstract class UserDatabase : RoomDatabase() {
@@ -24,12 +24,16 @@ abstract class UserDatabase : RoomDatabase() {
     abstract val userDao: UserDao
 
     companion object {
+
         @Volatile
         private var USERINSTANCE: UserDatabase? = null
 
         private const val DB_NAME = "myWallet_db"
 
         fun getInstance(context: Context) : UserDatabase?{
+
+
+
             if(USERINSTANCE == null){
                 //UserDatabase::class
                 synchronized(this){

@@ -14,6 +14,23 @@ class MainActivity : FragmentActivity() { // Fragment Activity
         const val USER_EMAIL = "USER_EMAIL"
         const val CHANNEL_ANNOUNCES = "CHANNEL_ANNOUNCES"
 
+        const val ACCOUNT = "ACCOUNT"
+        const val USERNAME = "USERNAME"
+
+        const val TYPE = "TYPE"
+
+        const val PREFS_NAME = "com.kotlin.mywallet"
+        const val GOAL = "GOAL"
+        const val IS_LOGGED = "IS_LOGGED"
+
+        const val ID = "ID"
+        const val ENTITY = "ENTITY"
+
+        const val ALERT = "ALERT"
+        const val EXIT = "EXIT"
+        const val DELETE = "DELETE"
+
+
         val options = navOptions {
             anim {
                 enter = R.anim.slide_in_right

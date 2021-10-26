@@ -15,6 +15,7 @@ class AddAccountViewModel(private val userRepository: UserRepository): ViewModel
     fun insertAccount(account: Account){
         viewModelScope.launch {
             userRepository.insertAccount(account)
+            userRepository.updateUserGrandTotal(account.username, account.totalAmount)
         }
     }
 

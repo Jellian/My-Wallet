@@ -28,17 +28,15 @@ import java.util.concurrent.Executors
 
 class SignInFragment : Fragment() {
 
-    private lateinit var preferences: SharedPreferences
     private lateinit var binding: FragmentSignInBinding
     private lateinit var viewModel: SignInViewModel
 
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
         binding = FragmentSignInBinding.inflate(inflater, container, false)
-        preferences = activity?.getSharedPreferences(HomeActivity.PREFS_NAME, Context.MODE_PRIVATE) as SharedPreferences
 
         viewModel = SignInViewModel(
-            (requireContext().applicationContext as WalletApplication).userRepository
+            (requireContext().applicationContext as WalletApplication).userRepository, requireContext()
         )
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -75,11 +73,11 @@ class SignInFragment : Fragment() {
                     when {
                         nameAndPassUsr != null -> {
                             notificationOne()
-                            signIn(nameAndPassUsr.username, nameAndPassUsr.email)
+                            signIn(nameAndPassUsr.username, nameAndPassUsr.email.toString())
                         }
                         emailAndPassUsr != null -> {
                             notificationOne()
-                            signIn(emailAndPassUsr.username, emailAndPassUsr.email)
+                            signIn(emailAndPassUsr.username, emailAndPassUsr.email.toString())
                         }
                         else -> { Toast.makeText(requireContext(), "Tu nombre de usuario, email y/o tu contraseña son incorrectos", Toast.LENGTH_SHORT).show() }
                     }
@@ -115,11 +113,11 @@ class SignInFragment : Fragment() {
         }
     }
 
-    private fun signIn(userName: String?, userEmail: String?) {
+    private fun signIn(userName: String, userEmail: String) {
 
-        preferences.edit().putString(HomeActivity.IS_LOGGED, "TRUE").apply()
-        preferences.edit().putString(HomeActivity.USER_NAME, userName).apply()
-        preferences.edit().putString(HomeActivity.USER_EMAIL, userEmail).apply()
+        viewModel.editStringPref(MainActivity.IS_LOGGED, "TRUE")
+        viewModel.editStringPref(MainActivity.USER_NAME, userName)
+        viewModel.editStringPref(MainActivity.USER_EMAIL, userEmail)
 
         val intent = Intent(context, HomeActivity::class.java)
         intent.putExtra(MainActivity.USER_NAME, userName)

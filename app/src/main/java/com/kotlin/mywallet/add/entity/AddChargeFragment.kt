@@ -18,6 +18,7 @@ import com.kotlin.mywallet.data.entities.Charge
 import com.kotlin.mywallet.databinding.FragmentAddChargeBinding
 import com.kotlin.mywallet.databinding.FragmentHomeBinding
 import com.kotlin.mywallet.home.HomeActivity
+import com.kotlin.mywallet.login.MainActivity
 import com.kotlin.mywallet.utils.Categories
 import java.util.*
 import java.util.concurrent.ExecutorService
@@ -59,8 +60,8 @@ class AddChargeFragment : Fragment() {
 
         "${actualMonth+1}/ $dayOfMonth/ $actualYear".also { binding.textViewAddChargeDate.text = it }
 
-        chargeType = parentActivity.intent.getIntExtra(HomeActivity.TYPE, 0)
-        username = parentActivity.intent.getStringExtra(HomeActivity.USER_NAME).toString()
+        chargeType = parentActivity.intent.getIntExtra(MainActivity.TYPE, 0)
+        username = parentActivity.intent.getStringExtra(MainActivity.USER_NAME).toString()
 
         val categories : List<String>
 

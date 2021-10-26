@@ -62,14 +62,12 @@ class AddAccountFragment : Fragment() {
         }
 
         else{
-            val username = parentActivity.intent.getStringExtra(HomeActivity.USER_NAME).toString()
+            val username = parentActivity.intent.getStringExtra(MainActivity.USER_NAME).toString()
 
             val executor: ExecutorService = Executors.newSingleThreadExecutor()
             executor.execute {
 
                 val accountNameList = viewModel.getAccountNamesByUser(username)
-
-                accountNameList.forEach{ Log.d("ACCOUNT NAME", it)}
 
                 Handler(Looper.getMainLooper()).post{
                         if (accountNameList.contains(binding.textViewAddAccountAccountName.text.toString()))

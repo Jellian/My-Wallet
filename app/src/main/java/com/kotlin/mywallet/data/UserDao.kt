@@ -1,11 +1,10 @@
 package com.kotlin.mywallet.data
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.kotlin.mywallet.data.entities.Account
 import com.kotlin.mywallet.data.entities.Charge
 import com.kotlin.mywallet.data.entities.User
-import com.kotlin.mywallet.data.entities.relations.AccountWithCharges
-import com.kotlin.mywallet.data.entities.relations.UserWithAccounts
 
 @Dao
 interface UserDao {
@@ -19,10 +18,10 @@ interface UserDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertUser(vararg users: User)
 
-    /*
-    @Query("SELECT * FROM user WHERE id IN (:userIds)")
-    fun loadAllByIds(userIds: IntArray): List<User>
-    */
+
+    @Query("UPDATE user SET grandTotal = grandTotal + :amount WHERE username = :username")
+    suspend fun  updateUserGrandTotal(username: String, amount: Float)
+
 
     @Query("SELECT * FROM user WHERE username LIKE :username")
     suspend fun findByName(username: String): User
@@ -34,13 +33,8 @@ interface UserDao {
     @Query("SELECT * FROM user WHERE username = :userName AND password = :passwd")
     fun getUserByNameAndPassword(userName: String, passwd: String): User?
 
-    @Query("SELECT EXISTS (SELECT * FROM user WHERE username = :userName AND password = :password)")
-    suspend fun checkIfExistsUsernameAndPassword(userName: String, password: String): Boolean
-
-    @Query("SELECT EXISTS (SELECT * FROM user WHERE email = :userEmail AND password = :password)")
-    suspend fun checkIfExistsEmailAndPassword(userEmail: String, password: String): Boolean
-
-
+    @Query("SELECT totalAmount FROM account WHERE username = :username")
+    fun getTotalAmountsFromAllAccountsByUser(username: String): List<Float>
 
     @Delete
     suspend fun delete(user: User)
@@ -51,13 +45,19 @@ interface UserDao {
     @Insert
     suspend fun insertAllAccounts(accounts: List<Account>)
 
+    @Delete
+    suspend fun deleteAccount(account: Account)
+
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAccount(vararg account: Account)
 
-    @Transaction
-    @Query("SELECT * FROM user WHERE username = :userName")
-    suspend fun getUserWithAccounts(userName: String): List<UserWithAccounts>
+
+    @Query("UPDATE account SET totalAmount = totalAmount + :amount WHERE accountName = :accountName AND username = :username")
+    suspend fun  updateAccountTotalAmount(accountName: String, username: String, amount: Float)
+
+    @Query("SELECT count(*) FROM account WHERE username = :username")
+    fun getNumberOfAccountsByUser(username: String): Int
 
     @Transaction
     @Query("SELECT accountName FROM account WHERE userName = :userName")
@@ -65,7 +65,10 @@ interface UserDao {
 
     @Transaction
     @Query("SELECT * FROM account WHERE userName = :userName")
-    fun getAccountsByUser(userName: String): List<Account>
+    fun getAccountsByUser(userName: String): LiveData<List<Account>>
+
+    @Query("SELECT count(*) FROM account WHERE username= :username LIMIT 1")
+    fun getAnyAccountByUser(username: String): Int
 
     @Transaction
     @Query("SELECT * FROM account WHERE userName = :userName AND accountName = :accountName")
@@ -77,15 +80,15 @@ interface UserDao {
     suspend fun insertCharge(vararg charge: Charge)
 
     @Transaction
-    @Query("SELECT * FROM account WHERE accountName = :accountName")
-    suspend fun getAccountWithCharges(accountName: String): List<AccountWithCharges>
-
-    @Transaction
     @Query("SELECT * FROM charge WHERE userName = :userName AND accountName= :accountName")
     fun getChargesByUserAndAccount(userName: String, accountName: String): List<Charge>
 
     @Insert
     suspend fun insertAllCharges(charges: List<Charge>)
+
+    @Transaction
+    @Query("DELETE FROM charge WHERE username = :username AND accountName = :accountName")
+    suspend fun deleteChargesByUserAndAccount(username: String, accountName: String)
 
 
 }

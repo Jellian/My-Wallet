@@ -7,13 +7,9 @@ import android.os.Bundle
 import com.kotlin.mywallet.charge.list.DetailActivity
 import com.kotlin.mywallet.R
 import com.kotlin.mywallet.home.HomeActivity
+import com.kotlin.mywallet.login.MainActivity
 
 class AccountListActivity : AppCompatActivity() {
-
-    companion object {
-        const val ACCOUNT = "ACCOUNT"
-        const val USERNAME = "USERNAME"
-    }
 
     private lateinit var username: String
 
@@ -23,12 +19,12 @@ class AccountListActivity : AppCompatActivity() {
 
         val listFragment = supportFragmentManager.findFragmentById(R.id.fragmentList) as AccountListFragment
 
-        username = intent.getStringExtra(HomeActivity.USER_NAME).toString()
+        username = intent.getStringExtra(MainActivity.USER_NAME).toString()
 
         listFragment.setListener{
                 val intent = Intent(this, DetailActivity::class.java)
-                intent.putExtra(USERNAME, username)
-                intent.putExtra(ACCOUNT, it.accountName)
+                intent.putExtra(MainActivity.USERNAME, username)
+                intent.putExtra(MainActivity.ACCOUNT, it.accountName)
                 startActivity(intent)
         }
 

@@ -5,11 +5,13 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(indices = [Index(value= ["email"], unique = true)])
+@Entity(indices = [Index(value= ["email"], unique = true), Index(value = ["username"], unique = true)])
 data class User @JvmOverloads constructor(
 
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo val username: String,
-    @ColumnInfo val email: String?,
-    @ColumnInfo val password: String?
-)
+    @ColumnInfo var username: String,
+    @ColumnInfo var email: String?,
+    @ColumnInfo var password: String?
+) {
+    @ColumnInfo var grandTotal: Float = 0.0f
+}

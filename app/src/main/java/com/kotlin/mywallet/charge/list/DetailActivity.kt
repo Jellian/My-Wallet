@@ -6,6 +6,7 @@ import android.view.View
 import androidx.appcompat.widget.Toolbar
 import com.kotlin.mywallet.R
 import com.kotlin.mywallet.account.list.AccountListActivity
+import com.kotlin.mywallet.login.MainActivity
 
 class DetailActivity : AppCompatActivity() {
 
@@ -16,8 +17,8 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
-        username = intent.getStringExtra(AccountListActivity.USERNAME).toString()
-        accountName = intent.getStringExtra(AccountListActivity.ACCOUNT).toString()
+        username = intent.getStringExtra(MainActivity.USERNAME).toString()
+        accountName = intent.getStringExtra(MainActivity.ACCOUNT).toString()
 
         //val parentActivity = activity as ListActivity
         val appBar = findViewById<Toolbar>(R.id.toolbar_detail_AppBar)

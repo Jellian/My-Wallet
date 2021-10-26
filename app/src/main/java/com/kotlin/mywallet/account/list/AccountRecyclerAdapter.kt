@@ -1,19 +1,23 @@
 package com.kotlin.mywallet.account.list
 
 import android.content.Context
+import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.mywallet.R
 import com.kotlin.mywallet.data.entities.Account
 import java.text.DecimalFormat
 
 class AccountRecyclerAdapter(private val context: Context, private val accounts: MutableList<Account>, private val clickListener: (Account) -> Unit):
-    RecyclerView.Adapter<AccountRecyclerAdapter.ViewHolder>(){
+    RecyclerView.Adapter<AccountRecyclerAdapter.AccountViewHolder>(){
 
-    class ViewHolder(val view : View) : RecyclerView.ViewHolder(view){
+    class AccountViewHolder(val view : View) : RecyclerView.ViewHolder(view){
         //obteniendo las referencias a las Views
         private val name = view.findViewById<TextView>(R.id.textView_itemAccount_accountName)
         private val amount = view.findViewById<TextView>(R.id.textView_itemAccount_amount)
@@ -27,21 +31,27 @@ class AccountRecyclerAdapter(private val context: Context, private val accounts:
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_account, parent, false)
-        return ViewHolder(view)
+        return AccountViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holderAccount: AccountViewHolder, position: Int) {
         val account = accounts[position]
-        holder.bind(account)
+        holderAccount.bind(account)
 
-        holder.view.setOnClickListener{clickListener(account)}
+        holderAccount.view.setOnClickListener{ clickListener(account) }
+
+        val editButton = holderAccount.view.findViewById<ConstraintLayout>(R.id.layout_imageView_itemAccount_editIcon)
+        val deleteButton = holderAccount.view.findViewById<ConstraintLayout>(R.id.layout_imageView_itemAccount_deleteIcon)
+
+        editButton.setOnClickListener { Toast.makeText( context, "EDIT", Toast.LENGTH_SHORT).show() }
+        deleteButton.setOnClickListener { Toast.makeText( context, "DELETE", Toast.LENGTH_SHORT).show() }
     }
 
     override fun getItemCount(): Int {
         return accounts.size
     }
 
-
 }
+

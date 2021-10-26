@@ -2,6 +2,7 @@ package com.kotlin.mywallet.home
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -42,11 +43,11 @@ class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var parentActivity: HomeActivity
-    private lateinit var preferences: SharedPreferences
     private lateinit var viewModel: HomeViewModel
 
     private lateinit var email: String
     private lateinit var username: String
+
     private var pictureUriReference: Uri? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -54,10 +55,8 @@ class HomeFragment : Fragment() {
 
         parentActivity = activity as HomeActivity
 
-        preferences = activity?.getSharedPreferences(HomeActivity.PREFS_NAME, Context.MODE_PRIVATE) as SharedPreferences
-
         viewModel = HomeViewModel(
-            (requireContext().applicationContext as WalletApplication).userRepository
+            (requireContext().applicationContext as WalletApplication).userRepository, requireContext()
         )
 
         return binding.root
@@ -68,7 +67,7 @@ class HomeFragment : Fragment() {
 
         setupDrawer()
 
-        username = parentActivity.intent?.getStringExtra(HomeActivity.USER_NAME).toString()
+        username = parentActivity.intent?.getStringExtra(MainActivity.USER_NAME).toString()
         email = parentActivity.intent?.getStringExtra(MainActivity.USER_EMAIL).toString()
 
         val headerView = binding.navView.getHeaderView(0)
@@ -79,10 +78,9 @@ class HomeFragment : Fragment() {
         userNameNav.text = username
         emailNav.text = email
 
-        binding.myGoal.text = preferences.getFloat(HomeActivity.GOAL,0f).toString()
+        binding.myGoal.text = viewModel.getFloatPref(MainActivity.GOAL).toString()
 
         "¡Hola, $username!".also { binding.textViewHomeWelcome.text = it }
-
 
         changePictureNav.setOnClickListener{ changePicture() }
 
@@ -120,7 +118,7 @@ class HomeFragment : Fragment() {
                     true
                 }
                 R.id.nav_signOut ->{
-                    parentActivity.showDialog("Cerrando sesión...", "¿Estás seguro que deseas salir?", HomeActivity.EXIT)
+                    showDialog("Cerrando sesión...", "¿Estás seguro que deseas salir?", MainActivity.EXIT)
                     true
                 }
                 else -> false
@@ -144,16 +142,16 @@ class HomeFragment : Fragment() {
 
             Handler(Looper.getMainLooper()).post {
                 if( accountNameList.isNullOrEmpty() )
-                    parentActivity.showDialog("No tan rápido...", "Primero debes \"Agregar una cuenta\"")
+                    showDialog("No tan rápido...", "Primero debes \"Agregar una cuenta\"")
                 else {
                     val intent = Intent(context, AddEntityActivity::class.java)
                     // Boton que ha llamado a la funcion
                     when (view.id) {
-                        R.id.button_home_addIncome -> intent.putExtra(HomeActivity.TYPE, +1)
-                        else -> intent.putExtra(HomeActivity.TYPE, -1)
+                        R.id.button_home_addIncome -> intent.putExtra(MainActivity.TYPE, +1)
+                        else -> intent.putExtra(MainActivity.TYPE, -1)
                     }
-                    intent.putExtra(HomeActivity.USER_NAME, username)
-                    intent.putExtra(HomeActivity.ENTITY, "Charge")
+                    intent.putExtra(MainActivity.USER_NAME, username)
+                    intent.putExtra(MainActivity.ENTITY, "Charge")
 
                     startActivity(intent)
                 }
@@ -163,14 +161,14 @@ class HomeFragment : Fragment() {
 
     private fun addAccount() {
         val intent = Intent(context, AddEntityActivity::class.java)
-        intent.putExtra(HomeActivity.USER_NAME, username)
-        intent.putExtra(HomeActivity.ENTITY, "Account")
+        intent.putExtra(MainActivity.USER_NAME, username)
+        intent.putExtra(MainActivity.ENTITY, "Account")
         startActivity(intent)
     }
 
     private fun showAccounts() {
         val intent = Intent(context, AccountListActivity::class.java)
-        intent.putExtra(HomeActivity.USER_NAME, username)
+        intent.putExtra(MainActivity.USER_NAME, username)
         startActivity(intent)
     }
 
@@ -228,17 +226,17 @@ class HomeFragment : Fragment() {
                     imageView_drawerMenu_profilePicture.setImageDrawable(roundDrawable)
                 }
             }
-            //refreshTotal()
         }
     }
 
-//    private fun refreshTotal(){
-//        val dec = DecimalFormat("#,###.##")
-//        val total = dec.format(user.getGrandTotal())
-//        binding.textViewHomeTotalAmount.text = "$ $total MXN"
-//        apiCall()
-//        isGoalReach()
-//    }
+    private fun showDialog(title:String, message:String, type: String = MainActivity.ALERT){
+        if (type == MainActivity.ALERT) AlertDialog.Builder( context ).setTitle(title).setMessage(message).setPositiveButton("OK") { _, _ -> }.create().show()
+        else if (type == MainActivity.EXIT)
+            AlertDialog.Builder( context).setTitle(title).setMessage(message).setPositiveButton("Sí") { _, _ ->
+                viewModel.editStringPref(MainActivity.IS_LOGGED, "FALSE")
+                parentActivity.finish()
+            }.setNegativeButton("No", null).create().show()
+    }
 
 //    private fun apiCall(){
 //        val okHttpClient = OkHttpClient()

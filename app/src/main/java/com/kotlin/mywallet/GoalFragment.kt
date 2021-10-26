@@ -27,7 +27,7 @@ class GoalFragment : Fragment() {
 
         binding = FragmentGoalBinding.inflate(layoutInflater)
 
-        preferences = activity?.getSharedPreferences(HomeActivity.PREFS_NAME, Context.MODE_PRIVATE) as SharedPreferences
+        preferences = activity?.getSharedPreferences(MainActivity.PREFS_NAME, Context.MODE_PRIVATE) as SharedPreferences
 
         return binding.root
     }
@@ -54,18 +54,17 @@ class GoalFragment : Fragment() {
                 findNavController().popBackStack()
             }
         }
-
     }
 
     private  fun loadPreferences(): Float{
-        val goal = preferences.getFloat(HomeActivity.GOAL,0f)
+        val goal = preferences.getFloat(MainActivity.GOAL,0f)
         return goal
     }
 
     private  fun setGoal(goal: Float){
 
         if (goal > 0){
-            preferences.edit().putFloat(HomeActivity.GOAL,goal).apply()
+            preferences.edit().putFloat(MainActivity.GOAL,goal).apply()
             Toast.makeText(context,"Meta agregada", Toast.LENGTH_SHORT).show()
             findNavController().navigate(R.id.action_goalFragment_to_homeFragment)
         }else

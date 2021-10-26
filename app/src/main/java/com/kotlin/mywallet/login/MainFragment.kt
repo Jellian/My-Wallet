@@ -27,7 +27,7 @@ class MainFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentMainBinding.inflate(inflater, container, false)
 
-        preferences = activity?.getSharedPreferences(HomeActivity.PREFS_NAME, Context.MODE_PRIVATE) as SharedPreferences
+        preferences = activity?.getSharedPreferences(MainActivity.PREFS_NAME, Context.MODE_PRIVATE) as SharedPreferences
 
         FirebaseApp.initializeApp( requireContext() )
 
@@ -65,13 +65,13 @@ class MainFragment : Fragment() {
     }
 
     private fun isLogged(): Boolean {
-        val isLogged = preferences.getString(HomeActivity.IS_LOGGED, "")
+        val isLogged = preferences.getString(MainActivity.IS_LOGGED, "")
         return isLogged == "TRUE"
     }
 
     private fun goToHome(){
-        val userName = preferences.getString(HomeActivity.USER_NAME, "").toString()
-        val userEmail = preferences.getString(HomeActivity.USER_EMAIL, "").toString()
+        val userName = preferences.getString(MainActivity.USER_NAME, "").toString()
+        val userEmail = preferences.getString(MainActivity.USER_EMAIL, "").toString()
 
         val intent = Intent(context, HomeActivity::class.java)
         intent.putExtra(MainActivity.USER_NAME, userName)

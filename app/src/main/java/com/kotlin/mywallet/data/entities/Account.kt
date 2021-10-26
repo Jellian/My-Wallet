@@ -9,9 +9,9 @@ import com.kotlin.mywallet.finance.Cargo
 data class Account @JvmOverloads constructor(
 
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo val accountName: String,
-    @ColumnInfo val initialAmount: Float,
-    @ColumnInfo val username: String
+    @ColumnInfo var accountName: String,
+    @ColumnInfo var initialAmount: Float,
+    @ColumnInfo var username: String
 
     ) {
 

@@ -6,6 +6,9 @@ import com.kotlin.mywallet.data.UserRepository
 
 class WalletApplication: Application() {
 
+
+
+
     val userRepository: UserRepository
     get() = UserRepository( UserDatabase.getInstance(this)!!.userDao)
 

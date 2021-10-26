@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.kotlin.mywallet.R
 import com.kotlin.mywallet.home.HomeActivity
+import com.kotlin.mywallet.login.MainActivity
 
 
 class AddEntityActivity : AppCompatActivity() {
@@ -13,12 +14,12 @@ class AddEntityActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_entity)
 
-        if(intent.getStringExtra(HomeActivity.ENTITY) == "Account") {
+        if(intent.getStringExtra(MainActivity.ENTITY) == "Account") {
             val transaction = supportFragmentManager.beginTransaction()
             transaction.add(R.id.add_account_fragment, AddAccountFragment())
             transaction.commit()
         }
-        else if (intent.getStringExtra(HomeActivity.ENTITY) == "Charge") {
+        else if (intent.getStringExtra(MainActivity.ENTITY) == "Charge") {
             val transaction = supportFragmentManager.beginTransaction()
             transaction.add(R.id.add_charge_fragment, AddChargeFragment())
             transaction.commit()

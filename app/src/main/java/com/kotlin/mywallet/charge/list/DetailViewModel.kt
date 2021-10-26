@@ -6,7 +6,6 @@ import com.kotlin.mywallet.data.entities.Account
 
 class DetailViewModel (private val userRepository: UserRepository): ViewModel(){
 
-
     fun getAccountByNameAndUser(accountName: String, username: String): Account {
         return userRepository.getAccountByNameAndUser(accountName, username)
     }

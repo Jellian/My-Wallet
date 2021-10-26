@@ -1,59 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
+
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardBackgroundColor="?attr/colorPrimaryDark"
-    app:cardCornerRadius="8dp"
-    android:layout_margin="8dp"
-    app:cardElevation="8dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+        <variable
+            name="account"
+            type="com.kotlin.mywallet.data.entities.Account" />
+
+        <variable
+            name="viewModel"
+            type="com.kotlin.mywallet.account.list.AccountListViewModel" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="bottom"
-        android:background="#FFFFFF"
-        android:orientation="vertical"
-        android:layout_margin="1dp"
-        android:padding="8dp">
+        app:cardBackgroundColor="?attr/colorPrimaryDark"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp"
+        >
 
-        <ImageView
-            android:id="@+id/imageView_itemAccount_accountIcon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:rotation="10"
-            android:src="@drawable/money"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/icono_de_la_cuenta" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="#FFFFFF"
+            android:layout_gravity="bottom"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:padding="8dp">
 
-        <TextView
-            android:id="@+id/textView_itemAccount_accountName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cuenta"
-            android:layout_marginTop="4dp"
-            android:textSize="16sp"
-            android:fontFamily="casual"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView_itemAccount_accountIcon" />
+            <ImageView
+                android:contentDescription="@string/icono_de_la_cuenta"
+                android:id="@+id/imageView_itemAccount_accountIcon"
+                android:layout_height="48dp"
+                android:layout_width="48dp"
+                android:rotation="10"
+                android:src="@drawable/money"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textView_itemAccount_amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/_1000"
-            android:textColor="#000"
-            android:textStyle="bold"
-            android:fontFamily="casual"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_itemAccount_accountName" />
+            <TextView
+                android:fontFamily="casual"
+                android:id="@+id/textView_itemAccount_accountName"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_width="wrap_content"
+                android:text="@{ account.accountName}"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView_itemAccount_accountIcon" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</com.google.android.material.card.MaterialCardView>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_imageView_itemAccount_editIcon"
+                android:layout_height="48dp"
+                android:layout_margin="8dp"
+                android:layout_width="48dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:onClick="@{() -> viewModel.onEdit(account.id)}">
+
+                <ImageView
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:id="@+id/imageView_itemAccount_editIcon"
+                    android:layout_height="32dp"
+                    android:layout_width="32dp"
+                    android:src="@drawable/ic_edit"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:contentDescription="@string/description" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_imageView_itemAccount_deleteIcon"
+                android:layout_height="48dp"
+                android:layout_margin="8dp"
+                android:layout_width="48dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:onClick="@{() -> viewModel.deleteAccount(account)}">
+
+                <ImageView
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:id="@+id/imageView_itemAccount_deleteIcon"
+                    android:layout_height="32dp"
+                    android:layout_width="32dp"
+                    android:src="@drawable/ic_delete"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:contentDescription="@string/description" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:fontFamily="casual"
+                android:id="@+id/textView_itemAccount_amount"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@{String.valueOf(account.totalAmount)}"
+                android:textColor="#000"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_itemAccount_accountName" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

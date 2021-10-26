@@ -13,6 +13,7 @@ import com.kotlin.mywallet.account.list.AccountListActivity
 import com.kotlin.mywallet.account.list.AccountListViewModel
 import com.kotlin.mywallet.application.WalletApplication
 import com.kotlin.mywallet.data.UserDatabase
+import com.kotlin.mywallet.login.MainActivity
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -47,8 +48,8 @@ class DetailFragment : Fragment() {
     private fun setUpView() {
 
         val parentActivity = activity as DetailActivity?
-        val accountName = parentActivity?.intent?.getStringExtra(AccountListActivity.ACCOUNT).toString()
-        val username = parentActivity?.intent?.getStringExtra(AccountListActivity.USERNAME).toString()
+        val accountName = parentActivity?.intent?.getStringExtra(MainActivity.ACCOUNT).toString()
+        val username = parentActivity?.intent?.getStringExtra(MainActivity.USERNAME).toString()
 
         val executor: ExecutorService = Executors.newSingleThreadExecutor()
         executor.execute {

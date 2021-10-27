@@ -18,10 +18,11 @@ interface UserDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertUser(vararg users: User)
 
-
     @Query("UPDATE user SET grandTotal = grandTotal + :amount WHERE username = :username")
     suspend fun  updateUserGrandTotal(username: String, amount: Float)
 
+    @Query("SELECT grandTotal FROM user WHERE username = :username")
+    fun getUserGrandTotal(username: String): LiveData<Float>
 
     @Query("SELECT * FROM user WHERE username LIKE :username")
     suspend fun findByName(username: String): User
@@ -48,6 +49,8 @@ interface UserDao {
     @Delete
     suspend fun deleteAccount(account: Account)
 
+    @Update
+    suspend fun updateAccountById(vararg account: Account)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAccount(vararg account: Account)
@@ -66,6 +69,10 @@ interface UserDao {
     @Transaction
     @Query("SELECT * FROM account WHERE userName = :userName")
     fun getAccountsByUser(userName: String): LiveData<List<Account>>
+
+    @Query("SELECT * FROM account WHERE id = :accountId")
+    fun getAccountById(accountId: Int): Account
+
 
     @Query("SELECT count(*) FROM account WHERE username= :username LIMIT 1")
     fun getAnyAccountByUser(username: String): Int
@@ -90,5 +97,8 @@ interface UserDao {
     @Query("DELETE FROM charge WHERE username = :username AND accountName = :accountName")
     suspend fun deleteChargesByUserAndAccount(username: String, accountName: String)
 
+    @Transaction
+    @Query("UPDATE charge SET accountName = :newAccountName WHERE accountName = :oldAccountName AND username = :username")
+    suspend fun updateChargesAccountName(newAccountName: String, oldAccountName: String, username: String)
 
 }

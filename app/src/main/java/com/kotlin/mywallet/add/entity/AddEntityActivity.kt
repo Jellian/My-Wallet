@@ -10,9 +10,13 @@ import com.kotlin.mywallet.login.MainActivity
 
 class AddEntityActivity : AppCompatActivity() {
 
+    private var edit = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_entity)
+
+        edit = intent.getIntExtra(MainActivity.EDIT, 0)
 
         if(intent.getStringExtra(MainActivity.ENTITY) == "Account") {
             val transaction = supportFragmentManager.beginTransaction()
@@ -30,7 +34,9 @@ class AddEntityActivity : AppCompatActivity() {
         AlertDialog.Builder( this ).setTitle(title).setMessage(message).setPositiveButton("OK") { _, _ -> }.create().show()
     }
 
-    fun finishActivity() {
-        finish()
+    fun isEditMode(): Boolean {
+        return edit == 1
     }
+
+
 }

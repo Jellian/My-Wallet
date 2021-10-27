@@ -33,6 +33,10 @@ class UserRepository( private val userDao: UserDao, private val ioDispatcher: Co
         return userDao.getUserByNameAndPassword(username, password)
     }
 
+    fun getUserGrandTotal(username: String): LiveData<Float>{
+        return userDao.getUserGrandTotal(username)
+    }
+
     //-------------------------------------------------------------//
     //---------------------- ACCOUNTS -----------------------------//
     //-------------------------------------------------------------//
@@ -43,6 +47,14 @@ class UserRepository( private val userDao: UserDao, private val ioDispatcher: Co
 
     suspend fun updateAccountTotalAmount(accountName: String, username: String, amount: Float) = withContext(ioDispatcher){
         return@withContext userDao.updateAccountTotalAmount(accountName, username, amount)
+    }
+
+    suspend fun updateAccountById(account: Account) = withContext(ioDispatcher){
+        return@withContext userDao.updateAccountById(account)
+    }
+
+    fun getAccountById(accountId: Int): Account{
+        return userDao.getAccountById(accountId)
     }
 
     fun getAccountsByUser(username: String): LiveData<List<Account>> {
@@ -88,6 +100,11 @@ class UserRepository( private val userDao: UserDao, private val ioDispatcher: Co
     suspend fun deleteChargesByUserAndAccount(username: String, accountName: String) = withContext(ioDispatcher) {
         return@withContext userDao.deleteChargesByUserAndAccount(username, accountName)
     }
+
+    suspend fun updateChargesAccountName (newAccountName: String, oldAccountName: String, username: String) = withContext(ioDispatcher) {
+        return@withContext userDao.updateChargesAccountName(newAccountName, oldAccountName, username)
+    }
+
 
     private suspend fun prepopulateAccounts(){
         val accounts = listOf(
@@ -200,11 +217,12 @@ class UserRepository( private val userDao: UserDao, private val ioDispatcher: Co
 //                prepopulateUsers()
 //                prepopulateAccounts()
 //                prepopulateCharges()
+//                setAllUsersGranTotal()
 //            }
 //       }
 //    }
 
-
+//
 //    private suspend fun setAllUsersGranTotal() = withContext(ioDispatcher){
 //        val usersList = userDao.getAllUsers()
 //

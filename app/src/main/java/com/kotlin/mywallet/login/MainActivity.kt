@@ -26,6 +26,8 @@ class MainActivity : FragmentActivity() { // Fragment Activity
         const val ID = "ID"
         const val ENTITY = "ENTITY"
 
+        const val EDIT = "EDIT"
+
         const val ALERT = "ALERT"
         const val EXIT = "EXIT"
         const val DELETE = "DELETE"

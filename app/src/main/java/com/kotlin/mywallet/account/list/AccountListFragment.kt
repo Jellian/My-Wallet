@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.kotlin.mywallet.R
@@ -99,6 +100,7 @@ class AccountListFragment : Fragment() {
         val intent = Intent(context, AddEntityActivity::class.java)
         intent.putExtra(MainActivity.ID, accountId )
         intent.putExtra(MainActivity.ENTITY, "Account")
+        intent.putExtra(MainActivity.EDIT, 1)
         startActivity(intent)
     }
 

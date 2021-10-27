@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlin.mywallet.data.entities.Account
 import com.kotlin.mywallet.databinding.ItemAccountBinding
+import java.text.DecimalFormat
 
 class AccountAdapter(private val context: Context, val viewModel: AccountListViewModel, private val clickListener: (Account) -> Unit):
     ListAdapter<Account, AccountAdapter.AccountViewHolder>(AccountDiffCallback){
@@ -23,7 +24,7 @@ class AccountAdapter(private val context: Context, val viewModel: AccountListVie
 
 //                name.text = account.accountName
 //                val dec = DecimalFormat("#,###.##")
-//                val total = dec.format(account.totalAmount)
+            //            val total = dec.format(account.totalAmount)
 //                amount.text = "$ $total MXN"
 
             }
@@ -48,16 +49,6 @@ class AccountAdapter(private val context: Context, val viewModel: AccountListVie
         holderAccount.bind(viewModel, item)
 
         holderAccount.itemView.setOnClickListener{ clickListener(item) }
-        //holderAccount.binding.imageViewItemAccountEditIcon.setOnClickListener {  Toast.makeText( context, "EDIT", Toast.LENGTH_SHORT).show()  }
-
-
- //           .view.setOnClickListener{ clickListener(account) }
-//
-//        val editButton = holderAccount.view.findViewById<ConstraintLayout>(R.id.layout_imageView_itemAccount_editIcon)
-//        val deleteButton = holderAccount.view.findViewById<ConstraintLayout>(R.id.layout_imageView_itemAccount_deleteIcon)
-//
-//        editButton.setOnClickListener { Toast.makeText( context, "EDIT", Toast.LENGTH_SHORT).show() }
-//        deleteButton.setOnClickListener { Toast.makeText( context, "DELETE", Toast.LENGTH_SHORT).show() }
     }
 
 }

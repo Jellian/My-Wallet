@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.kotlin.mywallet.finance.Cargo
+import java.text.DecimalFormat
 
 @Entity
 data class Account @JvmOverloads constructor(

@@ -114,7 +114,7 @@ class AddChargeFragment : Fragment() {
             spinnerAddChargeCategories.adapter = categoryAdapter
         }
 
-        appBar.setNavigationOnClickListener { parentActivity.finishActivity() }
+        appBar.setNavigationOnClickListener { parentActivity.finish() }
 
     }
 
@@ -171,7 +171,7 @@ class AddChargeFragment : Fragment() {
                         Toast.makeText(context, "Ingreso creado. ${amount} MXN a cuenta $accountName en categoría ${category}.", Toast.LENGTH_SHORT).show()
                     else
                         Toast.makeText(context, "Egreso creado. -${amount} MXN a cuenta $accountName en categoría ${category}.", Toast.LENGTH_SHORT).show()
-                    parentActivity.finishActivity()
+                    parentActivity.finish()
                 }
             }
         }

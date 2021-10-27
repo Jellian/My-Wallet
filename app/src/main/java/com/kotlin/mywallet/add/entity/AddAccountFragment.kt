@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -49,7 +50,10 @@ class AddAccountFragment : Fragment() {
             (requireContext().applicationContext as WalletApplication).userRepository
         )
 
-        appBar.setNavigationOnClickListener { parentActivity.finishActivity() }
+        if(parentActivity.isEditMode())
+            setupEditMode()
+
+        appBar.setNavigationOnClickListener { parentActivity.finish() }
 
         binding.buttonAddAccountAccept.setOnClickListener( checkNewAccountInfo() )
 
@@ -62,20 +66,41 @@ class AddAccountFragment : Fragment() {
         }
 
         else{
+
             val username = parentActivity.intent.getStringExtra(MainActivity.USER_NAME).toString()
+            val newAccountName = binding.textViewAddAccountAccountName.text.toString()
+
+            var accountToEdit: Account? = null
 
             val executor: ExecutorService = Executors.newSingleThreadExecutor()
             executor.execute {
 
                 val accountNameList = viewModel.getAccountNamesByUser(username)
 
-                Handler(Looper.getMainLooper()).post{
-                        if (accountNameList.contains(binding.textViewAddAccountAccountName.text.toString()))
-                            parentActivity.showDialog("Espera...", "Ya existe una cuenta con este nombre.\nPor favor, elige otro nombre.")
-                        else
-                            addAccount(username)
-                    }
+                if (parentActivity.isEditMode()) {
+                    accountToEdit = viewModel.getAccountById(parentActivity.intent.getIntExtra(MainActivity.ID, 0))
                 }
+
+                Handler(Looper.getMainLooper()).post {
+
+                    if (accountNameList.contains(newAccountName)) {
+                        if(parentActivity.isEditMode() && accountToEdit?.accountName == newAccountName ) {
+                            editAccount(accountToEdit)
+                        }
+                        else {
+                            parentActivity.showDialog(
+                                "Espera...",
+                                "Ya existe una cuenta con este nombre.\nPor favor, elige otro nombre."
+                            )
+                        }
+                    }
+                    else if(parentActivity.isEditMode()){
+                        editAccount(accountToEdit)
+                    }
+                    else
+                        addAccount(username)
+                }
+            }
         }
     }
 
@@ -94,7 +119,35 @@ class AddAccountFragment : Fragment() {
             Handler(Looper.getMainLooper()).post {
                 Toast.makeText(context, "Cuenta $name agregada.", Toast.LENGTH_SHORT).show()
                 //parentActivity.showDialog("¡Genial!", "Cuenta $name agregada.")
-                parentActivity.finishActivity()
+                parentActivity.finish()
+            }
+        }
+    }
+
+    private fun editAccount(accountToEdit: Account?){
+
+        if(accountToEdit != null ) {
+
+            val name = binding.textViewAddAccountAccountName.text.toString()
+            val amount = binding.textViewAddAccountInitialAmount.text.toString()
+
+            val editedAccount = Account(
+                id = accountToEdit.id,
+                accountName = name,
+                initialAmount = amount.toFloat(),
+                username = accountToEdit.username
+            )
+
+            val executor: ExecutorService = Executors.newSingleThreadExecutor()
+
+            executor.execute {
+                viewModel.updateAccountById(accountToEdit, editedAccount)
+
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(context, "Cuenta $name editada.", Toast.LENGTH_SHORT).show()
+                    //parentActivity.showDialog("¡Genial!", "Cuenta $name agregada.")
+                    parentActivity.finish()
+                }
             }
         }
     }
@@ -122,6 +175,31 @@ class AddAccountFragment : Fragment() {
 
         with(NotificationManagerCompat.from(requireContext())) {
             notify(22, notification)
+        }
+    }
+
+    private fun setupEditMode(){
+
+        binding.textViewAddAccountNewAccount.text = "Editar cuenta"
+        binding.toolbarAddAccountAppBar.title = "Editar cuenta"
+
+        val accountId = parentActivity.intent.getIntExtra(MainActivity.ID, 0)
+        val executor: ExecutorService = Executors.newSingleThreadExecutor()
+
+        var existingAccount: Account? = null
+
+        executor.execute {
+
+            if (accountId != 0) {
+                existingAccount = viewModel.getAccountById(accountId)
+            }
+
+            Handler(Looper.getMainLooper()).post {
+
+                binding.textViewAddAccountAccountName.setText(existingAccount?.accountName)
+                binding.textViewAddAccountInitialAmount.setText(existingAccount?.initialAmount.toString())
+
+            }
         }
     }
 

@@ -19,4 +19,20 @@ class AddAccountViewModel(private val userRepository: UserRepository): ViewModel
         }
     }
 
+    fun getAccountById(accountId: Int): Account{
+        return userRepository.getAccountById(accountId)
+    }
+
+    fun updateAccountById(accountToEdit: Account, editedAccount: Account){
+        viewModelScope.launch {
+
+            val diff = (editedAccount.initialAmount - accountToEdit.initialAmount)
+            editedAccount.totalAmount = accountToEdit.totalAmount + diff
+
+            userRepository.updateAccountById(editedAccount)
+            userRepository.updateUserGrandTotal(accountToEdit.username, diff)
+            userRepository.updateChargesAccountName(editedAccount.accountName, accountToEdit.accountName, accountToEdit.username)
+        }
+    }
+
 }

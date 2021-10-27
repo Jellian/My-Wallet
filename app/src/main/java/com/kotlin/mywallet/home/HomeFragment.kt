@@ -4,9 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.ImageDecoder
 import android.net.Uri
@@ -15,7 +13,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +24,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.RoundedBitmapDrawable
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.kotlin.mywallet.R
 import com.kotlin.mywallet.account.list.AccountListActivity
@@ -51,24 +51,34 @@ class HomeFragment : Fragment() {
     private var pictureUriReference: Uri? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        binding = DataBindingUtil.inflate( inflater, R.layout.fragment_home, container, false)
+        binding.lifecycleOwner = this
 
         parentActivity = activity as HomeActivity
 
-        viewModel = HomeViewModel(
-            (requireContext().applicationContext as WalletApplication).userRepository, requireContext()
+        username = parentActivity.intent?.getStringExtra(MainActivity.USER_NAME).toString()
+        email = parentActivity.intent?.getStringExtra(MainActivity.USER_EMAIL).toString()
+
+        viewModel= HomeViewModel(
+            (requireContext().applicationContext as WalletApplication).userRepository, requireContext(), username
         )
 
         return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        binding.viewModel = viewModel
+        binding.executePendingBindings()
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupDrawer()
-
-        username = parentActivity.intent?.getStringExtra(MainActivity.USER_NAME).toString()
-        email = parentActivity.intent?.getStringExtra(MainActivity.USER_EMAIL).toString()
 
         val headerView = binding.navView.getHeaderView(0)
         val userNameNav = headerView.findViewById<TextView>(R.id.textView_drawerMenu_userName)

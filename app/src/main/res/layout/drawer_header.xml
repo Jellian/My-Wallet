@@ -9,17 +9,21 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imageView_drawerMenu_profilePicture"
-            android:layout_width="148dp"
-            android:layout_height="148dp"
-            android:contentDescription="@string/imagen_de_usuario"
-            android:src="@drawable/default_user"
+            app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+            app:strokeColor="@color/white"
+            android:layout_height="160dp"
+            android:layout_width="160dp"
+            app:strokeWidth="2dp"
+            android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/default_user"
+            />
 
         <ImageView
             android:id="@+id/imageView_drawerMenu_camera"

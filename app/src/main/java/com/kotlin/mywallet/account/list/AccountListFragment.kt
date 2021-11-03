@@ -4,12 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
-import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.kotlin.mywallet.R
@@ -19,7 +16,6 @@ import com.kotlin.mywallet.data.entities.Account
 import com.kotlin.mywallet.databinding.FragmentListBinding
 import com.kotlin.mywallet.login.MainActivity
 import kotlinx.android.synthetic.main.fragment_list.*
-import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -44,11 +40,10 @@ class AccountListFragment : Fragment() {
             (requireContext().applicationContext as WalletApplication).userRepository, username
         )
 
-        val parentActivity = activity as AccountListActivity
         val appBar = binding.toolbarListAccountsAppBar
         parentActivity.setSupportActionBar(appBar)
 
-        appBar.setNavigationOnClickListener { parentActivity.finishActivity() }
+        appBar.setNavigationOnClickListener { parentActivity.finish() }
 
         return binding.root
 
@@ -66,7 +61,7 @@ class AccountListFragment : Fragment() {
         var howManyAccounts = 0
 
         executor.execute {
-            howManyAccounts = viewModel.getAnyAccountByUser(username)
+            howManyAccounts = viewModel.getAccountsCountByUser(username)
         }
         Handler(Looper.getMainLooper()).post {
             if (howManyAccounts == 0)

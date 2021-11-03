@@ -7,8 +7,6 @@ import androidx.room.RoomDatabase
 import com.kotlin.mywallet.data.entities.Account
 import com.kotlin.mywallet.data.entities.Charge
 import com.kotlin.mywallet.data.entities.User
-import com.kotlin.mywallet.finance.Cargo
-import com.kotlin.mywallet.finance.Cuenta
 
 @Database(
     entities = [

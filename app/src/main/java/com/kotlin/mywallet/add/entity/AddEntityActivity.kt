@@ -18,16 +18,15 @@ class AddEntityActivity : AppCompatActivity() {
 
         edit = intent.getIntExtra(MainActivity.EDIT, 0)
 
-        if(intent.getStringExtra(MainActivity.ENTITY) == "Account") {
-            val transaction = supportFragmentManager.beginTransaction()
+        val transaction = supportFragmentManager.beginTransaction()
+
+        if(intent.getStringExtra(MainActivity.ENTITY) == "Account")
             transaction.add(R.id.add_account_fragment, AddAccountFragment())
-            transaction.commit()
-        }
-        else if (intent.getStringExtra(MainActivity.ENTITY) == "Charge") {
-            val transaction = supportFragmentManager.beginTransaction()
+
+        else if (intent.getStringExtra(MainActivity.ENTITY) == "Charge")
             transaction.add(R.id.add_charge_fragment, AddChargeFragment())
-            transaction.commit()
-        }
+
+        transaction.commit()
     }
 
     fun showDialog(title:String, message:String){

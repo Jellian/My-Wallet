@@ -1,59 +1,79 @@
 package com.kotlin.mywallet.charge.list
 
+import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.kotlin.mywallet.R
+import com.kotlin.mywallet.add.entity.AddEntityActivity
 import com.kotlin.mywallet.application.WalletApplication
+import com.kotlin.mywallet.databinding.FragmentChargelistBinding
+import com.kotlin.mywallet.login.MainActivity
 import kotlinx.android.synthetic.main.fragment_chargelist.*
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
 class ChargeListFragment : Fragment() {
 
-    private lateinit var adapter : ChargeRecyclerAdapter
+    private lateinit var adapter : ChargeAdapter
     private lateinit var viewModel: ChargeListViewModel
+    private lateinit var binding: FragmentChargelistBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // infla el layout para este Fragment
-        val view = inflater.inflate(R.layout.fragment_chargelist, container, false)
+    private lateinit var parentActivity: DetailActivity
+    private lateinit var username: String
+    private lateinit var accountName: String
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_chargelist, container, false)
+
+        parentActivity = activity as DetailActivity
+
+        username = parentActivity.getUsername()
+        accountName = parentActivity.getAccountName()
 
         viewModel = ChargeListViewModel(
-            (requireContext().applicationContext as WalletApplication).userRepository
+            (requireContext().applicationContext as WalletApplication).userRepository, username, accountName
         )
 
-        return view
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        setupEditCharge()
         setupChargeList()
     }
 
     private fun setupChargeList() {
 
-        val parentActivity = activity as DetailActivity?
+        adapter = ChargeAdapter(requireContext(), viewModel)
 
-        val executor: ExecutorService = Executors.newSingleThreadExecutor()
+        viewModel.charges.observe(viewLifecycleOwner, {
+            adapter.submitList(it)
+        })
 
-        executor.execute {
+        recyclerCharge.adapter = adapter
 
-            val charges = viewModel.getChargeListByUserAndAccount(
-                parentActivity?.getUsername().toString(),
-                parentActivity?.getAccountName().toString()
-            )
+    }
 
-            Handler(Looper.getMainLooper()).post {
-                if (charges.isNotEmpty()) {
-                    adapter = ChargeRecyclerAdapter(requireContext(), charges.toMutableList())
-                    recyclerCharge.adapter = adapter
+    private fun setupEditCharge(){
+        with(viewModel) {
+            eventEditChargeId.observe(viewLifecycleOwner, {
+                if(eventEditChargeId.value != null){
+                    editCharge(eventEditChargeId.value!!)
                 }
-            }
+            })
         }
+    }
+
+    private fun editCharge(chargeId: Int) {
+        val intent = Intent(context, AddEntityActivity::class.java)
+        intent.putExtra(MainActivity.ID, chargeId )
+        intent.putExtra(MainActivity.ENTITY, "Charge")
+        intent.putExtra(MainActivity.EDIT, 1)
+        startActivity(intent)
     }
 }
 

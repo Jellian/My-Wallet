@@ -21,12 +21,6 @@ class AccountAdapter(private val context: Context, val viewModel: AccountListVie
                 this.viewModel = viewModel
 
                 executePendingBindings()
-
-//                name.text = account.accountName
-//                val dec = DecimalFormat("#,###.##")
-            //            val total = dec.format(account.totalAmount)
-//                amount.text = "$ $total MXN"
-
             }
         }
 

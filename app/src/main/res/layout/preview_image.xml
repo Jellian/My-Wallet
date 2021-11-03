@@ -1,0 +1,21 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/iv_preview_image"
+        android:contentDescription="@string/profile_pic" />
+
+
+    <Button android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/default_user"
+        android:id="@+id/btnIvClose"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true" />
+
+</RelativeLayout>

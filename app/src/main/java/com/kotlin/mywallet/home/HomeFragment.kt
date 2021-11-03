@@ -13,7 +13,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,9 +23,12 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.RoundedBitmapDrawable
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.imageview.ShapeableImageView
+import com.kotlin.mywallet.ProfilePictureFragment
 import com.kotlin.mywallet.R
 import com.kotlin.mywallet.account.list.AccountListActivity
 import com.kotlin.mywallet.add.entity.AddEntityActivity
@@ -84,6 +86,7 @@ class HomeFragment : Fragment() {
         val userNameNav = headerView.findViewById<TextView>(R.id.textView_drawerMenu_userName)
         val emailNav = headerView.findViewById<TextView>(R.id.textView_drawerMenu_email)
         val changePictureNav = headerView.findViewById<ImageView>(R.id.imageView_drawerMenu_camera)
+        val profilePicture = headerView.findViewById<ShapeableImageView>(R.id.imageView_drawerMenu_profilePicture)
 
         userNameNav.text = username
         emailNav.text = email
@@ -98,6 +101,7 @@ class HomeFragment : Fragment() {
         binding.buttonHomeAddExpense.setOnClickListener( prepareCharge() )
         binding.buttonShowAccount.setOnClickListener{ showAccounts() }
         binding.cardGoal.setOnClickListener { findNavController().navigate(R.id.goalFragment, null, MainActivity.options) }
+        profilePicture.setOnClickListener{ showPicture() }
 
         binding.navView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -248,7 +252,17 @@ class HomeFragment : Fragment() {
             }.setNegativeButton("No", null).create().show()
     }
 
-//    private fun apiCall(){
+    private fun showPicture(){
+
+        val bundle = Bundle()
+        bundle.putString("URI", pictureUriReference.toString())
+
+        findNavController().navigate(R.id.profilePictureFragment, bundle, MainActivity.options)
+    }
+
+//   private fun apiCall(){
+
+  // }
 //        val okHttpClient = OkHttpClient()
 //        val url = "https://api.frankfurter.app/latest?from=MXN&to=USD"
 //

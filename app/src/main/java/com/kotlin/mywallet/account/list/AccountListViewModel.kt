@@ -16,8 +16,8 @@ class AccountListViewModel(private val userRepository: UserRepository, username:
 
     var accounts: LiveData<List<Account>> = userRepository.getAccountsByUser(username)
 
-    fun getAnyAccountByUser(username: String): Int{
-        return userRepository.getAnyAccountByUser(username)
+    fun getAccountsCountByUser(username: String): Int{
+        return userRepository.getAccountsCountByUser(username)
     }
 
     fun deleteAccount(account: Account){

@@ -8,11 +8,9 @@ class Categories() {
             "Depósito", "Salario", "Inversión","Bono",
             "Ahorro", "Renta", "Ventas",
         )
-
         val expendOptions = listOf(
             "Transporte",  "Comida", "Entretenimiento", "Casa",
             "Ropa",  "Salud",  "Auto", "Restaurante"
         )
-
     }
 }

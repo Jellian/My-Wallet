@@ -144,7 +144,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="casual"
-                                android:text="MXN"
+                                android:text="@string/mxn"
                                 android:textSize="16sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -165,6 +165,8 @@
                             style="?attr/borderlessButtonStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="casual"
+                            android:textStyle="bold"
                             android:layout_marginEnd="8dp"
                             android:text="@string/account" />
 
@@ -172,6 +174,8 @@
                             style="?attr/borderlessButtonStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="casual"
+                            android:textStyle="bold"
                             android:text="@string/history" />
 
                         <TextView

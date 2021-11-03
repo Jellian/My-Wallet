@@ -16,7 +16,6 @@
         tools:context=".account.list.AccountListFragment"
         android:orientation="vertical">
 
-
         <com.google.android.material.appbar.AppBarLayout
             app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/layout_addCharge_appBar"
@@ -38,8 +37,7 @@
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_account"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            />
     </LinearLayout>
 </layout>

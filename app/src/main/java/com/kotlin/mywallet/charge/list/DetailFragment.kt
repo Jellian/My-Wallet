@@ -1,5 +1,6 @@
 package com.kotlin.mywallet.charge.list
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,48 +9,55 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import com.kotlin.mywallet.R
 import com.kotlin.mywallet.account.list.AccountListActivity
 import com.kotlin.mywallet.account.list.AccountListViewModel
+import com.kotlin.mywallet.add.entity.AddEntityActivity
 import com.kotlin.mywallet.application.WalletApplication
 import com.kotlin.mywallet.data.UserDatabase
+import com.kotlin.mywallet.databinding.FragmentDetailBinding
+import com.kotlin.mywallet.databinding.FragmentHomeBinding
 import com.kotlin.mywallet.login.MainActivity
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class DetailFragment : Fragment() {
 
-    private lateinit var accountNameTextView: TextView
-    private lateinit var totalTextView: TextView
+    private lateinit var binding: FragmentDetailBinding
+    private lateinit var parentActivity: DetailActivity
 
     private lateinit var viewModel: DetailViewModel
+    private lateinit var accountName: String
+    private lateinit var username: String
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_detail, container, false)
+        binding = DataBindingUtil.inflate( inflater, R.layout.fragment_detail, container, false)
+        binding.lifecycleOwner = this
+
+        parentActivity = activity as DetailActivity
+
+        username = parentActivity.getUsername()
+        accountName = parentActivity.getAccountName()
 
         viewModel = DetailViewModel(
-            (requireContext().applicationContext as WalletApplication).userRepository
+            (requireContext().applicationContext as WalletApplication).userRepository, username, accountName
         )
 
         setUpView()
 
-        return view
+        return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
-        accountNameTextView = view.findViewById(R.id.textView_detail_accountName)
-        totalTextView = view.findViewById(R.id.textView_detail_totalAmount)
-
+        binding.viewModel = viewModel
+        binding.executePendingBindings()
     }
 
     private fun setUpView() {
-
-        val parentActivity = activity as DetailActivity?
-        val accountName = parentActivity?.intent?.getStringExtra(MainActivity.ACCOUNT).toString()
-        val username = parentActivity?.intent?.getStringExtra(MainActivity.USERNAME).toString()
 
         val executor: ExecutorService = Executors.newSingleThreadExecutor()
         executor.execute {
@@ -57,9 +65,26 @@ class DetailFragment : Fragment() {
             val account = viewModel.getAccountByNameAndUser(accountName, username)
 
             Handler(Looper.getMainLooper()).post {
-                accountNameTextView.text = account.accountName
-                totalTextView.text = account.totalAmount.toString()
+                binding.textViewDetailAccountName.text = account.accountName
             }
         }
+
+        binding.buttonDetailAddIncome.setOnClickListener( prepareCharge() )
+        binding.buttonDetailAddExpense.setOnClickListener( prepareCharge() )
+
+    }
+
+    private fun prepareCharge() = View.OnClickListener { view ->
+        val intent = Intent(context, AddEntityActivity::class.java)
+        // Boton que ha llamado a la funcion
+        when (view.id) {
+            R.id.button_detail_addIncome -> intent.putExtra(MainActivity.TYPE, +1)
+            else -> intent.putExtra(MainActivity.TYPE, -1)
+        }
+        intent.putExtra(MainActivity.USER_NAME, username)
+        intent.putExtra(MainActivity.ENTITY, "Charge")
+        intent.putExtra(MainActivity.ACCOUNT, accountName)
+
+        startActivity(intent)
     }
 }

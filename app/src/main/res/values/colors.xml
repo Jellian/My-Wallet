@@ -19,6 +19,8 @@
 
     <color name="toolbarIconColor">@color/primaryTextColor</color>
 
+    <color name="transparencyDarkColor">#AA072533</color>
+
     <color name="backgroundColor">#45B39C</color>
 </resources>
 

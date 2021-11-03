@@ -104,7 +104,7 @@
                 android:id="@+id/textView_itemAccount_amount"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="@{String.valueOf(account.totalAmount)}"
+                android:text="@{String.format(`%.2f `, account.totalAmount ) + account.currency }"
                 android:textColor="#000"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"

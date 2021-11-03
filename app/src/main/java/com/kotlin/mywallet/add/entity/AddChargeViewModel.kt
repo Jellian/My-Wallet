@@ -21,4 +21,18 @@ class AddChargeViewModel(private val userRepository: UserRepository): ViewModel(
         }
     }
 
+    fun getChargeById(chargeId: Int): Charge{
+        return userRepository.getChargeById(chargeId)
+    }
+
+    fun updateChargeById(chargeToEdit: Charge, editedCharge: Charge){
+        viewModelScope.launch {
+
+            val diff = (editedCharge.amount - chargeToEdit.amount)
+
+            userRepository.updateChargeById(editedCharge)
+            userRepository.updateAccountTotalAmount(editedCharge.accountName, editedCharge.username, diff)
+            userRepository.updateUserGrandTotal(editedCharge.username, diff)
+        }
+    }
 }

@@ -1,7 +1,6 @@
 package com.kotlin.mywallet.data
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.kotlin.mywallet.data.entities.Account
 import com.kotlin.mywallet.data.entities.Charge
 import com.kotlin.mywallet.data.entities.User
@@ -61,8 +60,8 @@ class UserRepository( private val userDao: UserDao, private val ioDispatcher: Co
         return userDao.getAccountsByUser(username)
     }
 
-    fun getAnyAccountByUser(username: String): Int{
-        return userDao.getAnyAccountByUser(username)
+    fun getAccountsCountByUser(username: String): Int{
+        return userDao.getAccountsCountByUser(username)
     }
 
     fun getAccountByNameAndUser(accountName: String, username: String): Account{
@@ -81,6 +80,10 @@ class UserRepository( private val userDao: UserDao, private val ioDispatcher: Co
         return userDao.getAccountNamesByUser(username)
     }
 
+    fun getAccountTotalAmount(accountName: String, username: String): LiveData<Float>{
+        return userDao.getAccountTotalAmount(accountName, username)
+    }
+
     //-------------------------------------------------------------//
     //---------------------- CHARGES ------------------------------//
     //-------------------------------------------------------------//
@@ -89,12 +92,24 @@ class UserRepository( private val userDao: UserDao, private val ioDispatcher: Co
         return@withContext userDao.insertCharge(charge)
     }
 
-    fun getChargesByUserAndAccount(username: String, accountName: String): List<Charge>{
+    fun getChargesByUserAndAccount(username: String, accountName: String): LiveData<List<Charge>>{
         return userDao.getChargesByUserAndAccount(username, accountName)
+    }
+
+    suspend fun updateChargeById(charge: Charge) = withContext(ioDispatcher){
+        return@withContext userDao.updateChargeById(charge)
+    }
+
+    fun getChargeById(chargeId: Int): Charge{
+        return userDao.getChargeById(chargeId)
     }
 
     suspend fun populateCharges(charges: List<Charge>) = withContext(ioDispatcher){
         return@withContext userDao.insertAllCharges(charges)
+    }
+
+    suspend fun deleteCharge(charge: Charge) = withContext(ioDispatcher){
+        return@withContext userDao.deleteCharge(charge)
     }
 
     suspend fun deleteChargesByUserAndAccount(username: String, accountName: String) = withContext(ioDispatcher) {
@@ -155,51 +170,51 @@ class UserRepository( private val userDao: UserDao, private val ioDispatcher: Co
     private suspend fun prepopulateCharges(){
 
         val charges = listOf(
-            Charge(amount =-254f , category = "Transporte" , note = "Transporte a casa.",date ="", accountName = "Principal", username = "Peter Parker"),
-            Charge(amount =-45.78f , category = "Comida" , note = "Sandwiches.",date ="", accountName = "Mi banco 1" , username = "Drake" ),
-            Charge(amount =-7.5f , category = "Transporte", note = "Combi a trabajo.",date ="", accountName = "Segunda", username = "Peter Parker"),
-            Charge(amount =-350f , category = "Ropa" , note = "Pantalón.",date ="", accountName = "Banco Nacional", username = "Travis Scott"),
-            Charge(amount =-700f , category = "Salud" , note = "Cita mensual dentista.",date = "", accountName = "Segunda", username = "Peter Parker"),
-            Charge(amount =-558f , category = "Auto", note = "Verificación.",date ="", accountName = "Vales", username = "Drake"),
-            Charge(amount =-250f , category = "Restaurante", note = "Comida con amigos.",date ="", accountName = "Ahorros", username = "David Uppen"),
-            Charge(amount =-100f , category = "Casa", note = "Repareción puerta.",date ="", accountName = "Principal", username = "Peter Parker"),
-            Charge(amount =-12f , category = "Transporte", note = "Combis a escuela.",date ="", accountName = "Principal", username = "Peter Parker"),
-            Charge(amount =-890f , category = "Ropa", note = "Teniss.",date ="", accountName = "Ahorros", username = "Drake" ),
-            Charge(amount =-350f , category = "Comida", note = "Despensa Super.",date ="", accountName = "Ahorros", username = "David Uppen"),
-            Charge(amount =-560f , category = "Salud", note = "Medicamentos.",date ="", accountName = "Principal", username = "Peter Parker"),
-            Charge(amount =-200f , category = "Entretenimiento", note = "Salida al cine.",date ="", accountName = "Segunda", username = "Peter Parker"),
-            Charge(amount =-70f , category = "Casa", note = "Candado nuevo.",date ="", accountName = "Principal", username = "Peter Parker"),
-            Charge(amount =-40f , category = "Auto", note = "Estacionamiento.",date ="", accountName = "Vales", username = "Drake"),
-            Charge(amount =-24f , category = "Transporte", note = "Taxi.",date = "", accountName = "Segunda", username = "Peter Parker"),
-            Charge(amount =-25f , category = "Casa", note = "Cooperación edificio.",date ="", accountName = "Ahorros", username = "David Uppen"),
-            Charge(amount =-230f , category = "Ropa", note = "Playeras.",date = "", accountName = "Mi banco 1", username = "Drake"),
-            Charge(amount =-449.50f , category = "Salud", note = "Rayos X",date = "", accountName = "Ahorros", username = "David Uppen"),
-            Charge(amount =-187.90f , category = "Restaurante", note = "Restaurante Palmas.",date ="", accountName = "Ahorros", username = "David Uppen"),
+            Charge(amount =-254f , category = "Transporte" , note = "Transporte a casa.",date ="2021/ 10/ 05", accountName = "Principal", username = "Peter Parker"),
+            Charge(amount =-45.78f , category = "Comida" , note = "Sandwiches.",date ="2021/ 09/ 27", accountName = "Mi banco 1" , username = "Drake" ),
+            Charge(amount =-7.5f , category = "Transporte", note = "Combi a trabajo.",date ="2020/ 07/ 01", accountName = "Segunda", username = "Peter Parker"),
+            Charge(amount =-350f , category = "Ropa" , note = "Pantalón.",date ="2021/ 03/ 14", accountName = "Banco Nacional", username = "Travis Scott"),
+            Charge(amount =-700f , category = "Salud" , note = "Cita mensual dentista.",date = "2021/ 03/ 16", accountName = "Segunda", username = "Peter Parker"),
+            Charge(amount =-558f , category = "Auto", note = "Verificación.",date ="2021/ 02/ 14", accountName = "Vales", username = "Drake"),
+            Charge(amount =-250f , category = "Restaurante", note = "Comida con amigos.",date ="2020/ 12/ 12", accountName = "Ahorros", username = "David Uppen"),
+            Charge(amount =-100f , category = "Casa", note = "Repareción puerta.",date ="2020/ 11/ 02", accountName = "Principal", username = "Peter Parker"),
+            Charge(amount =-12f , category = "Transporte", note = "Combis a escuela.",date ="2020/ 11/ 19", accountName = "Principal", username = "Peter Parker"),
+            Charge(amount =-890f , category = "Ropa", note = "Teniss.",date ="2021/ 05/ 15", accountName = "Ahorros", username = "Drake" ),
+            Charge(amount =-350f , category = "Comida", note = "Despensa Super.",date ="2021/ 05/ 10", accountName = "Ahorros", username = "David Uppen"),
+            Charge(amount =-560f , category = "Salud", note = "Medicamentos.",date ="2021/ 04/ 13", accountName = "Principal", username = "Peter Parker"),
+            Charge(amount =-200f , category = "Entretenimiento", note = "Salida al cine.",date ="2021/ 07/ 29", accountName = "Segunda", username = "Peter Parker"),
+            Charge(amount =-70f , category = "Casa", note = "Candado nuevo.",date ="2021/ 07/ 14", accountName = "Principal", username = "Peter Parker"),
+            Charge(amount =-40f , category = "Auto", note = "Estacionamiento.",date ="2020/ 01/ 01", accountName = "Vales", username = "Drake"),
+            Charge(amount =-24f , category = "Transporte", note = "Taxi.",date = "2021/ 08/ 17", accountName = "Segunda", username = "Peter Parker"),
+            Charge(amount =-25f , category = "Casa", note = "Cooperación edificio.",date ="2021/ 07/ 15", accountName = "Ahorros", username = "David Uppen"),
+            Charge(amount =-230f , category = "Ropa", note = "Playeras.",date = "2021/ 08/ 01", accountName = "Mi banco 1", username = "Drake"),
+            Charge(amount =-449.50f , category = "Salud", note = "Rayos X",date = "2021/ 10/ 10", accountName = "Ahorros", username = "David Uppen"),
+            Charge(amount =-187.90f , category = "Restaurante", note = "Restaurante Palmas.",date ="2021/ 10/ 11", accountName = "Ahorros", username = "David Uppen"),
 
 
-            Charge(amount =200f , category = "Depósito", note = "Nada.",date = "", accountName = "Principal", username = "Peter Parker"),
-            Charge(amount =230f , category = "Inversión", note = "Rendimiento quincenal.",date = "", accountName = "Mi banco 1", username = "Drake"),
-            Charge(amount =200f , category = "Ahorro", note = "Ahorro semanal.",date = "", accountName = "Banco Nacional", username = "Travis Scott"),
-            Charge(amount =235f , category = "Ahorro", note = "Ahorro semanal.",date = "", accountName = "Mi banco 1", username = "Drake"),
-            Charge(amount =137.12f , category = "Inversión", note = "Rendimientos.",date = "", accountName = "Banco Nacional", username = "Travis Scott"),
-            Charge(amount =100f , category = "Depósito", note = "David PM.",date = "", accountName = "Principal", username = "Peter Parker"),
-            Charge(amount =17000f , category = "Salario", note = "Quincena.",date = "", accountName = "Banco Nacional", username = "Travis Scott"),
-            Charge(amount =24000f , category = "Salario", note = "Quincena.",date = "", accountName = "Ahorros", username = "David Uppen"),
-            Charge(amount =2500f , category = "Depósito", note = "René.",date = "", accountName = "Principal", username = "Peter Parker"),
-            Charge(amount =900f , category = "Ventas", note = "",date = "", accountName = "Banco Nacional", username = "Travis Scott"),
-            Charge(amount =103.88f , category = "Inversión", note = "Acumulado.",date = "", accountName = "Mi banco 1", username = "Drake"),
-            Charge(amount =100f , category = "Depósito", note = "Karen Denisse M.",date = "", accountName = "Ahorros", username = "David Uppen"),
-            Charge(amount =378f , category = "Ahorro", note = "Ahorro semanal.",date = "", accountName = "Principal", username = "Peter Parker"),
-            Charge(amount =22000f , category = "Salario", note = "Mensual.",date = "", accountName = "Banco Nacional", username = "Travis Scott"),
-            Charge(amount =900f , category = "Depósito", note = "Javier A.",date = "", accountName = "Ahorros", username = "David Uppen"),
-            Charge(amount =20000f , category = "Salario", note = "Quincena.",date = "", accountName = "Mi banco 1", username = "Drake"),
-            Charge(amount =87.3f , category = "Inversión", note = "Mensual.",date = "", accountName = "Principal", username = "Peter Parker"),
-            Charge(amount =350f , category = "Depósito", note = "A cuenta viaje Qro. YIPM.",date = "", accountName = "Ahorros", username = "David Uppen"),
-            Charge(amount =460f , category = "Depósito", note = "Yunnuen S.G.",date = "", accountName = "Ahorros", username = "David Uppen"),
-            Charge(amount =35000f , category = "Salario", note = "Mensual.",date = "", accountName = "Principal", username = "Peter Parker"),
-            Charge(amount =27000f , category = "Salario", note = "Octubre.",date = "", accountName = "Mi banco 1", username = "Drake"),
-            Charge(amount =30f , category = "Depósito", note = "Torta xd",date = "", accountName = "Principal", username = "Peter Parker"),
-            Charge(amount =250f, category = "Ventas", note = "",date = "", accountName = "Banco Nacional", username = "Travis Scott")
+            Charge(amount =200f , category = "Depósito", note = "Nada.",date = "2021/ 05/ 06", accountName = "Principal", username = "Peter Parker"),
+            Charge(amount =230f , category = "Inversión", note = "Rendimiento quincenal.",date = "2021/ 05/ 10", accountName = "Mi banco 1", username = "Drake"),
+            Charge(amount =200f , category = "Ahorro", note = "Ahorro semanal.",date = "2021/ 09/ 15", accountName = "Banco Nacional", username = "Travis Scott"),
+            Charge(amount =235f , category = "Ahorro", note = "Ahorro semanal.",date = "2021/ 09/ 16", accountName = "Mi banco 1", username = "Drake"),
+            Charge(amount =137.12f , category = "Inversión", note = "Rendimientos.",date = "2020/ 11/ 20", accountName = "Banco Nacional", username = "Travis Scott"),
+            Charge(amount =100f , category = "Depósito", note = "David PM.",date = "2021/ 04/ 30", accountName = "Principal", username = "Peter Parker"),
+            Charge(amount =17000f , category = "Salario", note = "Quincena.",date = "2021/ 03/ 31", accountName = "Banco Nacional", username = "Travis Scott"),
+            Charge(amount =24000f , category = "Salario", note = "Quincena.",date = "2021/ 02/ 10", accountName = "Ahorros", username = "David Uppen"),
+            Charge(amount =2500f , category = "Depósito", note = "René.",date = "2020/ 02/ 28", accountName = "Principal", username = "Peter Parker"),
+            Charge(amount =900f , category = "Ventas", note = "",date = "2019/ 01/ 15", accountName = "Banco Nacional", username = "Travis Scott"),
+            Charge(amount =103.88f , category = "Inversión", note = "Acumulado.",date = "2020/ 01/ 17", accountName = "Mi banco 1", username = "Drake"),
+            Charge(amount =100f , category = "Depósito", note = "Karen Denisse M.",date = "2021/ 08/ 27", accountName = "Ahorros", username = "David Uppen"),
+            Charge(amount =378f , category = "Ahorro", note = "Ahorro semanal.",date = "2017/ 01/ 15", accountName = "Principal", username = "Peter Parker"),
+            Charge(amount =22000f , category = "Salario", note = "Mensual.",date = "2018/ 02/ 13", accountName = "Banco Nacional", username = "Travis Scott"),
+            Charge(amount =900f , category = "Depósito", note = "Javier A.",date = "2019/ 03/ 04", accountName = "Ahorros", username = "David Uppen"),
+            Charge(amount =20000f , category = "Salario", note = "Quincena.",date = "2019/ 04/ 16", accountName = "Mi banco 1", username = "Drake"),
+            Charge(amount =87.3f , category = "Inversión", note = "Mensual.",date = "2015/ 05/ 20", accountName = "Principal", username = "Peter Parker"),
+            Charge(amount =350f , category = "Depósito", note = "A cuenta viaje Qro. YIPM.",date = "2018/ 06/ 21", accountName = "Ahorros", username = "David Uppen"),
+            Charge(amount =460f , category = "Depósito", note = "Yunnuen S.G.",date = "2020/ 07/ 17", accountName = "Ahorros", username = "David Uppen"),
+            Charge(amount =35000f , category = "Salario", note = "Mensual.",date = "2021/ 08/ 11", accountName = "Principal", username = "Peter Parker"),
+            Charge(amount =27000f , category = "Salario", note = "Octubre.",date = "2019/ 09/ 13", accountName = "Mi banco 1", username = "Drake"),
+            Charge(amount =30f , category = "Depósito", note = "Torta xd",date = "2018/ 10/ 31", accountName = "Principal", username = "Peter Parker"),
+            Charge(amount =250f, category = "Ventas", note = "",date = "2018/ 11/ 04", accountName = "Banco Nacional", username = "Travis Scott")
         )
 
         populateCharges(charges)
@@ -221,7 +236,7 @@ class UserRepository( private val userDao: UserDao, private val ioDispatcher: Co
 //            }
 //       }
 //    }
-
+//
 //
 //    private suspend fun setAllUsersGranTotal() = withContext(ioDispatcher){
 //        val usersList = userDao.getAllUsers()

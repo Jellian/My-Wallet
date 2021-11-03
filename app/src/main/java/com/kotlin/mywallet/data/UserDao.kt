@@ -75,20 +75,30 @@ interface UserDao {
 
 
     @Query("SELECT count(*) FROM account WHERE username= :username LIMIT 1")
-    fun getAnyAccountByUser(username: String): Int
+    fun getAccountsCountByUser(username: String): Int
 
     @Transaction
     @Query("SELECT * FROM account WHERE userName = :userName AND accountName = :accountName")
     fun getAccountByNameAndUser(accountName: String, userName: String): Account
+
+    @Transaction
+    @Query("SELECT totalAmount FROM account WHERE accountName = :accountName AND username = :username")
+    fun getAccountTotalAmount(accountName: String, username: String): LiveData<Float>
 
     // THIS IS FOR RELATION ACCOUNT - CHARGES
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertCharge(vararg charge: Charge)
 
+    @Delete
+    suspend fun deleteCharge(charge: Charge)
+
     @Transaction
-    @Query("SELECT * FROM charge WHERE userName = :userName AND accountName= :accountName")
-    fun getChargesByUserAndAccount(userName: String, accountName: String): List<Charge>
+    @Query("SELECT * FROM charge WHERE userName = :userName AND accountName= :accountName ORDER BY date")
+    fun getChargesByUserAndAccount(userName: String, accountName: String): LiveData<List<Charge>>
+
+    @Update
+    suspend fun updateChargeById(vararg charge: Charge)
 
     @Insert
     suspend fun insertAllCharges(charges: List<Charge>)
@@ -100,5 +110,8 @@ interface UserDao {
     @Transaction
     @Query("UPDATE charge SET accountName = :newAccountName WHERE accountName = :oldAccountName AND username = :username")
     suspend fun updateChargesAccountName(newAccountName: String, oldAccountName: String, username: String)
+
+    @Query("SELECT * FROM charge WHERE id = :chargeId")
+    fun getChargeById(chargeId: Int): Charge
 
 }

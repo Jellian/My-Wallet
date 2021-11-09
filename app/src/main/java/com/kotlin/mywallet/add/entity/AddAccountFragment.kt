@@ -14,6 +14,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDeepLinkBuilder
 import com.kotlin.mywallet.R
@@ -35,6 +36,7 @@ class AddAccountFragment : Fragment() {
         binding = FragmentAddAccountBinding.inflate(inflater, container, false)
 
         parentActivity = activity as AddEntityActivity
+
         notificationTwo()
 
         return binding.root
@@ -67,7 +69,8 @@ class AddAccountFragment : Fragment() {
 
         else{
 
-            val username = parentActivity.intent.getStringExtra(MainActivity.USER_NAME).toString()
+            val username = parentActivity.intent?.getStringExtra(MainActivity.USER_NAME).toString()
+
             val newAccountName = binding.textViewAddAccountAccountName.text.toString()
 
             var accountToEdit: Account? = null
@@ -104,7 +107,7 @@ class AddAccountFragment : Fragment() {
         }
     }
 
-    fun addAccount(username: String){
+    private fun addAccount(username: String){
 
         val name = binding.textViewAddAccountAccountName.text.toString()
         val amount = binding.textViewAddAccountInitialAmount.text.toString()
@@ -159,6 +162,7 @@ class AddAccountFragment : Fragment() {
             .setComponentName(HomeActivity::class.java)
             .setGraph(R.navigation.home_navigation)
             .setDestination(R.id.goalFragment)
+            //.setArguments( bundleOf( Pair( MainActivity.USERNAME, username ) ) )
             .createPendingIntent()
 
         val notification = NotificationCompat.Builder(requireContext(), MainActivity.CHANNEL_ANNOUNCES)

@@ -1,35 +1,45 @@
 package com.kotlin.mywallet
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
+import com.kotlin.mywallet.application.WalletApplication
 import com.kotlin.mywallet.databinding.FragmentGoalBinding
-import com.kotlin.mywallet.home.HomeActivity
 import com.kotlin.mywallet.login.MainActivity
-import kotlinx.android.synthetic.main.activity_home.*
+import com.kotlin.mywallet.login.SignInViewModel
 
 class GoalFragment : Fragment() {
 
-    lateinit var preferences: SharedPreferences
-    lateinit var binding: FragmentGoalBinding
+    private lateinit var binding: FragmentGoalBinding
+    private lateinit var viewModel: GoalViewModel
 
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
 
-        binding = FragmentGoalBinding.inflate(layoutInflater)
+        binding = DataBindingUtil.inflate( inflater, R.layout.fragment_goal, container, false)
+        binding.lifecycleOwner = this
 
-        preferences = activity?.getSharedPreferences(MainActivity.PREFS_NAME, Context.MODE_PRIVATE) as SharedPreferences
+        viewModel = GoalViewModel(
+            (requireContext().applicationContext as WalletApplication).userRepository, requireContext()
+        )
 
         return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        binding.viewModel = viewModel
+        binding.executePendingBindings()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,8 +49,6 @@ class GoalFragment : Fragment() {
         (activity as AppCompatActivity).setSupportActionBar(appBar)
 
         with(binding){
-
-            etGoal.setText(loadPreferences().toString())
 
             appBar.setNavigationOnClickListener {
                 findNavController().popBackStack()
@@ -56,15 +64,10 @@ class GoalFragment : Fragment() {
         }
     }
 
-    private  fun loadPreferences(): Float{
-        val goal = preferences.getFloat(MainActivity.GOAL,0f)
-        return goal
-    }
-
     private  fun setGoal(goal: Float){
 
         if (goal > 0){
-            preferences.edit().putFloat(MainActivity.GOAL,goal).apply()
+            viewModel.updateActualGoalByUser(goal)
             Toast.makeText(context,"Meta agregada", Toast.LENGTH_SHORT).show()
             findNavController().navigate(R.id.action_goalFragment_to_homeFragment)
         }else

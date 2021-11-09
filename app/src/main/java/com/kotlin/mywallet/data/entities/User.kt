@@ -14,4 +14,5 @@ data class User @JvmOverloads constructor(
     @ColumnInfo var password: String?
 ) {
     @ColumnInfo var grandTotal: Float = 0.0f
+    @ColumnInfo var actualGoal: Float = 0.0f
 }

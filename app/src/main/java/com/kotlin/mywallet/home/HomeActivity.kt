@@ -1,12 +1,9 @@
 package com.kotlin.mywallet.home
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import com.kotlin.mywallet.databinding.ActivityHomeBinding
-import com.kotlin.mywallet.login.MainActivity
 
 class HomeActivity : AppCompatActivity() {
 

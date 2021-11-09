@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,12 +60,13 @@ class HomeFragment : Fragment() {
 
         parentActivity = activity as HomeActivity
 
-        username = parentActivity.intent?.getStringExtra(MainActivity.USER_NAME).toString()
-        email = parentActivity.intent?.getStringExtra(MainActivity.USER_EMAIL).toString()
 
         viewModel= HomeViewModel(
-            (requireContext().applicationContext as WalletApplication).userRepository, requireContext(), username
+            (requireContext().applicationContext as WalletApplication).userRepository, requireContext()
         )
+
+        username = parentActivity.intent?.getStringExtra(MainActivity.USER_NAME)?: viewModel.getUserName()
+        email = parentActivity.intent?.getStringExtra(MainActivity.USER_EMAIL)?: viewModel.getUserEmail()
 
         return binding.root
     }
@@ -90,8 +92,6 @@ class HomeFragment : Fragment() {
 
         userNameNav.text = username
         emailNav.text = email
-
-        binding.myGoal.text = viewModel.getFloatPref(MainActivity.GOAL).toString()
 
         "¡Hola, $username!".also { binding.textViewHomeWelcome.text = it }
 

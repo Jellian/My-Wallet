@@ -20,6 +20,10 @@ class UserRepository( private val userDao: UserDao, private val ioDispatcher: Co
         return@withContext userDao.updateUserGrandTotal(username, amount)
     }
 
+    suspend fun updateActualGoalByUser(username: String, newGoal: Float ) = withContext(ioDispatcher){
+        return@withContext userDao.updateActualGoalByUser(username, newGoal)
+    }
+
     suspend fun populateUsers(users: List<User>) = withContext(ioDispatcher){
         return@withContext userDao.insertAllUsers(users)
     }
@@ -34,6 +38,10 @@ class UserRepository( private val userDao: UserDao, private val ioDispatcher: Co
 
     fun getUserGrandTotal(username: String): LiveData<Float>{
         return userDao.getUserGrandTotal(username)
+    }
+
+    fun getActualGoalByUser(username: String): LiveData<Float>{
+        return userDao.getActualGoalByUser(username)
     }
 
     //-------------------------------------------------------------//
@@ -247,7 +255,7 @@ class UserRepository( private val userDao: UserDao, private val ioDispatcher: Co
 //        }
 //    }
 
-
+//  //-----------IGNORE THIS---------------------------------------//
 //  //-----SET THESE LINES THE FIRST TIME ACCOUNT LIST IS SHOWN----//
 //    runBlocking {
 //        withContext(ioDispatcher) {

@@ -21,6 +21,9 @@ interface UserDao {
     @Query("UPDATE user SET grandTotal = grandTotal + :amount WHERE username = :username")
     suspend fun  updateUserGrandTotal(username: String, amount: Float)
 
+    @Query("UPDATE user SET actualGoal = :newGoal WHERE username = :username")
+    suspend fun updateActualGoalByUser(username: String, newGoal: Float)
+
     @Query("SELECT grandTotal FROM user WHERE username = :username")
     fun getUserGrandTotal(username: String): LiveData<Float>
 
@@ -36,6 +39,9 @@ interface UserDao {
 
     @Query("SELECT totalAmount FROM account WHERE username = :username")
     fun getTotalAmountsFromAllAccountsByUser(username: String): List<Float>
+
+    @Query("SELECT actualGoal FROM user WHERE username = :username")
+    fun getActualGoalByUser(username: String): LiveData<Float>
 
     @Delete
     suspend fun delete(user: User)

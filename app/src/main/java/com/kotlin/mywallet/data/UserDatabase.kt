@@ -14,7 +14,7 @@ import com.kotlin.mywallet.data.entities.User
         Account::class,
         Charge::class
                ],
-    version = 2,
+    version = 3,
     exportSchema = false)
 
 abstract class UserDatabase : RoomDatabase() {

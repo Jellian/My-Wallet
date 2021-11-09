@@ -117,6 +117,11 @@ class HomeFragment : Fragment() {
                     findNavController().navigate(R.id.privacyFragment, null, MainActivity.options)
                     true
                 }
+                //navegación del botón premium
+                R.id.nav_premium ->{
+                    findNavController().navigate(R.id.addCardSDK, null,MainActivity.options)
+                    true
+                }
                 R.id.nav_accounts -> {
                     showAccounts()
                     binding.drawerLayout.closeDrawers()

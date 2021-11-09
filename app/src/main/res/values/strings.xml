@@ -44,8 +44,8 @@
     <string name="_0_00">0.00</string>
     <string name="nota">Nota</string>
     <string name="nueva_cuenta">Nueva cuenta</string>
-    <string name="nombre_de_la_cuenta">Nombre de la cuenta</string>
-    <string name="monto_inicial">Monto inicial</string>
+    <string name="nombre_de_la_cuenta">Nombre de tu nueva cuenta</string>
+    <string name="monto_inicial">Monto inicial de esta cuenta (opcional)</string>
     <string name="anadir_ingreso">Añadir ingreso</string>
     <string name="anadir_egreso">Añadir egreso</string>
     <string name="cuenta">Cuenta</string>
@@ -88,5 +88,29 @@
     <string name="descripcion">Descripcion</string>
     <string name="profile_pic">profile pic</string>
     <string name="mxn">MXN</string>
+    <!--  SDK de conekta  -->
+    <string name="XXXX">XXXX-XXXX-XXXX-XXXX</string>
+    <string name="cardNumber">Num. tarjeta:</string>
+    <string name="cardName">Nombre del titular de la tarjeta:</string>
+    <string name="expire">Expira:</string>
+    <string name="cardCvc">Código de seguridad:</string>
+    <string name="mm">MM</string>
+    <string name="yyyy">AAAA</string>
+    <string name="name">Nombre</string>
+    <string name="cvc">CVC</string>
+    <string name="outputData">Datos de registro premium:</string>
+    <string name="outputTokenData"> </string>
+    <string name="outputUUIDData"> </string>
+    <string name="needInternetConnection">Necesitas conexión a internet</string>
+    <string name="cardDataIncomplete">Ingresa todos los datos de tu tarjeta</string>
+    <string name="theTokenIdLabel">Token:</string>
+    <string name="errorLabel">Error:</string>
+    <string name="uuidDeviceLabel">UUID:</string>
+
+    <!--premium -->
+    <string name="descPremium">Al pagar tu versión premium de $100 X mes:</string>
+    <string name="Oferta1"> "Recibirás 20 hrs. de asesoría financiera, Tendrás contenido exclusivo de nuestros expertos"</string>
+    <string name="indicaciones3"> Agrega los datos de tu tarjeta de crédito o débito [núm. de prueba: 4242424242424242]</string>
+    <string name="indicacionesFin"> Una vez que se generó tu token, la transacción se confirmará dentro de las siguientes 24hrs</string>
 
 </resources>

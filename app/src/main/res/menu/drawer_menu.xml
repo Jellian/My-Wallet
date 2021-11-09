@@ -11,6 +11,10 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
+                    android:id="@+id/nav_premium"
+                    android:icon="@drawable/diamante"
+                    android:title="MyWallet Premium" />
+                <item
                     android:id="@+id/nav_accounts"
                     android:icon="@drawable/payment"
                     android:title="@string/drawer.accounts" />

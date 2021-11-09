@@ -23,6 +23,9 @@
         <action
             android:id="@+id/action_homeFragment_to_profilePictureFragment"
             app:destination="@id/profilePictureFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_addCardSDK"
+            app:destination="@id/addCardSDK" />
     </fragment>
 
     <fragment
@@ -86,4 +89,8 @@
             app:popUpToInclusive="true"
             />
     </fragment>
+    <activity
+        android:id="@+id/addCardSDK"
+        android:name="com.kotlin.mywallet.utils.addCardSDK"
+        android:label="addCardSDK" />
 </navigation>

@@ -23,10 +23,10 @@
 
     <TextView
         android:id="@+id/textView_addAccount_newAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
         style="@style/principal_Text"
+        android:layout_width="244dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="48dp"
         android:text="@string/nueva_cuenta"
         android:textAlignment="center"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -83,7 +83,7 @@
         style="@style/Wallet.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="152dp"
+        android:layout_marginTop="44dp"
         android:text="@string/aceptar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

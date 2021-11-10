@@ -36,7 +36,7 @@
     <string name="ingresar">Ingresar</string>
     <string name="aceptar">Aceptar</string>
     <string name="register">Registrarme</string>
-    <string name="login">Iniciar Sesion</string>
+    <string name="login">Iniciar Sesión</string>
     <string name="plus">+</string>
     <string name="minus">-</string>
     <string name="pesos">$</string>
@@ -59,7 +59,7 @@
     <string name="category">category</string>
     <string name="note">Note</string>
     <string name="_00_00_00">00/00/00</string>
-    <string name="about_of">¡Hola!\nEsta aplicación te permitirá:\nAdministrar tu dinero, \nDar seguimiento a tus finanzas, \nPlanear para el futuro."<br /><br /> \n\nTambién podrás controlar: <br /> \n*Cuentas <br /> \n*Ingresos  <br /> \n*Egresos</string>
+    <string name="about_of">"¡Hola!\nEsta aplicación te permitirá:\nAdministrar tu dinero, \nDar seguimiento a tus finanzas, \nPlanear para el futuro.<br /><br /> \n\nTambién podrás controlar: <br /> \n*Cuentas <br /> \n*Ingresos  <br /> \n*Egresos"</string>
     <string name="aviso_privacidad">Aviso de Privacidad</string>
     <string name="exclusividad">Exclusivo para el uso de los programadores &amp; contribuidores:</string>
     <string name="genial">¡Genial!</string>
@@ -84,8 +84,8 @@
     <string name="nombre_canal">Anuncios sobre la app</string>
     <string name="nombrenotificacion">My Walet se está ejecutando</string>
     <string name="notificacion1">¡My Wallet es la mejor APP para tus finanzas!</string>
-    <string name="notificacion2">¡Recuerda que puedes modificar o agregar METAS para seguir teniendo saldo positivo! Da clic en esta NOTIFICACIÓN para ir al modulo y agregar una meta. </string>
-    <string name="descripcion">Descripcion</string>
+    <string name="notificacion2">¡Recuerda que puedes modificar o agregar METAS para seguir teniendo saldo positivo! Da clic en esta NOTIFICACIÓN para agregar una meta. </string>
+    <string name="descripcion">Descripción</string>
     <string name="profile_pic">profile pic</string>
     <string name="mxn">MXN</string>
     <!--  SDK de conekta  -->
@@ -108,7 +108,7 @@
     <string name="uuidDeviceLabel">UUID:</string>
 
     <!--premium -->
-    <string name="descPremium">Al pagar tu versión premium de $100 X mes:</string>
+    <string name="descPremium">Paga tu versión premium de $200 X MES</string>
     <string name="Oferta1">Recibirás 20 hrs. de asesoría financiera virtual</string>
     <string name="Oferta2">Tendrás contenido financiero exclusivo de nuestros expertos</string>
     <string name="indicaciones3"> Agrega los datos de tu tarjeta de crédito o débito [núm. de prueba: 4242424242424242]</string>

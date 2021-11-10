@@ -41,6 +41,7 @@
         android:padding="16dp"
         android:text="@string/about_of"
         android:textAlignment="center"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView_signUp_appIcon" />

@@ -38,14 +38,15 @@
         android:text="@string/cuenta"
         app:layout_constraintBottom_toTopOf="@+id/spinner_addCharge_accounts"
         app:layout_constraintEnd_toEndOf="@id/spinner_addCharge_accounts"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/spinner_addCharge_accounts" />
 
     <TextView
         android:id="@+id/textView_addCharge_headerAction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
         style="@style/principal_Text"
+        android:layout_width="255dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="48dp"
         android:text="@string/action_text"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
@@ -119,7 +120,7 @@
         style="@style/Wallet.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="32dp"
         android:text="@string/text_button_charge"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -20,7 +20,23 @@
         <entry key="..\:/Users/H477718/Documents/Android/My-Wallet/app/src/main/res/layout/activity_add_card_sdk.xml" value="0.1" />
         <entry key="..\:/Users/H477718/Documents/Android/My-Wallet/app/src/main/res/layout/fragment_goal.xml" value="0.1" />
         <entry key="..\:/Users/H477718/Documents/Android/My-Wallet/app/src/main/res/layout/fragment_home.xml" value="0.264" />
-        <entry key="..\:/Users/tlahu/AndroidStudioProjects/My-Wallet/app/src/main/res/layout/activity_add_card_sdk.xml" value="0.28038897893030795" />
+        <entry key="..\:/Users/tlahu/AndroidStudioProjects/My-Wallet/app/src/main/res/layout/activity_add_card_sdk.xml" value="0.5474339035769828" />
+        <entry key="..\:/Users/tlahu/AndroidStudioProjects/My-Wallet/app/src/main/res/layout/activity_add_entity.xml" value="0.19479166666666667" />
+        <entry key="..\:/Users/tlahu/AndroidStudioProjects/My-Wallet/app/src/main/res/layout/activity_detail.xml" value="0.19479166666666667" />
+        <entry key="..\:/Users/tlahu/AndroidStudioProjects/My-Wallet/app/src/main/res/layout/activity_home.xml" value="0.19479166666666667" />
+        <entry key="..\:/Users/tlahu/AndroidStudioProjects/My-Wallet/app/src/main/res/layout/activity_list.xml" value="0.19479166666666667" />
+        <entry key="..\:/Users/tlahu/AndroidStudioProjects/My-Wallet/app/src/main/res/layout/activity_main.xml" value="0.19479166666666667" />
+        <entry key="..\:/Users/tlahu/AndroidStudioProjects/My-Wallet/app/src/main/res/layout/drawer_header.xml" value="0.19479166666666667" />
+        <entry key="..\:/Users/tlahu/AndroidStudioProjects/My-Wallet/app/src/main/res/layout/fragment_about_of.xml" value="0.19479166666666667" />
+        <entry key="..\:/Users/tlahu/AndroidStudioProjects/My-Wallet/app/src/main/res/layout/fragment_add_account.xml" value="0.19479166666666667" />
+        <entry key="..\:/Users/tlahu/AndroidStudioProjects/My-Wallet/app/src/main/res/layout/fragment_add_charge.xml" value="0.22" />
+        <entry key="..\:/Users/tlahu/AndroidStudioProjects/My-Wallet/app/src/main/res/layout/fragment_chargelist.xml" value="0.5" />
+        <entry key="..\:/Users/tlahu/AndroidStudioProjects/My-Wallet/app/src/main/res/layout/fragment_detail.xml" value="0.19479166666666667" />
+        <entry key="..\:/Users/tlahu/AndroidStudioProjects/My-Wallet/app/src/main/res/layout/fragment_home.xml" value="0.19479166666666667" />
+        <entry key="..\:/Users/tlahu/AndroidStudioProjects/My-Wallet/app/src/main/res/layout/fragment_privacy.xml" value="0.19479166666666667" />
+        <entry key="..\:/Users/tlahu/AndroidStudioProjects/My-Wallet/app/src/main/res/layout/item_account.xml" value="0.19479166666666667" />
+        <entry key="..\:/Users/tlahu/AndroidStudioProjects/My-Wallet/app/src/main/res/layout/item_charge.xml" value="0.19479166666666667" />
+        <entry key="..\:/Users/tlahu/AndroidStudioProjects/My-Wallet/app/src/main/res/layout/preview_image.xml" value="0.19479166666666667" />
         <entry key="..\:/Users/tlahu/AndroidStudioProjects/My-Wallet/app/src/main/res/menu/drawer_menu.xml" value="0.36102564102564105" />
         <entry key="..\:/Users/H477718/Documents/Android/My-Wallet/app/src/main/res/layout/preview_image.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/home.xml" value="0.14895833333333333" />

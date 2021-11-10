@@ -1,5 +1,6 @@
 package com.kotlin.mywallet.data
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import com.kotlin.mywallet.data.entities.Account
 import com.kotlin.mywallet.data.entities.Charge
@@ -16,6 +17,10 @@ class UserRepository( private val userDao: UserDao, private val ioDispatcher: Co
         return@withContext userDao.insertUser(user)
     }
 
+    suspend fun updateUriRefByUser(username: String, uriRefAsString: String?) = withContext(ioDispatcher){
+        return@withContext userDao.updateUriRefByUser(username, uriRefAsString)
+    }
+
     suspend fun updateUserGrandTotal(username: String, amount: Float) = withContext(ioDispatcher){
         return@withContext userDao.updateUserGrandTotal(username, amount)
     }
@@ -26,6 +31,10 @@ class UserRepository( private val userDao: UserDao, private val ioDispatcher: Co
 
     suspend fun populateUsers(users: List<User>) = withContext(ioDispatcher){
         return@withContext userDao.insertAllUsers(users)
+    }
+
+    fun getUriRefByUser(username: String):String?{
+        return userDao.getUriRefByUser(username)
     }
 
     fun getUserByEmailAndPassword(email: String, password: String): User?{
@@ -232,21 +241,21 @@ class UserRepository( private val userDao: UserDao, private val ioDispatcher: Co
     //-------------------------------------------------------------//
     //---------------- FOR TEST PURPOSE ONLY ----------------------//
     //-------------------------------------------------------------//
-
-
-//    init{
-//       runBlocking {
+//
+//
+//    init {
+//        runBlocking {
 //            withContext(ioDispatcher) {
 //                prepopulateUsers()
 //                prepopulateAccounts()
 //                prepopulateCharges()
 //                setAllUsersGranTotal()
 //            }
-//       }
+//        }
 //    }
 //
 //
-//    private suspend fun setAllUsersGranTotal() = withContext(ioDispatcher){
+//    private suspend fun setAllUsersGranTotal() = withContext(ioDispatcher) {
 //        val usersList = userDao.getAllUsers()
 //
 //        return@withContext usersList.forEach {

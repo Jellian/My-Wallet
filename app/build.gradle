@@ -67,7 +67,8 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:28.4.1')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-messaging-ktx'
-// SDK de conekta
+
+    // SDK de conekta
     implementation('io.conekta:conektasdk:2.0') {
         exclude group: 'com.android.support'
     }

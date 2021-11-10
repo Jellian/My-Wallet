@@ -1,5 +1,6 @@
 package com.kotlin.mywallet.data
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.kotlin.mywallet.data.entities.Account
@@ -24,6 +25,9 @@ interface UserDao {
     @Query("UPDATE user SET actualGoal = :newGoal WHERE username = :username")
     suspend fun updateActualGoalByUser(username: String, newGoal: Float)
 
+    @Query("UPDATE user SET uriRef = :uriRefAsString WHERE username = :username")
+    suspend fun updateUriRefByUser(username: String, uriRefAsString: String?)
+
     @Query("SELECT grandTotal FROM user WHERE username = :username")
     fun getUserGrandTotal(username: String): LiveData<Float>
 
@@ -42,6 +46,9 @@ interface UserDao {
 
     @Query("SELECT actualGoal FROM user WHERE username = :username")
     fun getActualGoalByUser(username: String): LiveData<Float>
+
+    @Query("SELECT uriRef FROM user WHERE username = :username")
+    fun getUriRefByUser(username: String): String?
 
     @Delete
     suspend fun delete(user: User)
@@ -100,7 +107,7 @@ interface UserDao {
     suspend fun deleteCharge(charge: Charge)
 
     @Transaction
-    @Query("SELECT * FROM charge WHERE userName = :userName AND accountName= :accountName ORDER BY date")
+    @Query("SELECT * FROM charge WHERE userName = :userName AND accountName= :accountName ORDER BY date DESC")
     fun getChargesByUserAndAccount(userName: String, accountName: String): LiveData<List<Charge>>
 
     @Update

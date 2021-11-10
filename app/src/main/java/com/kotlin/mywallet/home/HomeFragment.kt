@@ -50,7 +50,6 @@ class HomeFragment : Fragment() {
 
     private lateinit var email: String
     private lateinit var username: String
-
     private var pictureUriReference: Uri? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -83,6 +82,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupDrawer()
+        setProfilePicture()
 
         val headerView = binding.navView.getHeaderView(0)
         val userNameNav = headerView.findViewById<TextView>(R.id.textView_drawerMenu_userName)
@@ -207,13 +207,19 @@ class HomeFragment : Fragment() {
     private fun openCamera(){
         // Recuperar los bits de una foto--espacio de memoria vacio ContentValues
         val value= ContentValues()
+
         value.put(MediaStore.Images.Media.TITLE, "${System.currentTimeMillis()}.jpg")
 
-        pictureUriReference = activity?.contentResolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, value)
-
+        val pictureUriReference: Uri? = activity?.contentResolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, value)
         val camaraIntent= Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         camaraIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUriReference)
         startActivityForResult(camaraIntent, REQUEST_CAMERA)
+
+        val executor: ExecutorService = Executors.newSingleThreadExecutor()
+
+        executor.execute {
+            viewModel.updateUriRefByUser(username, pictureUriReference)
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -232,17 +238,7 @@ class HomeFragment : Fragment() {
         if(resultCode == Activity.RESULT_OK && data != null){
             when (requestCode) {
                 REQUEST_CAMERA -> {
-                    // Obtenemos bitmap desde URI REFERENCE
-                    val bitmap = if(Build.VERSION.SDK_INT < 28) {
-                        MediaStore.Images.Media.getBitmap( requireActivity().contentResolver, pictureUriReference)
-                    } else{
-                        val source = pictureUriReference?.let { ImageDecoder.createSource(requireActivity().contentResolver, it) }
-                        source?.let { ImageDecoder.decodeBitmap(it) }
-                    }
-                    // Create the RoundedBitmapDrawable.
-                    val roundDrawable: RoundedBitmapDrawable = RoundedBitmapDrawableFactory.create(resources, bitmap)
-                    roundDrawable.isCircular = true
-                    imageView_drawerMenu_profilePicture.setImageDrawable(roundDrawable)
+                    setProfilePicture()
                 }
             }
         }
@@ -264,6 +260,33 @@ class HomeFragment : Fragment() {
 
         findNavController().navigate(R.id.profilePictureFragment, bundle, MainActivity.options)
     }
+
+    private fun setProfilePicture(){
+
+        val executor: ExecutorService = Executors.newSingleThreadExecutor()
+
+        executor.execute {
+            pictureUriReference = viewModel.getUriRefByUser(username)
+
+            Handler(Looper.getMainLooper()).post {
+
+                if(pictureUriReference!= null){
+                    // Obtenemos bitmap desde URI REFERENCE
+                    val bitmap = if (Build.VERSION.SDK_INT < 28) {
+                        MediaStore.Images.Media.getBitmap( requireActivity().contentResolver, pictureUriReference)
+                    } else {
+                        val source = pictureUriReference?.let { ImageDecoder.createSource( requireActivity().contentResolver, it) }
+                        source?.let { ImageDecoder.decodeBitmap(it) }
+                    }
+                    // Create the RoundedBitmapDrawable.
+                    val roundDrawable: RoundedBitmapDrawable = RoundedBitmapDrawableFactory.create(resources, bitmap)
+                    roundDrawable.isCircular = true
+                    imageView_drawerMenu_profilePicture.setImageDrawable(roundDrawable)
+                }
+            }
+        }
+    }
+
 
 //   private fun apiCall(){
 

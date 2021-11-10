@@ -1,5 +1,6 @@
 package com.kotlin.mywallet.data.entities
 
+import android.net.Uri
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
@@ -15,4 +16,5 @@ data class User @JvmOverloads constructor(
 ) {
     @ColumnInfo var grandTotal: Float = 0.0f
     @ColumnInfo var actualGoal: Float = 0.0f
+    @ColumnInfo var uriRef: String? = null
 }

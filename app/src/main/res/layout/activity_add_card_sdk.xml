@@ -33,16 +33,15 @@
                     android:id="@+id/txvTitle"
                     android:layout_width="230dp"
                     android:layout_height="32dp"
-                    android:text="Beneficios premium"
+                    android:text="Activación premium"
                     android:textColor="#196E66"
                     android:textSize="25sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.575"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.04" />
+                    app:layout_constraintVertical_bias="0.023" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintCard"
@@ -222,13 +221,13 @@
                     android:layout_below="@+id/constraintCard"
                     android:layout_centerHorizontal="true"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="36dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
                     android:gravity="center"
                     android:text="@string/outputData"
                     android:textColor="@color/primaryColor"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/constraintCard" />
 
@@ -269,6 +268,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/outputView" />
 
+
                 <Button
                     android:id="@+id/btnTokenize"
                     android:layout_width="0dp"
@@ -280,8 +280,7 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/uuidDevice"
-                    app:layout_constraintVertical_bias="0.174" />
-
+                    app:layout_constraintVertical_bias="0.952" />
 
                 <TextView
                     android:id="@+id/indicaciones3"
@@ -290,6 +289,7 @@
                     android:layout_marginTop="212dp"
                     android:text="@string/indicaciones3"
                     android:textColor="@color/primaryColor"
+                    android:textStyle="italic"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.16"
                     app:layout_constraintStart_toStartOf="parent"
@@ -302,24 +302,74 @@
                     android:hint="IndicacionesTop"
                     android:text="@string/descPremium"
                     android:textColor="@color/primaryColor"
-                    app:layout_constraintBottom_toTopOf="@+id/Ofertas"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.112"
+                    app:layout_constraintHorizontal_bias="0.504"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.851" />
+                    app:layout_constraintVertical_bias="0.085" />
 
                 <TextView
-                    android:id="@+id/Ofertas"
+                    android:id="@+id/Oferta1"
                     android:layout_width="321dp"
                     android:layout_height="39dp"
                     android:text="@string/Oferta1"
-                    app:layout_constraintBottom_toTopOf="@+id/indicaciones3"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.172"
+                    app:layout_constraintHorizontal_bias="0.76"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.924" />
+                    app:layout_constraintVertical_bias="0.15" />
+
+                <TextView
+                    android:id="@+id/Oferta2"
+                    android:layout_width="321dp"
+                    android:layout_height="39dp"
+                    android:text="@string/Oferta2"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.774"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.209" />
+
+                <ImageView
+                    android:id="@+id/check1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.022"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.148"
+                    app:srcCompat="@drawable/check" />
+
+                <ImageView
+                    android:id="@+id/check2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.022"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.216"
+                    app:srcCompat="@drawable/check" />
+
+                <TextView
+                    android:id="@+id/indicacionesFin"
+                    android:layout_width="377dp"
+                    android:layout_height="44dp"
+                    android:text="@string/indicacionesFin"
+                    android:textAlignment="center"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/btnTokenize"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/outputViewData"
+                    app:layout_constraintVertical_bias="0.588" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

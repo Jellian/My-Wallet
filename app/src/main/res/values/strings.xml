@@ -98,7 +98,7 @@
     <string name="yyyy">AAAA</string>
     <string name="name">Nombre</string>
     <string name="cvc">CVC</string>
-    <string name="outputData">Datos de registro premium:</string>
+    <string name="outputData">Datos de registro:</string>
     <string name="outputTokenData"> </string>
     <string name="outputUUIDData"> </string>
     <string name="needInternetConnection">Necesitas conexión a internet</string>
@@ -109,7 +109,8 @@
 
     <!--premium -->
     <string name="descPremium">Al pagar tu versión premium de $100 X mes:</string>
-    <string name="Oferta1"> "Recibirás 20 hrs. de asesoría financiera, Tendrás contenido exclusivo de nuestros expertos"</string>
+    <string name="Oferta1">Recibirás 20 hrs. de asesoría financiera virtual</string>
+    <string name="Oferta2">Tendrás contenido financiero exclusivo de nuestros expertos</string>
     <string name="indicaciones3"> Agrega los datos de tu tarjeta de crédito o débito [núm. de prueba: 4242424242424242]</string>
     <string name="indicacionesFin"> Una vez que se generó tu token, la transacción se confirmará dentro de las siguientes 24hrs</string>
 

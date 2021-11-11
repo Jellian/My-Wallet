@@ -177,7 +177,6 @@ class SignInFragment : Fragment() {
                 }
             }
     }
-
 }
 
 

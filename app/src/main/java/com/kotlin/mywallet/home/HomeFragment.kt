@@ -36,6 +36,7 @@ import com.kotlin.mywallet.add.entity.AddEntityActivity
 import com.kotlin.mywallet.application.WalletApplication
 import com.kotlin.mywallet.databinding.FragmentHomeBinding
 import com.kotlin.mywallet.login.MainActivity
+//import com.kotlin.mywallet.utils.apiCall
 import kotlinx.android.synthetic.main.drawer_header.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -51,6 +52,7 @@ class HomeFragment : Fragment() {
     private lateinit var email: String
     private lateinit var username: String
     private var pictureUriReference: Uri? = null
+    private var rate: Float = 0.0f
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
@@ -58,7 +60,6 @@ class HomeFragment : Fragment() {
         binding.lifecycleOwner = this
 
         parentActivity = activity as HomeActivity
-
 
         viewModel= HomeViewModel(
             (requireContext().applicationContext as WalletApplication).userRepository, requireContext()
@@ -75,6 +76,19 @@ class HomeFragment : Fragment() {
 
         binding.viewModel = viewModel
         binding.executePendingBindings()
+
+        with(viewModel) {
+            grandTotal.observe(viewLifecycleOwner, {
+                if(grandTotal.value != null){
+                    viewModel.apiCall()
+                    updateGrandTotalUSD(rate)
+                }
+            })
+
+            apiCall().observe(viewLifecycleOwner){
+                rate = it
+            }
+        }
 
     }
 
@@ -143,7 +157,6 @@ class HomeFragment : Fragment() {
                 else -> false
             }
         }
-
     }
 
     private fun setupDrawer(){
@@ -286,36 +299,4 @@ class HomeFragment : Fragment() {
             }
         }
     }
-
-
-//   private fun apiCall(){
-
-  // }
-//        val okHttpClient = OkHttpClient()
-//        val url = "https://api.frankfurter.app/latest?from=MXN&to=USD"
-//
-//        val request = Request.Builder().url(url).build()
-//        okHttpClient.newCall(request).enqueue(object: Callback {
-//
-//            override fun onFailure(call: okhttp3.Call, e: IOException) {
-//                //Log.e("Response", e.toString())
-//            }
-//
-//            override fun onResponse(call: okhttp3.Call, response: Response) {
-//                val body = response.body?.string()
-//                //Log.d( "Response", body!!)
-//
-//                try {
-//                    val json = JSONObject(body)
-//                    val dec = DecimalFormat("#,###.##")
-//                    val rate = json.getJSONObject("rates").getString("USD")
-//                    val totalUsd = dec.format(rate.toDouble()*user.getGrandTotal())
-//
-//                    binding.textViewHomeTotalAmountDollars.text= "$ $totalUsd USD"
-//
-//                } catch (e: JSONException){ }
-//            }
-//        } )
-//    }
-
 }

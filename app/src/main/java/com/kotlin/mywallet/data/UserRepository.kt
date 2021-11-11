@@ -2,6 +2,7 @@ package com.kotlin.mywallet.data
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.kotlin.mywallet.data.entities.Account
 import com.kotlin.mywallet.data.entities.Charge
 import com.kotlin.mywallet.data.entities.User
@@ -45,7 +46,7 @@ class UserRepository( private val userDao: UserDao, private val ioDispatcher: Co
         return userDao.getUserByNameAndPassword(username, password)
     }
 
-    fun getUserGrandTotal(username: String): LiveData<Float>{
+    fun getUserGrandTotal(username: String): LiveData<Float> {
         return userDao.getUserGrandTotal(username)
     }
 

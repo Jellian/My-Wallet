@@ -19,6 +19,9 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.kotlin.mywallet.R
 import com.kotlin.mywallet.application.WalletApplication
 import com.kotlin.mywallet.databinding.FragmentSignInBinding
@@ -30,17 +33,26 @@ class SignInFragment : Fragment() {
 
     private lateinit var binding: FragmentSignInBinding
     private lateinit var viewModel: SignInViewModel
+    private lateinit var auth: FirebaseAuth
 
-    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentSignInBinding.inflate(inflater, container, false)
 
         viewModel = SignInViewModel(
-            (requireContext().applicationContext as WalletApplication).userRepository, requireContext()
+            (requireContext().applicationContext as WalletApplication).userRepository,
+            requireContext()
         )
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             setNotificationChannel()
+
+        auth = Firebase.auth
+
 
         return binding.root
     }
@@ -51,15 +63,15 @@ class SignInFragment : Fragment() {
         binding.buttonSignInAccept.setOnClickListener { checkSignInInfo() }
     }
 
-    private fun checkSignInInfo(){
+    private fun checkSignInInfo() {
 
-        if ( binding.editTextSignInUserName.text.isNullOrEmpty() )
+        if (binding.editTextSignInUserName.text.isNullOrEmpty())
             Toast.makeText(context, "Nombre de usuario vacío", Toast.LENGTH_SHORT).show()
         else {
 
             val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
-            executor.execute{
+            executor.execute {
                 val nameAndPassUsr = viewModel.getUserByNameAndPassword(
                     binding.editTextSignInUserName.text.toString(),
                     binding.editTextSignInPassword.text.toString()
@@ -69,17 +81,31 @@ class SignInFragment : Fragment() {
                     binding.editTextSignInPassword.text.toString()
                 )
 
-                Handler(Looper.getMainLooper()).post{
+                Handler(Looper.getMainLooper()).post {
                     when {
                         nameAndPassUsr != null -> {
                             notificationOne()
                             signIn(nameAndPassUsr.username, nameAndPassUsr.email.toString())
+                            logIn(
+                                nameAndPassUsr.email.toString(),
+                                nameAndPassUsr.password.toString()
+                            )
                         }
                         emailAndPassUsr != null -> {
                             notificationOne()
                             signIn(emailAndPassUsr.username, emailAndPassUsr.email.toString())
+                            logIn(
+                                emailAndPassUsr.email.toString(),
+                                emailAndPassUsr.password.toString()
+                            )
                         }
-                        else -> { Toast.makeText(requireContext(), "Tu nombre de usuario, email y/o tu contraseña son incorrectos", Toast.LENGTH_SHORT).show() }
+                        else -> {
+                            Toast.makeText(
+                                requireContext(),
+                                "Tu nombre de usuario, email y/o tu contraseña son incorrectos",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
             }
@@ -92,21 +118,27 @@ class SignInFragment : Fragment() {
         val name = "Anuncios My Wallet"
         val descriptionText = "Notificacion al iniciar sesión en MW"
         val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel(MainActivity.CHANNEL_ANNOUNCES, name, importance).apply { description = descriptionText }
+        val channel = NotificationChannel(
+            MainActivity.CHANNEL_ANNOUNCES,
+            name,
+            importance
+        ).apply { description = descriptionText }
 
-        val notificationManager = activity?.getSystemService(Activity.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            activity?.getSystemService(Activity.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
 
     //Primera notificación
     private fun notificationOne() {
-        val notification = NotificationCompat.Builder(requireContext(), MainActivity.CHANNEL_ANNOUNCES)
-            .setSmallIcon(R.drawable.wallet3)
-            .setColor(ContextCompat.getColor(requireContext(), R.color.primaryColor))
-            .setContentTitle(getString(R.string.nombrenotificacion))
-            .setContentText(getString(R.string.notificacion1))
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .build()
+        val notification =
+            NotificationCompat.Builder(requireContext(), MainActivity.CHANNEL_ANNOUNCES)
+                .setSmallIcon(R.drawable.wallet3)
+                .setColor(ContextCompat.getColor(requireContext(), R.color.primaryColor))
+                .setContentTitle(getString(R.string.nombrenotificacion))
+                .setContentText(getString(R.string.notificacion1))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .build()
 
         with(NotificationManagerCompat.from(requireContext())) {
             notify(20, notification)
@@ -125,6 +157,27 @@ class SignInFragment : Fragment() {
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
     }
+
+    private fun logIn(email: String, password: String) {
+        auth.signInWithEmailAndPassword(
+            email, password
+        )
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+
+                    Toast.makeText(context, "Has iniciado sesión correctamente", Toast.LENGTH_LONG)
+                        .show()
+
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Tu email o contraseña no corresponde con ningún registro",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+    }
+
 }
 
 

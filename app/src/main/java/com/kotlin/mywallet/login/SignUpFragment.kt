@@ -98,7 +98,7 @@ class SignUpFragment : Fragment() {
                     //updateUI(user, null)
                 } else {
                     //Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                    Toast.makeText(context, "Nope", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "Ha ocurrido un problema, intenta de nuevo con otro correo", Toast.LENGTH_LONG).show()
                 }
             }
     }

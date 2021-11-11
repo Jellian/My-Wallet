@@ -1,5 +1,5 @@
 # My Wallet
-## Proyecto para "Aplicaciones Moviles con Kotlin" - Bedu Santander
+## Proyecto para "Aplicaciones Móviles con Kotlin" - Bedu Santander
 
 ### Descripción
 My Wallet aplicación móvil en la que se puedan manejar las finanzas personales. Los procesos principales son realizados mediante la interfaz en la que se espera añadir ingresos y gastos.
